@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "step": "roadmap",
+  "step": "find-skill",
   "owner": "active-orchestrator",
   "discovery": {
     "created_by": "discovery-research",
@@ -215,5 +215,9 @@
     "mode": "deferred",
     "status": "deferred",
     "path": "design-system/README.md"
+  },
+  "roadmap": {
+    "created_by": "roadmap-generator",
+    "changes_file": "CHANGES.md"
   }
 }
