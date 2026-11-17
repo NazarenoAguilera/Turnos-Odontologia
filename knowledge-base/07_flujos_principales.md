@@ -10,7 +10,7 @@
 **Pasos**:
 1. **HTTP** valida el esquema del cuerpo: `pacienteId`, `profesionalId`, `sillonId`, `prestacionId`, `inicio` en ISO 8601 y `duracionMin` opcional.
 2. **Aplicación** carga el paciente, el profesional, el sillón y la prestación. Responde `404` si alguno no existe y `422 RECURSO_INACTIVO` si está inactivo (RN-AG-03).
-3. **Dominio** calcula `duracion` (la indicada o la de la prestación) y `fin = inicio + duracion`. Valida la grilla de 15 minutos (RN-TU-05), la duración (RN-TU-06) y que no cruce la medianoche (RN-AG-05).
+3. **Dominio** calcula `duracion` (la indicada o la de la prestación) y `fin = inicio + duracion`. Valida la grilla de 15 minutos (RN-TU-05) y la duración (RN-TU-06). La restricción de medianoche (RN-AG-05) está pendiente de confirmación (PA-09).
 4. **Dominio** valida la franja de atención del profesional para ese día (RN-AG-01) y la ausencia de bloqueos superpuestos (RN-AG-02).
 5. **Infraestructura** abre una transacción `BEGIN IMMEDIATE`, que bloquea a otros escritores.
 6. Dentro de la transacción, busca turnos no cancelados con `inicio_min < :fin AND :inicio < fin_min` y `(profesional_id = :p OR sillon_id = :s)` (RN-TU-02 a 04).

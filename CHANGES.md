@@ -107,7 +107,7 @@ C-01 ⭐ → C-05* → C-08 → C-09 → C-10
   - **Esquema SQLite** (conexión `node:sqlite`, base `:memory:` nueva por test): tablas `profesional`, `sillon` (`nombre` UNIQUE), `prestacion` (CHECK `duracion_min` > 0 y múltiplo de 15), `paciente`, `turno` (`inicio_min`, `fin_min`, `duracion_min`, `sillon_id` NOT NULL, `estado` con CHECK, índices por profesional y por sillón) y `evento_auditoria` (solo inserción)
   - **Seed y fixtures ficticios** usados por los tests: profesionales Dra. Ana Prueba, Dr. Bruno Ejemplo y Dra. Carla Demo; Sillón 1, Sillón 2 y Box 3; prestaciones Consulta 15, Limpieza 30, Extracción simple 45 y Endodoncia 90; Paciente Ficticio Uno, Dos y Tres
   - **`POST /turnos`** (`pacienteId`, `profesionalId`, `sillonId`, `prestacionId`, `inicio` ISO 8601, `duracionMin` opcional): 201 con el turno, 404 si falta un recurso, 422 `RECURSO_INACTIVO`, 409 por solapamiento
-  - `crearTurno` calcula `duracion` (la indicada o la de la prestación) y `fin = inicio + duracion`; valida grilla de 15 minutos (`INICIO_FUERA_DE_GRILLA`), duración (`DURACION_INVALIDA`) y que no cruce la medianoche
+  - `crearTurno` calcula `duracion` (la indicada o la de la prestación) y `fin = inicio + duracion`; valida grilla de 15 minutos (`INICIO_FUERA_DE_GRILLA`) y duración (`DURACION_INVALIDA`). La regla de medianoche (RN-AG-05) se quitó en la revisión del propose (ver PA-09)
   - **Concurrencia**: `DatabaseSync` es sincrónico, así que la carrera real ocurre entre conexiones. `BEGIN IMMEDIATE` con `busy_timeout`; el test usa 2 conexiones a un archivo SQLite temporal
   - **Fuera de alcance de C-01**: horarios de atención y bloqueos (`FUERA_DE_HORARIO`, `EN_BLOQUEO`), que van en C-03
   - Verificación de solapamiento con `BEGIN IMMEDIATE`: busca turnos no cancelados con `inicio_min < :fin AND :inicio < fin_min AND (profesional_id = :p OR sillon_id = :s)`; clasifica en `TURNO_SOLAPADO_PROFESIONAL` y/o `TURNO_SOLAPADO_SILLON` (si chocan ambos, informa los dos), con los turnos en conflicto en `detalle`
@@ -118,7 +118,7 @@ C-01 ⭐ → C-05* → C-08 → C-09 → C-10
 - **Dependencias**: ninguna
 - **Governance**: MEDIO
 - **Leer antes**:
-  - `knowledge-base/05_reglas_de_negocio.md` RN-TU-01 a RN-TU-08, RN-TU-13, RN-AG-03 a RN-AG-05, RN-AU-01, RN-GL-01 a RN-GL-03, RN-PA-01
+  - `knowledge-base/05_reglas_de_negocio.md` RN-TU-01 a RN-TU-08, RN-TU-13, RN-AG-03, RN-AG-04, RN-AU-01, RN-GL-01 a RN-GL-03, RN-PA-01
   - `docs/opsx/explore-crear-turno-sin-solapamientos.md`
   - `knowledge-base/06_funcionalidades.md` US-010
   - `knowledge-base/07_flujos_principales.md` Flujo 1
