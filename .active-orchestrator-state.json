@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "step": "discovery",
+  "step": "visual-design",
   "owner": "active-orchestrator",
   "discovery": {
     "created_by": "discovery-research",
@@ -182,6 +182,32 @@
       "¿Horario por profesional, sillón o consultorio?",
       "¿Trabajo individual o en grupo?",
       "Stack tecnológico (lo define kb-creator)"
+    ]
+  },
+  "kb": {
+    "created_by": "kb-creator",
+    "source": "ingest",
+    "discovery": {
+      "problem": "Consultorios odontológicos argentinos de 2 a 5 profesionales que comparten sillones/boxes agendan en papel, planillas o WhatsApp, o con sistemas que no demuestran cómo evitan reservar dos veces al mismo profesional o al mismo sillón; resultado: dobles reservas, sillones ociosos y conflictos en recepción.",
+      "system_type": "api",
+      "domain": "salud digital / agenda odontológica",
+      "scale": "team",
+      "stack": "TypeScript + Node 24 + Fastify + SQLite (node:sqlite) + Vitest",
+      "needs_infra": false
+    },
+    "files": [
+      "knowledge-base/01_vision_y_objetivos.md",
+      "knowledge-base/02_descripcion_general.md",
+      "knowledge-base/03_actores_y_roles.md",
+      "knowledge-base/04_modelo_de_datos.md",
+      "knowledge-base/05_reglas_de_negocio.md",
+      "knowledge-base/06_funcionalidades.md",
+      "knowledge-base/07_flujos_principales.md",
+      "knowledge-base/08_arquitectura_propuesta.md",
+      "knowledge-base/09_decisiones_y_supuestos.md",
+      "knowledge-base/10_preguntas_abiertas.md",
+      "knowledge-base/11_contexto_de_mercado.md",
+      "knowledge-base/README.md"
     ]
   }
 }
