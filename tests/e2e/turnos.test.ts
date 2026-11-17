@@ -179,6 +179,13 @@ describe('Requirement: Recursos obligatorios, existentes y activos', () => {
     expect(r.json().error.codigo).toBe('RECURSO_INACTIVO');
   });
 
+  it('un campo de más responde 400 SOLICITUD_INVALIDA y no crea el turno (design D7)', async () => {
+    const r = await turno(ana, sillon1, '10:00', { campoInventado: 'x' });
+    expect(r.statusCode).toBe(400);
+    expect(r.json().error.codigo).toBe('SOLICITUD_INVALIDA');
+    expect(contarTurnos()).toBe(0);
+  });
+
   it('inicio sin zona horaria responde 400 SOLICITUD_INVALIDA', async () => {
     const r = await pedir({
       pacienteId: SEED.pacientes.uno, profesionalId: ana, sillonId: sillon1, prestacionId: limpieza,

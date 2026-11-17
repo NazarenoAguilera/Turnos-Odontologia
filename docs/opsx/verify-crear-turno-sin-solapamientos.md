@@ -56,7 +56,41 @@ Otras comprobaciones hechas durante el Apply:
 
 Además, hay tests unitarios del dominio (`tests/domain/`: `Intervalo`, tiempo y zona horaria, grilla y duración, clasificación de conflictos) y de persistencia (`tests/infra/`: esquema, datos ficticios y repositorios, incluida la auditoría inmutable).
 
+## Fase Verify (revisión contra spec, design y reglas duras)
+
+Sin una skill de verify instalada, los tres chequeos del contrato de evidencia se hicieron directamente.
+
+| Chequeo | Resultado |
+|---|---|
+| Completitud | 15/16 tareas (falta la 1.1, `.env.example`). Los 18 escenarios tienen test |
+| Corrección: spec | ✔ Todos los escenarios en verde |
+| Corrección: reglas duras | ✔ Sin offset fijo en la lógica (solo aparece en el texto de un mensaje de ejemplo). ✔ La superposición se decide siempre con `Intervalo`; el SQL solo prefiltra, como documenta D2. ✔ Solo datos ficticios |
+| Coherencia: design ↔ código | D3, D4, D5, D6, D8 y D9 ✔. D7 ✖ → corregido (ver hallazgo 1) |
+
+### Hallazgos y correcciones
+
+| # | Prioridad | Hallazgo | Cómo se detectó | Corrección |
+|---|---|---|---|---|
+| 1 | Media | Un `POST /turnos` con un campo de más se aceptaba con **201**: Fastify, por defecto, descarta en silencio las propiedades extra. El design D7 y el README decían que se rechaza con 400 | Se probó un pedido con `campoInventado` por `app.inject` → 201 | `ajv.customOptions.removeAdditional: false` en `src/http/app.ts`. Test nuevo: "un campo de más responde 400 SOLICITUD_INVALIDA y no crea el turno (design D7)", primero en rojo y después en verde |
+| 2 | Menor | `PRAGMA busy_timeout = ${…}` interpolaba un número en SQL, contra la regla dura "nunca concatenar valores en SQL" (sin riesgo real: era un valor interno) | Búsqueda de `prepare`/`exec` con `${` en `src/` | El timeout y las claves foráneas pasan como opciones de `new DatabaseSync(ruta, { timeout, enableForeignKeyConstraints })`. Lo cubren los tests de esquema existentes. El test de concurrencia sigue en verde (5 de 5 tras el cambio) |
+
+Después de las correcciones: **75 tests en verde**, `npm run build` sin errores y ninguna interpolación de valores en SQL dentro de `src/`.
+
 ## Pendiente
 
 - La tarea 1.1 está incompleta: falta `.env.example`. Los permisos del entorno no le permiten al agente escribir archivos `.env*`, así que lo tiene que crear una persona del equipo (contenido sugerido en el reporte del Apply). No afecta a los tests ni al arranque, porque todas las variables tienen valor por defecto.
-- Fase **Verify** formal de la consigna: una persona del equipo tiene que correr `npm test` en su máquina (sirve como evidencia para el video).
+## Corrida independiente (persona del equipo)
+
+Nazareno Aguilera corrió `npm test` en su propia terminal (PowerShell, Vitest v3.2.7) el 2026-11-17 a las 01:42:54 hora local, sobre el código con las correcciones del Verify:
+
+```
+Test Files  11 passed (11)
+     Tests  75 passed (75)
+  Duration  1.82s
+```
+
+Incluye `tests/e2e/turnos.test.ts` (20 tests) y `tests/e2e/concurrencia.test.ts` ("Dos reservas simultáneas del mismo sillón", en verde). Esta corrida aporta la **procedencia independiente** que el contrato de evidencia pide además de la captura del arnés. Hay captura de pantalla de la corrida.
+
+**Estado del Verify: verificado.** El único pendiente no afecta el comportamiento (ver abajo).
+
+## Pendiente

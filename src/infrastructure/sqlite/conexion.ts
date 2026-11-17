@@ -11,9 +11,12 @@ export interface OpcionesBase {
  * configura busy_timeout y crea el esquema si no existe.
  */
 export function abrirBase(ruta: string = ':memory:', opciones: OpcionesBase = {}): DatabaseSync {
-  const db = new DatabaseSync(ruta);
-  db.exec('PRAGMA foreign_keys = ON;');
-  db.exec(`PRAGMA busy_timeout = ${Math.trunc(opciones.busyTimeoutMs ?? 5000)};`);
+  // busy_timeout y claves foráneas se configuran como opciones de la conexión,
+  // sin armar SQL con valores (regla dura; hallazgo del Verify del 2026-11-17).
+  const db = new DatabaseSync(ruta, {
+    timeout: Math.trunc(opciones.busyTimeoutMs ?? 5000),
+    enableForeignKeyConstraints: true,
+  });
   aplicarEsquema(db);
   return db;
 }

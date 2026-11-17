@@ -40,7 +40,9 @@ const esquemaCrearTurno = {
 
 /** Construye la app Fastify con sus rutas y el manejo de errores único. */
 export function construirApp({ db, reloj = relojDelSistema, logger = false }: OpcionesApp): FastifyInstance {
-  const app = Fastify({ logger });
+  // removeAdditional: false → un campo de más se RECHAZA con 400 en lugar de descartarse
+  // en silencio (design D7; hallazgo del Verify del 2026-11-17).
+  const app = Fastify({ logger, ajv: { customOptions: { removeAdditional: false } } });
 
   app.setErrorHandler((error: FastifyError | ErrorDeNegocio, request, reply) => {
     if (error instanceof ErrorDeNegocio) {
