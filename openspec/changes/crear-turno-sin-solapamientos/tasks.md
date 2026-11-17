@@ -4,7 +4,7 @@
 
 ## 1. Base del proyecto
 
-- [ ] 1.1 Crear `package.json` (`type: module`, `engines.node >= 24`, scripts `dev`, `build`, `test`, `start`), `tsconfig.json`, `vitest.config.ts`, `.gitignore` (`node_modules/`, `dist/`, `.env`, `data/`) y `.env.example` sin valores reales; verificar que `npm install` termina sin errores
+- [x] 1.1 Crear `package.json` (`type: module`, `engines.node >= 24`, scripts `dev`, `build`, `test`, `start`), `tsconfig.json`, `vitest.config.ts`, `.gitignore` (`node_modules/`, `dist/`, `.env`, `data/`) y `.env.example` sin valores reales; verificar que `npm install` termina sin errores
 - [x] 1.2 Crear la estructura `src/domain`, `src/application`, `src/infrastructure/sqlite`, `src/http`, `src/main.ts`, `tests/domain`, `tests/e2e` y un test trivial; verificar que `npm test` corre en verde
 
 ## 2. Dominio: intervalos, tiempo y reglas

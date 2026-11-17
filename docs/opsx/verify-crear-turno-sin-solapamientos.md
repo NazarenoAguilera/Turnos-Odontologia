@@ -76,9 +76,6 @@ Sin una skill de verify instalada, los tres chequeos del contrato de evidencia s
 
 Después de las correcciones: **75 tests en verde**, `npm run build` sin errores y ninguna interpolación de valores en SQL dentro de `src/`.
 
-## Pendiente
-
-- La tarea 1.1 está incompleta: falta `.env.example`. Los permisos del entorno no le permiten al agente escribir archivos `.env*`, así que lo tiene que crear una persona del equipo (contenido sugerido en el reporte del Apply). No afecta a los tests ni al arranque, porque todas las variables tienen valor por defecto.
 ## Corrida independiente (persona del equipo)
 
 Nazareno Aguilera corrió `npm test` en su propia terminal (PowerShell, Vitest v3.2.7) el 2026-11-17 a las 01:42:54 hora local, sobre el código con las correcciones del Verify:
@@ -91,6 +88,9 @@ Test Files  11 passed (11)
 
 Incluye `tests/e2e/turnos.test.ts` (20 tests) y `tests/e2e/concurrencia.test.ts` ("Dos reservas simultáneas del mismo sillón", en verde). Esta corrida aporta la **procedencia independiente** que el contrato de evidencia pide además de la captura del arnés. Hay captura de pantalla de la corrida.
 
-**Estado del Verify: verificado.** El único pendiente no afecta el comportamiento (ver abajo).
+**Estado del Verify: verificado.**
 
-## Pendiente
+## Cierre
+
+- Tareas: **16/16**. La tarea 1.1 (`.env.example`) la creó el equipo el 2026-11-17, porque los permisos del entorno no le permiten al agente escribir archivos `.env*`.
+- Sin pendientes. El change queda listo para Archive.
