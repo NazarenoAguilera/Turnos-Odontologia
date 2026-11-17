@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "step": "find-skill",
+  "step": "registry",
   "owner": "active-orchestrator",
   "discovery": {
     "created_by": "discovery-research",
@@ -219,5 +219,79 @@
   "roadmap": {
     "created_by": "roadmap-generator",
     "changes_file": "CHANGES.md"
+  },
+  "skills": {
+    "created_by": "find-skill",
+    "recommended": [
+      {
+        "name": "fastify-best-practices",
+        "source": "mcollina/skills",
+        "why": "Buenas prácticas de Fastify (esquemas, plugins, manejo de errores, testing con inject) escritas por un mantenedor del core; encaja con la API REST del change."
+      },
+      {
+        "name": "vitest",
+        "source": "antfu/skills",
+        "why": "Guía oficial-comunitaria de Vitest del equipo de Vitest; útil para los tests por escenario de solapamientos y concurrencia."
+      },
+      {
+        "name": "tdd",
+        "source": "mattpocock/skills",
+        "why": "Flujo red-green-refactor para construir el módulo de dominio de agenda test a test, con intervalos semiabiertos y casos borde."
+      },
+      {
+        "name": "nodejs-backend-patterns",
+        "source": "wshobson/agents",
+        "why": "Patrones de backend Node/TypeScript (capas, validación, errores, middleware) para estructurar el dominio y la API."
+      },
+      {
+        "name": "typescript-advanced-types",
+        "source": "wshobson/agents",
+        "why": "Tipos avanzados (branded types, uniones discriminadas) para modelar IDs, estados de turno e intervalos con seguridad de tipos."
+      },
+      {
+        "name": "api-security-best-practices",
+        "source": "sickn33/agentic-awesome-skills",
+        "why": "Checklist de seguridad de APIs (validación de entrada, authz por rol, logging sin PII) relevante para datos de salud; calidad moderada, revisar antes de instalar."
+      }
+    ],
+    "installed": [
+      {
+        "name": "fastify-best-practices",
+        "source": "mcollina/skills",
+        "scope": "global",
+        "agent": "claude-code"
+      },
+      {
+        "name": "vitest",
+        "source": "antfu/skills",
+        "scope": "global",
+        "agent": "claude-code"
+      },
+      {
+        "name": "tdd",
+        "source": "mattpocock/skills",
+        "scope": "global",
+        "agent": "claude-code"
+      }
+    ],
+    "declined": [
+      {
+        "name": "nodejs-backend-patterns",
+        "why": "Se superpone con la arquitectura ya definida en knowledge-base/08; sumaría ruido."
+      },
+      {
+        "name": "typescript-advanced-types",
+        "why": "Útil pero accesoria para un change chico; la tipología del dominio es simple."
+      },
+      {
+        "name": "api-security-best-practices",
+        "why": "Genérica y de calidad moderada; la seguridad (roles y auditoría) corresponde a C-08 y C-09, fuera del change de la consigna."
+      }
+    ],
+    "justificacion_instaladas": {
+      "fastify-best-practices": "Escrita por un mantenedor del núcleo de Fastify; cubre esquemas, errores y tests con inject, justo lo que usa POST /turnos.",
+      "vitest": "Guía del equipo de Vitest para escribir un test por escenario del spec, como exige la consigna.",
+      "tdd": "Ciclo red-green-refactor para el dominio de intervalos y sus casos borde; encaja con Apply y Verify."
+    }
   }
 }
