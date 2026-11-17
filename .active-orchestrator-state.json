@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "step": "visual-design",
+  "step": "roadmap",
   "owner": "active-orchestrator",
   "discovery": {
     "created_by": "discovery-research",
@@ -209,5 +209,11 @@
       "knowledge-base/11_contexto_de_mercado.md",
       "knowledge-base/README.md"
     ]
+  },
+  "visual_design": {
+    "created_by": "design-system",
+    "mode": "deferred",
+    "status": "deferred",
+    "path": "design-system/README.md"
   }
 }
