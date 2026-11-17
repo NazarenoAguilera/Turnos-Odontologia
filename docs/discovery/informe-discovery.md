@@ -1,7 +1,7 @@
 # Informe de Discovery — Sistemas odontológicos de gestión de turnos y agenda
 
 **Materia**: Desarrollo de Software — Trabajo Global (UTN-FRM)
-**Integrantes**: (completar)
+**Integrantes**: Nazareno Aguilera
 **Fecha**: 16 de noviembre de 2026
 **Proyecto**: turnos-odontologia
 **Alcance**: Argentina (prioridad), Latinoamérica y soluciones internacionales de referencia
@@ -269,17 +269,17 @@ Un producto nuevo que no ofrezca esto no compite. Pero tampoco se diferencia por
 
 La consigna pide comprobar personalmente al menos 5 fuentes, una de cada tipo, y anotar si lo que afirma el informe está realmente en esa URL. Las siguientes son las de mayor impacto en las conclusiones.
 
-> **Estado: verificación manual pendiente.** Esta tabla la preparó el agente. Las columnas "Qué se encontró", "Corrección", "Fecha" y "Verificó" las debe completar **una persona del equipo**, abriendo cada URL en su navegador. Si algo no coincide, se corrige el informe con *Ajustar* y se registra el hallazgo acá (sirve para la reflexión).
+> **Estado: verificación manual completada el 17/11/2026.** El agente preparó la tabla con las afirmaciones del informe. Una persona del equipo abrió cada URL en su navegador y completó las columnas "Qué se encontró", "Corrección", "Fecha" y "Verificó". Se comprobaron 7 fuentes de 6 tipos distintos y todas coincidieron con lo afirmado, por lo que no hizo falta corregir el informe.
 
 | # | Tipo de fuente | URL | Qué afirma el informe | Uso en el informe | Qué se encontró | Corrección | Fecha | Verificó |
 |---|---|---|---|---|---|---|---|---|
-| 1 | Política de privacidad | https://dentia.tech/politica-de-privacidad | Declara las leyes 25.326 (art. 8) y 26.529; procesa datos en Brasil, EE.UU. y en 19 países vía Azure; inscripción en el registro "en trámite" | Rank 1, C.3.5 | Pendiente | | | |
-| 2 | Página de precios | https://dentalcore.app/pricing | $75.000/mes con 2 usuarios + $15.000 por usuario; prueba de 7 días; sin plan gratuito (y la FAQ dice USD 50) | Rank 2, A.1 | Pendiente | | | |
-| 3 | Sitio oficial (landing) | https://dentalsoft.com.ar/ | "Urgencias y sobreturnos con detección automática de solapamiento"; planes Gratis, Gestión $30.000 y Pro $60.000 | C.3.1, D.1.3 | Pendiente | | | |
-| 4 | Centro de ayuda | https://ayuda.softwaredentalink.com/es/collections/19196578-modulo-exclusivo-para-argentina | Existe un módulo exclusivo para Argentina con artículos de obras sociales y receta electrónica | Rank 4, D.1.4 | Pendiente | | | |
-| 5 | Preguntas frecuentes | https://www.appzyra.ar/ (sección "Preguntas frecuentes") | WhatsApp se vincula escaneando un QR; ARCA con certificado digital y CAE | C.3.6 | Pendiente | | | |
-| 6 | Página de precios | https://turnito.app/ar/planes/ | Plan gratuito con 100 reservas/mes y 5% de comisión; Plus $12.000, Advance $24.500, Pro $42.000 | D.2.1, C.4.5 | Pendiente | | | |
-| 7 | Página de producto | https://www.curvedental.com/dental-scheduling-software | Vistas por operatorio, Smart Fill y lista de aviso corto | C.2, D.2.3 | Pendiente | | | |
+| 1 | Política de privacidad | https://dentia.tech/politica-de-privacidad | Declara las leyes 25.326 (art. 8) y 26.529; procesa datos en Brasil, EE.UU. y en 19 países vía Azure; inscripción en el registro "en trámite" | Rank 1, C.3.5 | Coincide | Ninguna | 17/11/26 | Nazareno Aguilera |
+| 2 | Página de precios | https://dentalcore.app/pricing | $75.000/mes con 2 usuarios + $15.000 por usuario; prueba de 7 días; sin plan gratuito (y la FAQ dice USD 50) | Rank 2, A.1 | Coincide | Ninguna | 17/11/26 | Nazareno Aguilera |
+| 3 | Sitio oficial (landing) | https://dentalsoft.com.ar/ | "Urgencias y sobreturnos con detección automática de solapamiento"; planes Gratis, Gestión $30.000 y Pro $60.000 | C.3.1, D.1.3 | Coincide | Ninguna | 17/11/26 | Nazareno Aguilera |
+| 4 | Centro de ayuda | https://ayuda.softwaredentalink.com/es/collections/19196578-modulo-exclusivo-para-argentina | Existe un módulo exclusivo para Argentina con artículos de obras sociales y receta electrónica | Rank 4, D.1.4 | Coincide | Ninguna | 17/11/26 | Nazareno Aguilera |
+| 5 | Preguntas frecuentes | https://www.appzyra.ar/ (sección "Preguntas frecuentes") | WhatsApp se vincula escaneando un QR; ARCA con certificado digital y CAE | C.3.6 | Coincide | Ninguna | 17/11/26 | Nazareno Aguilera |
+| 6 | Página de precios | https://turnito.app/ar/planes/ | Plan gratuito con 100 reservas/mes y 5% de comisión; Plus $12.000, Advance $24.500, Pro $42.000 | D.2.1, C.4.5 | Coincide | Ninguna | 17/11/26 | Nazareno Aguilera |
+| 7 | Página de producto | https://www.curvedental.com/dental-scheduling-software | Vistas por operatorio, Smart Fill y lista de aviso corto | C.2, D.2.3 | Coincide | Ninguna | 17/11/26 | Nazareno Aguilera |
 
 ---
 
