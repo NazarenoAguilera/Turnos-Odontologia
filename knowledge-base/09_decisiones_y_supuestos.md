@@ -50,7 +50,7 @@
 
 ## Supuestos inferidos
 
-### SU-01 — Todo turno requiere un sillón/box
+### SU-01 — Todo turno requiere un sillón/box ✅ Confirmado (PA-01, 2026-11-17)
 **Supuesto**: no hay prestaciones sin sillón.
 **Origen**: Discovery, supuesto confirmado por el usuario.
 **Riesgo si es falso**: consultas sin sillón (por ejemplo, de escritorio) bloquearían un sillón innecesariamente.
@@ -62,9 +62,9 @@
 **Riesgo si es falso**: no se podría reasignar el horario de un paciente ausente. Es de bajo impacto, porque son turnos pasados.
 **Cómo validar**: revisar en la demo de los competidores (DentalSoft, Dentia).
 
-### SU-03 — Duración múltiplo de 15 minutos
+### SU-03 — Duración múltiplo de 15 minutos ✅ Confirmado (PA-02, 2026-11-17)
 **Supuesto**: la duración (por defecto y editada) es múltiplo de 15, igual que la grilla.
-**Origen**: inferido de la grilla de 15 minutos. **No confirmado explícitamente** (PA-02).
+**Origen**: inferido de la grilla de 15 minutos; confirmado por el usuario en el Explore de C-01.
 **Riesgo si es falso**: rechazar una duración válida, como 20 minutos.
 **Cómo validar**: confirmarlo con el usuario antes de aprobar el spec del primer change.
 

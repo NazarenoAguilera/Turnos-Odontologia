@@ -25,6 +25,8 @@
 
 ## Dominio: Agenda y disponibilidad (RN-AG)
 
+> Implementación: RN-AG-01 (horario de atención) y RN-AG-02 (bloqueos) se incorporan a la creación de turnos en el change C-03 `horarios-y-bloqueos`, no en C-01. Es una decisión del Explore del 2026-11-17 para mantener C-01 chico (ver `docs/opsx/explore-crear-turno-sin-solapamientos.md`). RN-AG-03 a RN-AG-05 sí aplican desde C-01.
+
 - **RN-AG-01**: El turno debe caer completamente dentro de una franja de atención del profesional para ese día de la semana. Formalmente, [inicio, fin) ⊆ [desde, hasta). Si no, se rechaza con `FUERA_DE_HORARIO`. Un turno que termina justo a la hora de cierre es válido.
 - **RN-AG-02**: El turno no puede superponerse con un bloqueo del profesional (feriado, vacaciones), con la misma semántica semiabierta de RN-TU-02. Si se superpone, se rechaza con `EN_BLOQUEO`.
 - **RN-AG-03**: El profesional, el sillón y la prestación deben existir y estar activos. Si no existen, se responde `404`. Si están inactivos, `422` con `RECURSO_INACTIVO`.

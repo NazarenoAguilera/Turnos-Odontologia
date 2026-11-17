@@ -102,20 +102,24 @@ C-01 ⭐ → C-05* → C-08 → C-09 → C-10
   - Servidor Fastify con `GET /health` y mapeo de errores de dominio a 404/409/422 con `codigo` y mensaje en español (RN-GL-02)
   - Configuración por variables de entorno `PORT`, `DB_PATH`, `TZ_CONSULTORIO`, `SEED_FICTICIO`; `.env.example` sin valores reales; `.gitignore` con `.env` y `data/`; reloj inyectable (`Clock`)
   - `README.md` mínimo con `npm install` y `npm test`
-  - **Dominio puro**: value object `Intervalo` semiabierto en `src/domain/intervalo.ts` (superposición `a < d y c < b`, RN-TU-02); funciones `estaDentroDeHorario` ([inicio, fin) ⊆ [desde, hasta)) y `seSuperponeConBloqueo`; conversión de hora local `America/Argentina/Buenos_Aires` a instantes en minutos Unix (DD-03, RN-AG-04)
-  - **Esquema SQLite** (conexión `node:sqlite`, base `:memory:` nueva por test): tablas `profesional`, `sillon` (`nombre` UNIQUE), `prestacion` (CHECK `duracion_min` > 0 y múltiplo de 15; ver PA-02), `paciente`, `horario_atencion`, `bloqueo`, `turno` (`inicio_min`, `fin_min`, `duracion_min`, `estado` con CHECK, índices por profesional y por sillón) y `evento_auditoria` (solo inserción)
-  - **Seed y fixtures ficticios** usados por los tests: profesionales Dra. Ana Prueba, Dr. Bruno Ejemplo y Dra. Carla Demo con sus horarios; Sillón 1, Sillón 2 y Box 3; prestaciones Consulta 15, Limpieza 30, Extracción simple 45 y Endodoncia 90; Paciente Ficticio Uno, Dos y Tres; un feriado de ejemplo
+  - **Decisiones del Explore (2026-11-17)**: alcance acotado a solapamientos, grilla y duración; las validaciones de horario de atención y bloqueos pasan a C-03. PA-01: `sillonId` obligatorio. PA-02: duración > 0 y múltiplo de 15. Ver `docs/opsx/explore-crear-turno-sin-solapamientos.md`
+  - **Dominio puro**: value object `Intervalo` semiabierto en `src/domain/intervalo.ts` (superposición `a < d y c < b`, RN-TU-02); conversión de hora local `America/Argentina/Buenos_Aires` a instantes en minutos Unix (DD-03, RN-AG-04)
+  - **Esquema SQLite** (conexión `node:sqlite`, base `:memory:` nueva por test): tablas `profesional`, `sillon` (`nombre` UNIQUE), `prestacion` (CHECK `duracion_min` > 0 y múltiplo de 15), `paciente`, `turno` (`inicio_min`, `fin_min`, `duracion_min`, `sillon_id` NOT NULL, `estado` con CHECK, índices por profesional y por sillón) y `evento_auditoria` (solo inserción)
+  - **Seed y fixtures ficticios** usados por los tests: profesionales Dra. Ana Prueba, Dr. Bruno Ejemplo y Dra. Carla Demo; Sillón 1, Sillón 2 y Box 3; prestaciones Consulta 15, Limpieza 30, Extracción simple 45 y Endodoncia 90; Paciente Ficticio Uno, Dos y Tres
   - **`POST /turnos`** (`pacienteId`, `profesionalId`, `sillonId`, `prestacionId`, `inicio` ISO 8601, `duracionMin` opcional): 201 con el turno, 404 si falta un recurso, 422 `RECURSO_INACTIVO`, 409 por solapamiento
-  - `crearTurno` calcula `duracion` (la indicada o la de la prestación) y `fin = inicio + duracion`; valida grilla de 15 minutos (`INICIO_FUERA_DE_GRILLA`), duración (`DURACION_INVALIDA`), que no cruce la medianoche, horario de atención (`FUERA_DE_HORARIO`) y bloqueos (`EN_BLOQUEO`)
+  - `crearTurno` calcula `duracion` (la indicada o la de la prestación) y `fin = inicio + duracion`; valida grilla de 15 minutos (`INICIO_FUERA_DE_GRILLA`), duración (`DURACION_INVALIDA`) y que no cruce la medianoche
+  - **Concurrencia**: `DatabaseSync` es sincrónico, así que la carrera real ocurre entre conexiones. `BEGIN IMMEDIATE` con `busy_timeout`; el test usa 2 conexiones a un archivo SQLite temporal
+  - **Fuera de alcance de C-01**: horarios de atención y bloqueos (`FUERA_DE_HORARIO`, `EN_BLOQUEO`), que van en C-03
   - Verificación de solapamiento con `BEGIN IMMEDIATE`: busca turnos no cancelados con `inicio_min < :fin AND :inicio < fin_min AND (profesional_id = :p OR sillon_id = :s)`; clasifica en `TURNO_SOLAPADO_PROFESIONAL` y/o `TURNO_SOLAPADO_SILLON` (si chocan ambos, informa los dos), con los turnos en conflicto en `detalle`
   - Inserta el turno en estado `reservado` y el evento de auditoría `creado` en la misma transacción; `usuario_id` nulo hasta C-08
   - Sin sobreturnos: ningún parámetro fuerza un solapamiento (RN-TU-07)
   - **No incluye**: endpoints CRUD de profesionales, sillones, prestaciones, pacientes, horarios ni bloqueos (C-02 a C-04); los recursos se cargan por seed y fixtures
-  - Tests (uno por escenario): caso feliz; solapamiento por profesional; solapamiento por sillón con otro profesional; ambos conflictos a la vez; borde contiguo aceptado (10:00-10:30 y 10:30-11:00); turno cancelado no bloquea; inicio 10:10; duración 0 y 20; fuera de horario; en bloqueo; recurso inactivo; 404; dos creaciones concurrentes resultan en exactamente un turno; rechazo no deja datos ni auditoría; tabla de bordes de `Intervalo` (contiguo, contenido, idéntico, disjunto); `/health` devuelve 200
+  - Tests (uno por escenario): caso feliz; solapamiento por profesional; solapamiento por sillón con otro profesional; ambos conflictos a la vez; borde contiguo aceptado (10:00-10:30 y 10:30-11:00); turno cancelado no bloquea; inicio 10:10; duración 0 y 20; recurso inactivo; 404; dos creaciones concurrentes resultan en exactamente un turno; rechazo no deja datos ni auditoría; tabla de bordes de `Intervalo` (contiguo, contenido, idéntico, disjunto); `/health` devuelve 200
 - **Dependencias**: ninguna
 - **Governance**: MEDIO
 - **Leer antes**:
-  - `knowledge-base/05_reglas_de_negocio.md` RN-TU-01 a RN-TU-08, RN-TU-13, RN-AG-01 a RN-AG-05, RN-AU-01, RN-GL-01 a RN-GL-03, RN-PA-01
+  - `knowledge-base/05_reglas_de_negocio.md` RN-TU-01 a RN-TU-08, RN-TU-13, RN-AG-03 a RN-AG-05, RN-AU-01, RN-GL-01 a RN-GL-03, RN-PA-01
+  - `docs/opsx/explore-crear-turno-sin-solapamientos.md`
   - `knowledge-base/06_funcionalidades.md` US-010
   - `knowledge-base/07_flujos_principales.md` Flujo 1
   - `knowledge-base/04_modelo_de_datos.md` todas las entidades y §Seed data inicial
@@ -149,10 +153,12 @@ C-01 ⭐ → C-05* → C-08 → C-09 → C-10
 - **Estado**: `[ ]` pendiente
 - **Scope**:
   - Cubre US-004
+  - Esquema: tablas `horario_atencion` y `bloqueo` (movidas desde C-01 en el Explore del 2026-11-17), con seed ficticio de horarios y un feriado de ejemplo
   - Endpoints: `POST/GET/DELETE /profesionales/:id/horarios` y `POST/GET/DELETE /profesionales/:id/bloqueos`, por profesional (ver PA-03 y PA-04)
   - Validación: `dia_semana` 1..7 ISO, `hora_desde` < `hora_hasta`, bloqueo con `inicio` < `fin`; franjas y bloqueos semiabiertos
-  - Reutiliza `Intervalo`, `estaDentroDeHorario` y `seSuperponeConBloqueo` de C-01; no redefine la regla
-  - Tests: franja inválida rechazada, bloqueo creado impide un turno que lo roza (turno que termina justo al inicio del bloqueo sí se acepta), borrar un bloqueo libera la franja
+  - Dominio: funciones `estaDentroDeHorario` ([inicio, fin) ⊆ [desde, hasta)) y `seSuperponeConBloqueo`, que reutilizan `Intervalo` de C-01
+  - **Suma a `POST /turnos`** (y a la reprogramación) las validaciones `FUERA_DE_HORARIO` (RN-AG-01) y `EN_BLOQUEO` (RN-AG-02)
+  - Tests: franja inválida rechazada; turno fuera de horario rechazado; turno que termina justo al cierre aceptado; bloqueo que lo roza rechazado (turno que termina justo al inicio del bloqueo sí se acepta); borrar un bloqueo libera la franja
 - **Dependencias**: `C-01`
 - **Governance**: MEDIO
 - **Leer antes**:

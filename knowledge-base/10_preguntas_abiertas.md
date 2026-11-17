@@ -20,14 +20,14 @@
 **Documento A dice**: Discovery: el inicio va en grilla de 15 minutos y la duración es editable.
 **Documento B dice**: la KB asume que la duración también es múltiplo de 15 (SU-03, RN-TU-06).
 **Impacto**: cambia una validación del primer change.
-**Resolución propuesta**: confirmar PA-02 antes de aprobar el spec.
+**Resolución**: ✅ resuelta el 2026-11-17. El usuario confirmó PA-02 (múltiplo de 15) en el Explore de C-01, así que la KB queda como estaba.
 
 ## Preguntas abiertas de producto (priorizadas)
 
 | ID | Prioridad | Pregunta | Bloquea | Decisor |
 |---|---|---|---|---|
-| PA-01 | Alta | ¿Hay prestaciones que no requieren sillón/box (por ejemplo, una consulta de escritorio)? Hoy se asume que no (SU-01). | Spec del primer change | Usuario / Product Owner |
-| PA-02 | Alta | ¿La duración editable debe ser múltiplo de 15 minutos como el inicio, o puede ser cualquier valor mayor que cero? | Spec del primer change | Usuario / Product Owner |
+| PA-01 | ✅ Resuelta (2026-11-17) | ¿Hay prestaciones que no requieren sillón/box? → **No: `sillonId` es obligatorio en todo turno.** Una consulta sin sillón se modela como un box más. | — | Usuario, en el Explore de C-01 |
+| PA-02 | ✅ Resuelta (2026-11-17) | ¿La duración debe ser múltiplo de 15 minutos? → **Sí: duración > 0 y múltiplo de 15**, si no `422 DURACION_INVALIDA`. | — | Usuario, en el Explore de C-01 |
 | PA-03 | Media | ¿El horario de atención se define por profesional (supuesto actual), por sillón o por consultorio? | Change de configuración | Usuario |
 | PA-04 | Media | ¿Hacen falta bloqueos por sillón (mantenimiento, rotura), además de por profesional? | Change de configuración | Usuario |
 | PA-05 | Media | ¿Un turno reprogramado vuelve a `reservado` o conserva `confirmado`? (SU-04) | Change de reprogramar | Usuario |
