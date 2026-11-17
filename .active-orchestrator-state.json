@@ -1,5 +1,187 @@
 {
   "version": 5,
   "step": "discovery",
-  "owner": "active-orchestrator"
+  "owner": "active-orchestrator",
+  "discovery": {
+    "created_by": "discovery-research",
+    "discovery_file": "docs/discovery/discovery.md",
+    "report_file": "docs/discovery/informe-discovery.md",
+    "sources_fetched_at": "2026-11-16",
+    "sources": [
+      "https://dentia.tech/",
+      "https://dentalcore.app/",
+      "https://dentalsoft.com.ar/",
+      "https://bilog.com.ar/",
+      "https://www.appzyra.ar/",
+      "https://www.clinia.com.ar/odontologia",
+      "https://web.dentaltec.com.ar/",
+      "https://www.softwaredentalink.com/",
+      "https://agendapro.com/ar/dental/software-odontologico",
+      "https://turnito.app/ar/",
+      "https://www.dentidesk.com/",
+      "https://www.softwaremedilink.com/",
+      "https://clinic-cloud.com/",
+      "https://www.medesk.net/es/solutiones/odontologia",
+      "https://www.curvedental.com/",
+      "https://www.opendental.com/"
+    ],
+    "competitors": [
+      {
+        "name": "Dentia",
+        "notes_file": "docs/discovery/sources/dentia.md"
+      },
+      {
+        "name": "DentalCore",
+        "notes_file": "docs/discovery/sources/dentalcore.md"
+      },
+      {
+        "name": "DentalSoft",
+        "notes_file": "docs/discovery/sources/dentalsoft.md"
+      },
+      {
+        "name": "Bilog",
+        "notes_file": "docs/discovery/sources/bilog.md"
+      },
+      {
+        "name": "ZYRA",
+        "notes_file": "docs/discovery/sources/zyra.md"
+      },
+      {
+        "name": "OdontoClinIA",
+        "notes_file": "docs/discovery/sources/clinia.md"
+      },
+      {
+        "name": "DentalTec",
+        "notes_file": "docs/discovery/sources/dentaltec.md"
+      },
+      {
+        "name": "Dentalink",
+        "notes_file": "docs/discovery/sources/dentalink.md"
+      },
+      {
+        "name": "AgendaPro",
+        "notes_file": "docs/discovery/sources/agendapro.md"
+      },
+      {
+        "name": "Turnito",
+        "notes_file": "docs/discovery/sources/turnito.md"
+      },
+      {
+        "name": "Dentidesk",
+        "notes_file": "docs/discovery/sources/dentidesk.md"
+      },
+      {
+        "name": "Medilink",
+        "notes_file": "docs/discovery/sources/medilink.md"
+      },
+      {
+        "name": "Clinic Cloud",
+        "notes_file": "docs/discovery/sources/clinic-cloud.md"
+      },
+      {
+        "name": "Medesk",
+        "notes_file": "docs/discovery/sources/medesk.md"
+      },
+      {
+        "name": "Curve Dental",
+        "notes_file": "docs/discovery/sources/curve-dental.md"
+      },
+      {
+        "name": "Open Dental",
+        "notes_file": "docs/discovery/sources/open-dental.md"
+      }
+    ],
+    "not_surveyed": [
+      {
+        "name": "Doctoralia Argentina",
+        "reason": "conexión rechazada"
+      }
+    ],
+    "problema": "Consultorios odontológicos argentinos de 2 a 5 profesionales que comparten sillones/boxes agendan en papel, planillas o WhatsApp, o con sistemas que no demuestran cómo evitan reservar dos veces al mismo profesional o al mismo sillón; resultado: dobles reservas, sillones ociosos y conflictos en recepción.",
+    "usuarios": [
+      "Recepción: crea, cancela y reprograma turnos",
+      "Odontólogo: consulta su agenda y puede crear turnos",
+      "Administrador del consultorio: configura profesionales, sillones/boxes, prestaciones, horarios, bloqueos y roles",
+      "Paciente: sujeto del turno; no usa el sistema en v1"
+    ],
+    "casos_de_uso": [
+      "Crear un turno (paciente + profesional + sillón/box + prestación) sin solapamientos por profesional ni por sillón",
+      "Cancelar un turno y liberar profesional y sillón",
+      "Reprogramar un turno con las mismas reglas que la creación",
+      "Ver la agenda diaria y semanal por profesional o por sillón",
+      "Configurar profesionales, sillones, prestaciones con duración, horarios y bloqueos"
+    ],
+    "funcionalidades_necesarias": [
+      "Alta de profesionales, sillones/boxes y prestaciones con duración por defecto",
+      "Horarios de atención por profesional y bloqueos",
+      "Creación de turnos sin solapamientos por profesional y por sillón/box con intervalos semiabiertos [inicio, fin)",
+      "Estados de turno (reservado, confirmado, cancelado, ausente, atendido); cancelación y reprogramación",
+      "Agenda diaria y semanal filtrable por profesional y sillón",
+      "Ficha mínima de paciente con datos ficticios",
+      "Roles básicos y auditoría de cambios de turnos"
+    ],
+    "funcionalidades_opcionales": [
+      "Reserva online por link (v1.x)",
+      "Recordatorios y confirmación por WhatsApp API oficial y email (v1.x)",
+      "Lista de espera que ofrece huecos liberados (v1.x)",
+      "Métricas de ocupación por sillón y ausentismo (v1.x)",
+      "Transparencia de cumplimiento Ley 25.326/26.529 y exportación (v1.x)",
+      "Odontograma, periodontograma, historia clínica e imágenes (posterior)",
+      "Presupuestos y planes de tratamiento (posterior)",
+      "Caja, señas con Mercado Pago y facturación ARCA (posterior)",
+      "Liquidación de obras sociales y honorarios (posterior)",
+      "Asistente IA, campañas, multisucursal, stock (posterior)"
+    ],
+    "reglas_de_negocio": [
+      "Un turno ocupa a la vez un profesional y un sillón/box durante [inicio, fin), con fin = inicio + duración",
+      "No puede haber dos turnos no cancelados superpuestos del mismo profesional ni del mismo sillón/box",
+      "[a,b) y [c,d) se superponen si y solo si a < d y c < b; un turno que empieza cuando termina otro no se superpone",
+      "El inicio se alinea a una grilla de 15 minutos",
+      "La duración por defecto viene de la prestación y es editable al crear; debe ser mayor que cero",
+      "Sin sobreturnos en v1",
+      "Cancelación sin anticipación mínima en v1; pasa a cancelado, libera recursos y se audita",
+      "La reprogramación valida igual que la creación, excluyendo al propio turno",
+      "Todo turno requiere sillón/box (supuesto confirmado)",
+      "El turno debe caer dentro del horario de atención del profesional y fuera de bloqueos (supuesto confirmado)",
+      "Solo el estado cancelado libera los recursos (supuesto confirmado)",
+      "Nunca datos reales de pacientes en repo, ejemplos, tests ni capturas"
+    ],
+    "integraciones": [
+      "Ninguna en v1",
+      "v1.x: WhatsApp Business API oficial y email",
+      "Posterior: ARCA, Mercado Pago, Google Calendar"
+    ],
+    "restricciones": [
+      "Entrega 2026-11-25 23:00",
+      "Solo datos ficticios; no contactar proveedores ni crear cuentas reales",
+      "Sin secretos en el repositorio",
+      "Stack libre; sin UI obligatoria (API o módulo de dominio)",
+      "Tests automatizados por escenario; README reproducible",
+      "Historial de commits por fase en master; si es grupo, commits por integrante y PRs por change",
+      "Un único change en el ciclo OPSX",
+      "Sin despliegue público requerido"
+    ],
+    "riesgos": [
+      "Supuesto sin probar: el vacío de prevención de solapamientos por sillón puede ser falta de documentación y no de función",
+      "Supuesto sin probar: frecuencia real de sillones compartidos en consultorios de 2 a 5 profesionales",
+      "Concurrencia: reservas simultáneas pueden crear solapamientos si la regla no se garantiza en la persistencia",
+      "Manejo de fechas/horas y bordes de intervalos",
+      "Plazo corto (9 días)",
+      "Verificación manual de 5 fuentes pendiente"
+    ],
+    "preguntas_abiertas": [
+      "Cómo previenen solapamientos los competidores (No evidenciado)",
+      "Lista de espera en sistemas argentinos (No evidenciado)",
+      "Método de WhatsApp de cada proveedor (No evidenciado salvo DentalCore y ZYRA)",
+      "Cumplimiento de Ley 26.529 (solo Dentia y DentalCore lo declaran)",
+      "Precios no publicados de Bilog, DentalTec, OdontoClinIA, Dentalink, Medilink, Dentidesk, Curve",
+      "Doctoralia Argentina no relevado",
+      "Open Dental código abierto no verificado",
+      "¿Prestaciones sin sillón?",
+      "¿Duración múltiplo de 15 minutos?",
+      "¿Horario por profesional, sillón o consultorio?",
+      "¿Trabajo individual o en grupo?",
+      "Stack tecnológico (lo define kb-creator)"
+    ]
+  }
 }
