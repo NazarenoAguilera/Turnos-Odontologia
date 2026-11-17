@@ -41,7 +41,7 @@ La fuente de verdad del dominio vive en `knowledge-base/`. **Leé el archivo rel
 | [10_preguntas_abiertas.md](knowledge-base/10_preguntas_abiertas.md) | ⚠️ Inconsistencias y preguntas a resolver ANTES de codear |
 | [11_contexto_de_mercado.md](knowledge-base/11_contexto_de_mercado.md) | Competidores y vacío del mercado que ataca el producto |
 
-> ⚠️ Antes del spec del primer change, resolver las preguntas **Alta** de `10_preguntas_abiertas.md`: **PA-01** (¿hay prestaciones sin sillón?) y **PA-02** (¿la duración debe ser múltiplo de 15 minutos?).
+> ✅ PA-01 (sillón obligatorio) y PA-02 (duración múltiplo de 15) se resolvieron en el Explore del 2026-11-17. Antes de cada change nuevo, revisá las preguntas abiertas que lo bloquean en `10_preguntas_abiertas.md`.
 
 Evidencia del Discovery: [docs/discovery/informe-discovery.md](docs/discovery/informe-discovery.md) y [docs/discovery/discovery.md](docs/discovery/discovery.md).
 
@@ -69,7 +69,7 @@ Cargá la skill correspondiente al contexto ANTES de escribir código. Las skill
 El plan completo está en [CHANGES.md](CHANGES.md). Resumen:
 
 - **Total**: 10 changes en 4 fases, más un backlog fuera del MVP (FASE 5).
-- **Primer change (y único del ciclo OPSX de la consigna)**: `C-01` `crear-turno-sin-solapamientos`. Es autocontenido, sin dependencias, con gobernanza MEDIO.
+- **Primer change (y único del ciclo OPSX de la consigna)**: `C-01` `crear-turno-sin-solapamientos` — ✅ **archivado el 2026-11-17**. Spec vigente: `openspec/specs/agenda-turnos/`.
 - **Después de C-01**: C-02 a C-07 en paralelo (catálogo de recursos, horarios y bloqueos, ficha de paciente, cancelar y cambiar estado, reprogramar, agenda). Luego C-08 `roles-basicos` (CRÍTICO), C-09 `consulta-de-auditoria` (CRÍTICO) y C-10 `cierre-y-entrega`.
 - **Camino crítico**: `C-01 → (cualquiera de C-02 a C-07) → C-08 → C-09 → C-10`.
 

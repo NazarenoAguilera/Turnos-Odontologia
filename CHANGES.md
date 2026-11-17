@@ -95,7 +95,7 @@ C-01 ⭐ → C-05* → C-08 → C-09 → C-10
 > Autocontenido a propósito: absorbe lo mínimo que necesita (base del proyecto, tablas, dominio y datos de prueba) para que sea un único ciclo OPSX. No incluye CRUD de recursos: esos llegan en la FASE 2.
 
 ### [C-01] `crear-turno-sin-solapamientos` ⭐
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` completado — archivado el 2026-11-17 en `openspec/changes/archive/2026-11-17-crear-turno-sin-solapamientos/`; spec vigente `openspec/specs/agenda-turnos/` (75 tests en verde)
 - **Scope**:
   - Cubre US-010, el caso de uso central del MVP
   - **Base del proyecto**: scaffold TypeScript + Node 24 (`package.json` con scripts `dev`, `build`, `test`, `start`; `tsconfig.json`), Vitest, estructura hexagonal `src/domain`, `src/application`, `src/infrastructure/sqlite`, `src/http`, `src/main.ts`, `tests/domain`, `tests/e2e`
@@ -331,4 +331,4 @@ C-01 ⭐ → C-05* → C-08 → C-09 → C-10
 | C-09 | `consulta-de-auditoria` | 4 | C-08 | CRITICO |
 | C-10 | `cierre-y-entrega` | 4 | C-09 | BAJO |
 
-**Primer change recomendado**: `C-01` (`crear-turno-sin-solapamientos`), sin dependencias. Cuando esté `[x]`, se abren en paralelo C-02 a C-07.
+**Primer change recomendado**: `C-01` (`crear-turno-sin-solapamientos`), sin dependencias — ✅ **completado y archivado el 2026-11-17**. GATE 0 desbloqueado: se pueden abrir en paralelo C-02 a C-07.
