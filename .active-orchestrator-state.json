@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "step": "registry",
+  "step": "agents",
   "owner": "active-orchestrator",
   "discovery": {
     "created_by": "discovery-research",
@@ -293,5 +293,10 @@
       "vitest": "Guía del equipo de Vitest para escribir un test por escenario del spec, como exige la consigna.",
       "tdd": "Ciclo red-green-refactor para el dominio de intervalos y sus casos borde; encaja con Apply y Verify."
     }
+  },
+  "registry": {
+    "created_by": "skill-registry",
+    "file": ".atl/skill-registry.md",
+    "skills_count": 29
   }
 }
