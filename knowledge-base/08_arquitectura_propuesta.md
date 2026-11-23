@@ -28,6 +28,13 @@ turnos-odontologia/
 ├── tests/
 │   ├── domain/            # tests unitarios de reglas (intervalo, grilla, transiciones)
 │   └── e2e/               # un test por escenario del spec contra la API (base en memoria)
+├── web/                   # interfaz web mínima (DD-08): Vite + React + TypeScript, package.json propio
+│   ├── src/
+│   │   ├── api/           # cliente fetch de /api y traducción de errores { codigo, mensaje }
+│   │   ├── components/    # layout con menú lateral, botones, avisos, insignias de estado
+│   │   └── pages/         # NuevoTurno (C-11), Agenda (C-07)
+│   └── vite.config.ts     # proxy /api → http://127.0.0.1:3000
+├── design-system/         # tokens.css, brand, components.html y previews (revisión 1)
 ├── knowledge-base/
 ├── openspec/
 ├── docs/
@@ -35,6 +42,18 @@ turnos-odontologia/
 ├── tsconfig.json
 └── README.md              # cómo instalar y correr los tests
 ```
+
+## Interfaz web
+
+Agregada el 2026-11-23 por DD-08. Es un cliente más de la API: **no repite reglas de negocio**. Los solapamientos, la grilla y las duraciones los decide siempre el backend, y la pantalla muestra el `codigo` y el `mensaje` que devuelve.
+
+- **Stack**: Vite + React + TypeScript en `web/`, creado con `npm create vite@latest web -- --template react-ts`. Tiene su propio `package.json`; la raíz no cambia.
+- **Conexión con la API**: `web/vite.config.ts` define un proxy: todo lo que empiece con `/api` va a `http://127.0.0.1:3000` sin el prefijo (`/api/turnos` → `/turnos`). Como el navegador ve un solo origen, la API **no necesita CORS**.
+- **Diseño**: `web/src/main.tsx` importa `../../design-system/tokens.css` y los componentes usan solo esas variables. Si Vite rechaza servir un archivo de fuera de `web/`, se agrega `server.fs.allow: [".."]` en `vite.config.ts`. Los colores y textos siguen `design-system/brand.md`.
+- **Fechas**: la pantalla arma el `inicio` en hora local del consultorio con offset ISO 8601, igual que la API (RN-AG-04). Las horas se muestran en `America/Argentina/Buenos_Aires`.
+- **Datos**: solo los del seed ficticio (RN-PA-01). Las capturas de los verify tampoco pueden tener datos reales.
+- **Sin login** hasta C-08 (DD-07): la interfaz se usa en la computadora de recepción y no se publica en internet.
+- **Mockups**: cada pantalla nueva tiene un mockup HTML aprobado antes del Apply (`design-system/README.md`, modo `system-and-mockups`).
 
 ## Seguridad
 
@@ -61,3 +80,5 @@ turnos-odontologia/
 - Base `:memory:` nueva por test: aislamiento total, sin servicios externos.
 - Test de concurrencia: dos creaciones simultáneas en conflicto → exactamente un turno persistido.
 - Comando único: `npm test`. El README documenta `npm install` y `npm test`.
+- **Interfaz web**: los escenarios del spec describen la API y se testean automáticamente. Las pantallas se verifican a mano contra su mockup aprobado, con capturas a 390×844 y 1440×900 guardadas en el verify del change. `npm run build` dentro de `web/` tiene que compilar sin errores.
+- **Levantar todo para probar**: terminal 1 en la raíz, `npm run dev` (API en `http://127.0.0.1:3000`); terminal 2, `cd web` y `npm run dev` (interfaz en `http://localhost:5173`).

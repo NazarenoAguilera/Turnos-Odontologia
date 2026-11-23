@@ -31,7 +31,7 @@
 | PA-03 | Media | ¿El horario de atención se define por profesional (supuesto actual), por sillón o por consultorio? | Change de configuración | Usuario |
 | PA-04 | Media | ¿Hacen falta bloqueos por sillón (mantenimiento, rotura), además de por profesional? | Change de configuración | Usuario |
 | PA-05 | Media | ¿Un turno reprogramado vuelve a `reservado` o conserva `confirmado`? (SU-04) | Change de reprogramar | Usuario |
-| PA-06 | Media | ¿El trabajo es individual o en grupo? Afecta ramas por integrante, PRs a `master` y la ubicación de las skills en `.agents/`. | Roadmap y flujo de trabajo | Usuario |
+| PA-06 | ✅ Resuelta (2026-11-23) | ¿El trabajo es individual o en grupo? → **Grupo de 3**: Nazareno (líder, `master`), Lucas (rama `lucas`) y Lautaro (rama `lautaro`). Un PR por change hacia `master`, que solo mergea el líder. Ver CHANGES.md §Plan del equipo. | — | Equipo |
 | PA-07 | Media | ¿Qué esquema de autenticación se usa en v1: token por usuario desde variables de entorno o login real? (DD-07) | Change de roles | Equipo técnico |
 | PA-09 | Baja | ¿Hace falta prohibir que un turno cruce la medianoche (RN-AG-05, supuesto SU-04)? Se quitó de C-01 en la revisión del propose (2026-11-17) por no estar confirmada. Con horarios de atención (C-03), la regla puede volverse innecesaria. | C-03 | Usuario |
 | PA-08 | Baja | ¿Hace falta un tiempo de limpieza entre turnos del mismo sillón, o va dentro de la duración? (DD-02) | v1.x | Usuario |

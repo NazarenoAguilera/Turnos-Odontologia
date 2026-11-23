@@ -4,8 +4,8 @@
 
 See `_shared/skill-resolver.md` for the full resolution protocol.
 
-**Proyecto**: turnos-odontologia (TypeScript + Node 24 + Fastify + SQLite node:sqlite + Vitest; solo API, sin UI en v1).
-**Relevantes para este proyecto**: fastify-best-practices, vitest, tdd, openspec-apply-change, openspec-propose, openspec-explore, openspec-update-change, openspec-sync-specs, openspec-archive-change. El resto es de flujo de fundación o de dominios que no aplican (React/Vercel/UI).
+**Proyecto**: turnos-odontologia (TypeScript + Node 24 + Fastify + SQLite node:sqlite + Vitest; API REST + interfaz web mínima en `web/` con Vite + React + TypeScript desde DD-08, 2026-11-23; design-system en modo `system-and-mockups`).
+**Relevantes para este proyecto**: fastify-best-practices, vitest, tdd, openspec-apply-change, openspec-propose, openspec-explore, openspec-update-change, openspec-sync-specs, openspec-archive-change. **Solo para `web/`**: web-design-guidelines, emil-design-eng, design-taste-frontend-v1, vercel-react-best-practices, vercel-composition-patterns (subordinadas a `design-system/`). El resto es de flujo de fundación o no aplica (despliegue en Vercel, React Native, View Transitions).
 
 ## User Skills
 
@@ -32,14 +32,14 @@ Rutas: `G` = `C:/Users/nazar/.claude/skills`, `P` = `C:/Users/nazar/Desktop/Glob
 | Investigar competidores desde una URL | web-scraper | G/web-scraper/SKILL.md |
 | Crear/mejorar skills | skill-creator | G/skill-creator/SKILL.md |
 | Revisar prosa/docs contra guía de escritura | writing-guidelines | G/writing-guidelines/SKILL.md |
-| Revisar UI / accesibilidad (no aplica: sin UI en v1) | web-design-guidelines | G/web-design-guidelines/SKILL.md |
-| Pulido de UI/animaciones (no aplica) | emil-design-eng | G/emil-design-eng/SKILL.md |
-| Diseño frontend v1 (no aplica) | design-taste-frontend-v1 | G/design-taste-frontend-v1/SKILL.md |
+| Revisar UI / accesibilidad (solo `web/`) | web-design-guidelines | G/web-design-guidelines/SKILL.md |
+| Pulido de UI/animaciones (solo `web/`) | emil-design-eng | G/emil-design-eng/SKILL.md |
+| Diseño frontend v1 (solo `web/`, subordinada al design-system) | design-taste-frontend-v1 | G/design-taste-frontend-v1/SKILL.md |
 | Deploy a Vercel (no aplica) | deploy-to-vercel | G/deploy-to-vercel/SKILL.md |
 | Vercel CLI con tokens (no aplica) | vercel-cli-with-tokens | G/vercel-cli-with-tokens/SKILL.md |
 | Optimización costo/performance Vercel (no aplica) | vercel-optimize | G/vercel-optimize/SKILL.md |
-| Patrones de composición React (no aplica) | vercel-composition-patterns | G/vercel-composition-patterns/SKILL.md |
-| Performance React/Next.js (no aplica) | vercel-react-best-practices | G/vercel-react-best-practices/SKILL.md |
+| Patrones de composición React (solo `web/`) | vercel-composition-patterns | G/vercel-composition-patterns/SKILL.md |
+| Performance React (solo `web/`; las reglas de Next.js/RSC no aplican) | vercel-react-best-practices | G/vercel-react-best-practices/SKILL.md |
 | React Native/Expo (no aplica) | vercel-react-native-skills | G/vercel-react-native-skills/SKILL.md |
 | React View Transitions (no aplica) | vercel-react-view-transitions | G/vercel-react-view-transitions/SKILL.md |
 
@@ -105,16 +105,56 @@ Pre-digested rules per skill. Delegators copy matching blocks into sub-agent pro
 ### writing-guidelines
 - Aplicar al revisar README/docs: voz y tono consistentes, frases directas, sin relleno.
 
-### Skills de UI / React / Vercel (no aplican en v1: sin UI ni despliegue)
-- web-design-guidelines, emil-design-eng, design-taste-frontend-v1, vercel-*: no inyectar en este proyecto salvo que se agregue UI o despliegue.
+### Precedencia para `web/` (vale para las 5 skills de UI de abajo)
+- Manda `design-system/` (tokens.css, brand.md, components.html, revisión 1) y el mockup aprobado del change. Si una skill choca con eso, se sigue el design-system o se propone una revisión al líder.
+- Reglas duras del proyecto por encima de todo: solo datos ficticios ("Paciente Ficticio Uno", "Dra. Ana Prueba"), aunque una skill pida nombres "realistas".
+- CSS plano con las variables de `tokens.css`; sin Tailwind, sin fuentes remotas, sin librerías nuevas sin consultar.
+- La interfaz no tiene reglas de negocio: muestra `codigo` y `mensaje` de la API, no recalcula solapamientos ni grilla.
+
+### web-design-guidelines
+- Uso: revisión de UI. Bajar las reglas frescas de `https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md` antes de revisar.
+- Revisar solo los archivos de `web/` pedidos y reportar en formato `archivo:línea`.
+- Foco del proyecto: etiquetas en cada campo, foco visible, contraste, mensajes de error junto al campo, objetivos táctiles de 44 px.
+
+### emil-design-eng
+- Al revisar UI, reportar en una tabla `| Before | After | Why |`.
+- Animar solo con propósito (feedback, cambio de estado); nada que se vea decenas de veces por día (navegación, filtros de agenda).
+- Entradas y salidas con ease-out (`--ease-out` de tokens), nunca ease-in; animaciones de UI por debajo de 300 ms (`--duration-fast`/`--duration-base`).
+- Animar solo `transform` y `opacity`; nunca `transition: all`.
+- Botones con `:active` (traslado de 1 px o escala 0.97); nada aparece desde `scale(0)`.
+- Respetar `prefers-reduced-motion` (ya definido en tokens.css).
+
+### design-taste-frontend-v1
+- Subordinada al design-system: ignorar sus valores por defecto de Tailwind, fuentes (Geist/Satoshi), motion intensa y "nombres realistas".
+- Sí aplicar: estados completos en cada pantalla (carga con skeleton, vacío con indicación de qué hacer, error inline en formularios).
+- Etiqueta arriba del campo, ayuda opcional y error debajo.
+- Un solo color de acento (el verde de tokens); sin degradados ni brillos neón; sin negro puro.
+- Grid en lugar de cálculos de porcentajes con flex; en < 768 px, una sola columna sin scroll horizontal de la página.
+- Verificar `web/package.json` antes de importar cualquier librería; sin emojis en la interfaz.
+
+### vercel-react-best-practices
+- Proyecto Vite + React (SPA): ignorar las reglas de Next.js, RSC, `server-*` y `next/dynamic`.
+- Pedidos independientes en paralelo (`Promise.all` al cargar los catálogos de C-11).
+- Importar directo, sin archivos barril.
+- Estado derivado se calcula en el render, no con `useEffect`; lógica de interacción en los manejadores de eventos.
+- No definir componentes dentro de componentes; `setState` funcional cuando depende del valor anterior.
+- Condicionales con ternario en lugar de `&&` cuando el valor puede ser 0.
+
+### vercel-composition-patterns
+- No sumar props booleanas para variantes: componentes explícitos (`BotonPrimario`, `BotonPeligro`) o `children`.
+- Componentes compuestos con contexto para piezas complejas (por ejemplo, la tabla de Agenda con sus filtros).
+- El proveedor de estado es el único que sabe cómo se guarda el estado.
+- React 19: sin `forwardRef` (`ref` es una prop común); `use()` en lugar de `useContext()`.
 
 ## Project Conventions
 
 | File | Path | Notes |
 |------|------|-------|
 | CHANGES.md | CHANGES.md | Roadmap de changes OpenSpec |
-| Knowledge base | knowledge-base/README.md | Índice de la KB (reglas de negocio en 05, arquitectura en 08) |
+| Knowledge base | knowledge-base/README.md | Índice de la KB (reglas de negocio en 05, arquitectura e interfaz web en 08, DD-08 en 09) |
+| Instrucciones de agentes | CLAUDE.md / AGENTS.md | Reglas duras, skills por rol, flujo OPSX con paso de diseño |
+| Design system | design-system/README.md | Modo `system-and-mockups`, revisión 1; tokens en design-system/tokens.css |
 
-CLAUDE.md / AGENTS.md aún no existen (los genera agent-instruction en la fase siguiente).
+_Actualizado el 2026-11-23 (DD-08: interfaz web mínima en `web/`)._
 
 Read the convention files listed above for project-specific patterns and rules.

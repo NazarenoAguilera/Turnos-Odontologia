@@ -48,6 +48,14 @@
 **Contexto**: la consigna pide un único change chico; la autenticación no es el vacío del mercado que ataca el producto.
 **Trade-offs aceptados**: hasta implementarla, la auditoría registra `usuario_id` nulo (ver PA-07).
 
+### DD-08 — Interfaz web mínima en v1
+**Decisión**: la v1 suma una interfaz web mínima para recepción en `web/` (Vite + React + TypeScript), que consume la API por el proxy `/api` de Vite. Reemplaza el modo visual diferido (`visual_design.mode: deferred`) de la fundación: el proyecto pasa a `system-and-mockups`, con el design-system de `design-system/` (revisión 1, verde/menta).
+**Contexto**: el 2026-11-22 el equipo revisó el video de ejemplo de la cátedra, que muestra una aplicación con pantallas. La KB decía "sin interfaz gráfica en v1", así que el front habría quedado fuera del método. Este ajuste (protocolo "Ajustar") lo habilita antes de empezar.
+**Alcance**: pantalla Nuevo turno y layout (C-11), pantalla Agenda (C-07) y botón Cancelar (C-05); botón Reprogramar (C-06) y pantalla Configuración (C-03) solo si sobra tiempo. **Sin login ni roles**: siguen diferidos por DD-07 (C-08). Sin despliegue público.
+**Alternativas consideradas**: seguir solo con la API y mostrar `curl` en el video (no se parece al ejemplo de la cátedra); un front completo con todas las pantallas del MVP (no entra en el plazo del 25/11 y la cátedra pidió no hacer el programa completo); HTML sin framework servido por Fastify (menos trabajo inicial, pero el equipo prefirió React).
+**Justificación**: alcanza para demostrar el núcleo (crear sin solapamientos, ver la agenda y cancelar) sin agrandar el backend. El proxy evita configurar CORS, y la interfaz no tiene reglas propias: todo lo valida la API.
+**Trade-offs aceptados**: dos `package.json` y dos procesos para levantar en desarrollo. Las pantallas se prueban a mano (los tests automáticos siguen siendo de la API). Cada change visual suma un paso de mockup antes del Apply.
+
 ## Supuestos inferidos
 
 ### SU-01 — Todo turno requiere un sillón/box ✅ Confirmado (PA-01, 2026-11-17)

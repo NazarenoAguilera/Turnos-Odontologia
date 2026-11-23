@@ -12,15 +12,17 @@
 | Persistencia | SQLite vía `node:sqlite` (`DatabaseSync`) | SQLite 3.4x (integrado en Node 24) | Sin servidor ni Docker: los tests corren con `npm test` |
 | Tests | Vitest | 3.x | Rápido, nativo para TypeScript, un test por escenario del spec |
 | Ejecución TS | `tsx` (dev) / `tsc` (build) | — | Correr TypeScript sin paso de compilación en desarrollo |
+| Interfaz web | Vite + React + TypeScript en `web/` | la que instala `npm create vite@latest` (`react-ts`) | Interfaz mínima de DD-08; consume la API por el proxy `/api` de Vite |
+| Diseño visual | `design-system/tokens.css` | Revisión 1 | Colores verde/menta, tipografía y componentes comunes (`design-system/README.md`) |
 
 Verificado en el entorno: Node v24.20.0 con `node:sqlite` operativo (SQLite 3.53.4).
 
 ## Arquitectura general
 
-Monolito modular con dominio puro en el centro. La API HTTP es un adaptador delgado: no hace falta interfaz gráfica.
+Monolito modular con dominio puro en el centro. La API HTTP es un adaptador delgado. La interfaz web de `web/` (DD-08) es un cliente más de la API: no tiene reglas de negocio propias.
 
 ```
- Cliente HTTP (tests, curl, futura UI)
+ Cliente HTTP (tests, curl, interfaz web en web/ vía proxy /api)
             │
             ▼
  ┌──────────────────────┐

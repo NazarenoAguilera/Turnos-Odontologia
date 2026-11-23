@@ -1,0 +1,126 @@
+/*
+ * Design tokens — Turnos Odontología
+ * Revision: 1 (ver design-system/README.md)
+ *
+ * Única fuente de los valores visuales. Las pantallas de web/ y los mockups
+ * importan este archivo y usan las variables; no repiten colores ni medidas.
+ * Tema claro únicamente en v1 (el modo oscuro queda (TBD)).
+ */
+
+:root {
+  /* ---------- Color: marca (verde / menta) ---------- */
+  --color-primary-50: #effaf6;   /* fondo menta muy suave */
+  --color-primary-100: #d3f3e8;  /* menta: superficies seleccionadas */
+  --color-primary-200: #a8e6d3;  /* menta: bordes de foco suave, decoración */
+  --color-primary-500: #1a9a85;  /* acento gráfico (no para texto chico) */
+  --color-primary-600: #0f766e;  /* principal: botones, enlaces (5,5:1 sobre blanco) */
+  --color-primary-700: #0b5e58;  /* hover / presionado */
+  --color-primary-800: #094b46;  /* texto sobre menta */
+
+  /* ---------- Color: neutros (grises con tinte verde) ---------- */
+  --color-bg: #f5f9f8;           /* fondo de la aplicación */
+  --color-surface: #ffffff;      /* tarjetas, tablas, formularios */
+  --color-surface-muted: #eef4f2;/* cabeceras de tabla, zonas secundarias */
+  --color-border: #d3e0dc;
+  --color-border-strong: #a9bcb6;/* bordes de campos (3:1 sobre blanco) */
+  --color-text: #17302c;         /* texto principal (13:1) */
+  --color-text-muted: #4a605b;   /* texto secundario (6,4:1) */
+  --color-text-inverse: #ffffff;
+
+  /* ---------- Color: estados de mensajes ---------- */
+  --color-danger-600: #b42318;   /* errores 409 / 422, botón Cancelar turno */
+  --color-danger-700: #912018;
+  --color-danger-50: #fef3f2;
+  --color-danger-200: #fecdca;
+  --color-warning-700: #93540a;
+  --color-warning-50: #fff8eb;
+  --color-warning-200: #fbd9a5;
+  --color-success-700: #067647;
+  --color-success-50: #ecfdf3;
+  --color-success-200: #abefc6;
+  --color-info-700: #1849a9;
+  --color-info-50: #eff6ff;
+  --color-info-200: #b9d4fb;
+
+  /* ---------- Color: estados del turno (RN-TU-09) ---------- */
+  --estado-reservado-bg: var(--color-info-50);
+  --estado-reservado-fg: var(--color-info-700);
+  --estado-confirmado-bg: var(--color-success-50);
+  --estado-confirmado-fg: var(--color-success-700);
+  --estado-atendido-bg: var(--color-primary-100);
+  --estado-atendido-fg: var(--color-primary-800);
+  --estado-ausente-bg: var(--color-warning-50);
+  --estado-ausente-fg: var(--color-warning-700);
+  --estado-cancelado-bg: var(--color-surface-muted);
+  --estado-cancelado-fg: var(--color-text-muted);
+
+  /* ---------- Tipografía ---------- */
+  /* Fuentes del sistema: claras, sin descargas ni cuentas externas. */
+  --font-sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Cascadia Mono", ui-monospace, Consolas, monospace;
+
+  --text-xs: 0.75rem;    /* 12px: notas legales, ayudas mínimas */
+  --text-sm: 0.875rem;   /* 14px: etiquetas, tablas */
+  --text-md: 1rem;       /* 16px: cuerpo y campos (evita zoom en móviles) */
+  --text-lg: 1.125rem;   /* 18px: subtítulos */
+  --text-xl: 1.375rem;   /* 22px: título de pantalla en móvil */
+  --text-2xl: 1.75rem;   /* 28px: título de pantalla en escritorio */
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+
+  /* ---------- Espaciado (base 4px) ---------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* ---------- Layout ---------- */
+  --sidebar-width: 15rem;
+  --content-max: 72rem;
+  --control-height: 2.75rem;     /* 44px: objetivo táctil mínimo */
+  --breakpoint-md: 48rem;        /* referencia: 768px (los media queries usan el valor literal) */
+
+  /* ---------- Radios ---------- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* ---------- Sombras ---------- */
+  --shadow-sm: 0 1px 2px rgb(23 48 44 / 0.06);
+  --shadow-md: 0 2px 8px rgb(23 48 44 / 0.08), 0 1px 2px rgb(23 48 44 / 0.06);
+
+  /* ---------- Foco (accesibilidad) ---------- */
+  --focus-ring: 0 0 0 3px var(--color-surface), 0 0 0 5px var(--color-primary-600);
+
+  /* ---------- Movimiento ---------- */
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -29,6 +29,7 @@ Este sistema ataca ese vacío con un **motor de agenda de doble restricción**: 
 - Agenda diaria y semanal, filtrable por profesional y por sillón (consulta por API).
 - Ficha mínima de paciente: nombre, contacto y obra social como dato. Siempre con datos ficticios en ejemplos y tests.
 - Roles básicos (administrador, recepción, odontólogo) y registro de auditoría de los cambios de turnos.
+- **Interfaz web mínima** para recepción (agregada el 2026-11-23, DD-08): pantallas Nuevo turno y Agenda, con botón Cancelar. Sin login hasta el change de roles.
 
 ## Fuera de alcance
 
@@ -46,7 +47,7 @@ Este sistema ataca ese vacío con un **motor de agenda de doble restricción**: 
 - Caja, cobros, señas con Mercado Pago y facturación electrónica ARCA.
 - Liquidación de obras sociales y de honorarios.
 - Asistente de IA, campañas, multisucursal, stock e integraciones con organismos (PUCO, ReNaPDiS).
-- Interfaz gráfica: la v1 se entrega como API y módulo de dominio.
+- Interfaz gráfica completa (pantallas de configuración, reportes, portal del paciente): la v1 solo tiene la interfaz web mínima de DD-08.
 - Sobreturnos: no existen en v1.
 
 ## Métricas de éxito
