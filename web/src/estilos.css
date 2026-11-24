@@ -1,0 +1,135 @@
+/*
+ * Estilos de la interfaz web. Mismas clases y variables que
+ * design-system/components.html y el mockup aprobado de interfaz-web-base:
+ * todos los valores salen de design-system/tokens.css (revisión 1).
+ * Solo escritorio: la vista móvil quedó fuera de este change (design.md, "Ajuste de alcance").
+ */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+h1, h2 { line-height: var(--leading-tight); margin: 0; }
+p { margin: 0; }
+
+/* ---------- Layout ---------- */
+.app { display: grid; grid-template-columns: var(--sidebar-width) 1fr; min-height: 100vh; }
+.sidebar {
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  padding: var(--space-5) var(--space-3);
+  display: flex; flex-direction: column; gap: var(--space-6);
+}
+.brand { display: flex; align-items: center; gap: var(--space-3); padding: 0 var(--space-2); }
+.brand img { width: 40px; height: 40px; }
+.brand strong { font-size: var(--text-md); font-weight: var(--weight-bold); color: var(--color-primary-800); }
+.nav { display: flex; flex-direction: column; gap: var(--space-1); }
+.nav-item {
+  display: flex; align-items: center; gap: var(--space-3);
+  width: 100%;
+  min-height: var(--control-height);
+  padding: 0 var(--space-3);
+  border: 0; border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-muted);
+  font: inherit; font-weight: var(--weight-medium);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+}
+.nav-item:hover:not([aria-disabled="true"]) { background: var(--color-primary-50); color: var(--color-primary-800); }
+.nav-item[aria-current="page"] { background: var(--color-primary-100); color: var(--color-primary-800); font-weight: var(--weight-semibold); }
+.nav-item[aria-disabled="true"] { cursor: not-allowed; }
+.nav-item:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.nav-item svg { width: 20px; height: 20px; flex: none; }
+.nav-item .soon {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+}
+
+.main { padding: var(--space-8) var(--space-8) var(--space-12); min-width: 0; }
+.page { max-width: 48rem; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-6); }
+.page-header h1 { font-size: var(--text-2xl); font-weight: var(--weight-bold); }
+.page-header p { color: var(--color-text-muted); margin-top: var(--space-1); }
+
+/* ---------- Tarjeta ---------- */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-6);
+}
+.stack { display: flex; flex-direction: column; gap: var(--space-5); }
+.row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+.cargando { color: var(--color-text-muted); }
+
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: var(--control-height);
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font: inherit; font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+}
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.btn-primary { background: var(--color-primary-600); color: var(--color-text-inverse); }
+.btn-primary:hover { background: var(--color-primary-700); }
+.btn-secondary { background: var(--color-surface); color: var(--color-primary-700); border-color: var(--color-border-strong); }
+.btn-secondary:hover { background: var(--color-primary-50); }
+.btn-sm { min-height: 2.25rem; padding: 0 var(--space-3); font-size: var(--text-sm); }
+.btn[disabled], .btn[aria-busy="true"] { opacity: .55; cursor: not-allowed; transform: none; }
+
+/* ---------- Campos ---------- */
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); }
+.field { display: flex; flex-direction: column; gap: var(--space-2); }
+.field label { font-size: var(--text-sm); font-weight: var(--weight-semibold); }
+.field .hint { font-size: var(--text-sm); color: var(--color-text-muted); }
+.control {
+  min-height: var(--control-height);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  width: 100%;
+}
+.control:focus-visible { outline: none; border-color: var(--color-primary-600); box-shadow: var(--focus-ring); }
+.control:disabled { background: var(--color-surface-muted); color: var(--color-text-muted); }
+.field.invalid .control { border-color: var(--color-danger-600); }
+.field.invalid .hint { color: var(--color-danger-600); }
+
+/* ---------- Avisos ---------- */
+.alert {
+  display: grid; grid-template-columns: auto 1fr; gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid;
+}
+.alert svg { width: 20px; height: 20px; margin-top: 2px; }
+.alert strong { display: block; }
+.alert p, .alert li { font-size: var(--text-sm); }
+.alert ul { margin: var(--space-1) 0 0; padding-left: var(--space-5); }
+.alert code { font-family: var(--font-mono); font-size: var(--text-xs); }
+.alert .acciones { margin-top: var(--space-3); }
+.alert-danger { background: var(--color-danger-50); border-color: var(--color-danger-200); color: var(--color-danger-700); }
+.alert-warning { background: var(--color-warning-50); border-color: var(--color-warning-200); color: var(--color-warning-700); }
+.alert-success { background: var(--color-success-50); border-color: var(--color-success-200); color: var(--color-success-700); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}

@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mockup · Nuevo turno — Turnos Odontología</title>
+  <link rel="stylesheet" href="../../../../../design-system/tokens.css">
+  <script type="module" src="../../../../../design-system/brand.js"></script>
+  <style>
+    /* Mockup del change interfaz-web-base (C-11). Mismas clases y variables que
+       design-system/components.html; sin valores de color ni medidas sueltos. */
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font-sans); font-size: var(--text-md); line-height: var(--leading-normal); color: var(--color-text); background: var(--color-bg); }
+    h1, h2 { line-height: var(--leading-tight); margin: 0; }
+    p { margin: 0; }
+    [hidden] { display: none !important; }
+
+    .app { display: grid; grid-template-columns: var(--sidebar-width) 1fr; min-height: 100vh; }
+    .sidebar { background: var(--color-surface); border-right: 1px solid var(--color-border); padding: var(--space-5) var(--space-3); display: flex; flex-direction: column; gap: var(--space-6); }
+    .brand { display: flex; align-items: center; gap: var(--space-3); padding: 0 var(--space-2); }
+    .brand img { width: 40px; height: 40px; }
+    .brand strong { font-size: var(--text-md); font-weight: var(--weight-bold); color: var(--color-primary-800); }
+    .nav { display: flex; flex-direction: column; gap: var(--space-1); }
+    .nav a { display: flex; align-items: center; gap: var(--space-3); min-height: var(--control-height); padding: 0 var(--space-3); border-radius: var(--radius-md); color: var(--color-text-muted); text-decoration: none; font-weight: var(--weight-medium); }
+    .nav a[aria-current="page"] { background: var(--color-primary-100); color: var(--color-primary-800); font-weight: var(--weight-semibold); }
+    .nav a[aria-disabled="true"] { cursor: not-allowed; }
+    .nav a:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+    .nav svg { width: 20px; height: 20px; flex: none; }
+    .nav .soon { margin-left: auto; font-size: var(--text-xs); padding: 0 var(--space-2); border-radius: var(--radius-pill); background: var(--color-surface-muted); color: var(--color-text-muted); }
+
+    .main { padding: var(--space-8) var(--space-8) var(--space-12); min-width: 0; }
+    .page { max-width: 48rem; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-6); }
+    .page-header h1 { font-size: var(--text-2xl); font-weight: var(--weight-bold); }
+    .page-header p { color: var(--color-text-muted); margin-top: var(--space-1); }
+
+    .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: var(--space-6); }
+    .stack { display: flex; flex-direction: column; gap: var(--space-5); }
+    .row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: var(--control-height); padding: 0 var(--space-5); border-radius: var(--radius-md); border: 1px solid transparent; font: inherit; font-weight: var(--weight-semibold); cursor: pointer; }
+    .btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+    .btn-primary { background: var(--color-primary-600); color: var(--color-text-inverse); }
+    .btn-secondary { background: var(--color-surface); color: var(--color-primary-700); border-color: var(--color-border-strong); }
+    .btn-sm { min-height: 2.25rem; padding: 0 var(--space-3); font-size: var(--text-sm); }
+    .btn[disabled], .btn[aria-busy="true"] { opacity: .55; cursor: not-allowed; }
+
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); }
+    .field { display: flex; flex-direction: column; gap: var(--space-2); }
+    .field label { font-size: var(--text-sm); font-weight: var(--weight-semibold); }
+    .field .hint { font-size: var(--text-sm); color: var(--color-text-muted); }
+    .control { min-height: var(--control-height); padding: 0 var(--space-3); border: 1px solid var(--color-border-strong); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); font: inherit; width: 100%; }
+    .control:focus-visible { outline: none; border-color: var(--color-primary-600); box-shadow: var(--focus-ring); }
+    .control:disabled { background: var(--color-surface-muted); color: var(--color-text-muted); }
+    .field.invalid .control { border-color: var(--color-danger-600); }
+    .field.invalid .hint { color: var(--color-danger-600); }
+
+    .alert { display: grid; grid-template-columns: auto 1fr; gap: var(--space-3); padding: var(--space-4); border-radius: var(--radius-md); border: 1px solid; }
+    .alert svg { width: 20px; height: 20px; margin-top: 2px; }
+    .alert strong { display: block; }
+    .alert p, .alert li { font-size: var(--text-sm); }
+    .alert ul { margin: var(--space-1) 0 0; padding-left: var(--space-5); }
+    .alert code { font-family: var(--font-mono); font-size: var(--text-xs); }
+    .alert .acciones { margin-top: var(--space-3); }
+    .alert-danger { background: var(--color-danger-50); border-color: var(--color-danger-200); color: var(--color-danger-700); }
+    .alert-warning { background: var(--color-warning-50); border-color: var(--color-warning-200); color: var(--color-warning-700); }
+    .alert-success { background: var(--color-success-50); border-color: var(--color-success-200); color: var(--color-success-700); }
+
+    .cargando { color: var(--color-text-muted); }
+
+    /* Solo escritorio: la vista móvil quedó fuera de este change (design.md, "Ajuste de alcance"). */
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" aria-label="Navegación principal">
+    <div class="brand">
+      <img src="../../../../../design-system/assets/logo.svg" alt="">
+      <strong data-brand-name>Turnos Odontología</strong>
+    </div>
+    <nav class="nav">
+      <a href="#" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+        <span>Nuevo turno</span>
+      </a>
+      <a aria-disabled="true" title="Disponible próximamente">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+        <span>Agenda</span><span class="soon">Próximamente</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="page">
+      <header class="page-header">
+        <h1>Nuevo turno</h1>
+        <p>Elegí paciente, profesional, sillón y prestación. El sistema avisa si el horario choca con otro turno.</p>
+      </header>
+
+      <!-- Estado: cargando catálogos -->
+      <div class="card" data-estado="cargando" aria-busy="true">
+        <p class="cargando" role="status">Cargando…</p>
+      </div>
+
+      <!-- Estado: sin conexión al cargar o al reservar -->
+      <div class="alert alert-danger" role="alert" data-estado="sin-conexion">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17h.01"/></svg>
+        <div>
+          <strong>No pudimos conectar con el servidor</strong>
+          <p>Revisá que la API esté levantada y volvé a intentar. No se reservó ningún turno. <code>SIN_CONEXION</code></p>
+          <div class="acciones"><button class="btn btn-secondary btn-sm" type="button">Reintentar</button></div>
+        </div>
+      </div>
+
+      <!-- Formulario -->
+      <form class="card stack" data-estado="listo reservando exito error-409 error-422" onsubmit="return false" novalidate>
+        <div class="form-grid">
+          <div class="field">
+            <label for="f-paciente">Paciente</label>
+            <select class="control" id="f-paciente">
+              <option>Paciente Ficticio Uno</option><option>Paciente Ficticio Dos</option><option>Paciente Ficticio Tres</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-prestacion">Prestación</label>
+            <select class="control" id="f-prestacion">
+              <option>Limpieza (30 min)</option><option>Consulta (15 min)</option><option>Endodoncia (90 min)</option><option>Extracción simple (45 min)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-profesional">Profesional</label>
+            <select class="control" id="f-profesional">
+              <option>Dra. Ana Prueba</option><option>Dr. Bruno Ejemplo</option><option>Dra. Carla Demo</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-sillon">Sillón</label>
+            <select class="control" id="f-sillon">
+              <option>Sillón 1</option><option>Sillón 2</option><option>Box 3</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-fecha">Fecha</label>
+            <input class="control" id="f-fecha" type="date" value="2026-12-01">
+          </div>
+          <div class="field" id="campo-hora">
+            <label for="f-hora">Hora</label>
+            <input class="control" id="f-hora" type="time" value="10:00" step="900" aria-describedby="f-hora-ayuda">
+            <span class="hint" id="f-hora-ayuda">Turnos cada 15 minutos: :00, :15, :30 o :45.</span>
+          </div>
+        </div>
+
+        <!-- Avisos de resultado (debajo de los campos, arriba del botón) -->
+        <div class="alert alert-success" role="status" data-estado="exito">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>
+          <div>
+            <strong>Turno reservado</strong>
+            <p>Paciente Ficticio Uno · Dra. Ana Prueba · Sillón 1 · Limpieza · martes 1/12, 10:00 a 10:30.</p>
+          </div>
+        </div>
+
+        <div class="alert alert-danger" role="alert" data-estado="error-409">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17h.01"/></svg>
+          <div>
+            <strong>El sillón ya está ocupado en ese horario</strong>
+            <ul><li>Choca con el turno de 10:00 a 10:30 en Sillón 1.</li></ul>
+            <p>Probá otro horario u otro sillón. <code>409 TURNO_SOLAPADO_SILLON</code></p>
+          </div>
+        </div>
+
+        <div class="alert alert-warning" role="alert" data-estado="error-422">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg>
+          <div>
+            <strong>La hora tiene que caer en la grilla de 15 minutos</strong>
+            <p>Elegí :00, :15, :30 o :45. <code>422 INICIO_FUERA_DE_GRILLA</code></p>
+          </div>
+        </div>
+
+        <div class="row">
+          <button class="btn btn-primary" type="submit" id="btn-reservar">Reservar turno</button>
+          <button class="btn btn-secondary" type="reset">Limpiar</button>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Selector de estado del mockup: nuevo-turno.html?estado=<listo|cargando|reservando|exito|error-409|error-422|sin-conexion>
+  (function () {
+    var estado = new URLSearchParams(location.search).get('estado') || 'listo';
+    document.querySelectorAll('[data-estado]').forEach(function (el) {
+      el.hidden = el.getAttribute('data-estado').split(' ').indexOf(estado) === -1;
+    });
+    var form = document.querySelector('form');
+    var btn = document.getElementById('btn-reservar');
+    if (estado === 'reservando') {
+      btn.textContent = 'Reservando…';
+      btn.disabled = true;
+      btn.setAttribute('aria-busy', 'true');
+      form.querySelectorAll('.control').forEach(function (c) { c.disabled = true; });
+    }
+    if (estado === 'exito') {
+      document.getElementById('f-hora').value = '';
+    }
+    if (estado === 'error-409') {
+      document.getElementById('f-profesional').value = 'Dr. Bruno Ejemplo';
+      document.getElementById('f-hora').value = '10:15';
+    }
+    if (estado === 'error-422') {
+      var campo = document.getElementById('campo-hora');
+      var hora = document.getElementById('f-hora');
+      campo.classList.add('invalid');
+      hora.value = '10:10';
+      hora.setAttribute('aria-invalid', 'true');
+    }
+  })();
+</script>
+</body>
+</html>

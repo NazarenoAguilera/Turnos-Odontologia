@@ -33,6 +33,47 @@ export function obtenerPrestacion(db: DatabaseSync, id: number): PrestacionActiv
   return fila ? { id: fila.id, activo: fila.activa === 1, duracionMin: fila.duracion_min } : undefined;
 }
 
+// ---------- Catálogos (solo lectura) ----------
+// Cada consulta selecciona SOLO las columnas que la API expone (design D2).
+
+export interface ItemCatalogo {
+  id: number;
+  nombre: string;
+}
+
+export interface PrestacionCatalogo extends ItemCatalogo {
+  duracionMin: number;
+}
+
+export interface PacienteCatalogo extends ItemCatalogo {
+  apellido: string;
+}
+
+export function listarProfesionalesActivos(db: DatabaseSync): ItemCatalogo[] {
+  return db
+    .prepare('SELECT id, nombre FROM profesional WHERE activo = 1 ORDER BY nombre, id')
+    .all() as unknown as ItemCatalogo[];
+}
+
+export function listarSillonesActivos(db: DatabaseSync): ItemCatalogo[] {
+  return db
+    .prepare('SELECT id, nombre FROM sillon WHERE activo = 1 ORDER BY nombre, id')
+    .all() as unknown as ItemCatalogo[];
+}
+
+export function listarPrestacionesActivas(db: DatabaseSync): PrestacionCatalogo[] {
+  return db
+    .prepare('SELECT id, nombre, duracion_min AS duracionMin FROM prestacion WHERE activa = 1 ORDER BY nombre, id')
+    .all() as unknown as PrestacionCatalogo[];
+}
+
+/** Todos los pacientes (no hay baja lógica, H1), sin teléfono, email ni obra social (H2). */
+export function listarPacientes(db: DatabaseSync): PacienteCatalogo[] {
+  return db
+    .prepare('SELECT id, nombre, apellido FROM paciente ORDER BY apellido, nombre, id')
+    .all() as unknown as PacienteCatalogo[];
+}
+
 export interface FiltroCandidatos {
   profesionalId: number;
   sillonId: number;

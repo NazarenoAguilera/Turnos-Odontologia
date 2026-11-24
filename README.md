@@ -76,14 +76,59 @@ Si se pide el mismo sillón en un horario superpuesto, la respuesta es `409`:
 | `RECURSO_INEXISTENTE` | 404 | No existe el recurso indicado |
 | `SOLICITUD_INVALIDA` | 400 | Faltan datos, hay datos de más o el formato es inválido (por ejemplo, un inicio sin zona horaria) |
 
+### Catálogos
+
+Para elegir los datos de un turno sin conocer los ids, la API lista los recursos (solo lectura, ordenados por nombre):
+
+| Ruta | Devuelve |
+|---|---|
+| `GET /pacientes` | Todos los pacientes con `id`, `nombre` y `apellido` (sin teléfono, email ni obra social) |
+| `GET /profesionales` | Profesionales activos con `id` y `nombre` |
+| `GET /sillones` | Sillones/boxes activos con `id` y `nombre` |
+| `GET /prestaciones` | Prestaciones activas con `id`, `nombre` y `duracionMin` |
+
+## Interfaz web
+
+La carpeta `web/` tiene la interfaz de recepción (Vite + React + TypeScript), con la pantalla **Nuevo turno**. Es un cliente de la API: no repite reglas de negocio y muestra los errores que devuelve el backend. Por ahora es solo para escritorio y no tiene login.
+
+Se usan **dos terminales**, las dos parados en la raíz del repositorio.
+
+Terminal 1, la API en modo desarrollo (`http://127.0.0.1:3000`, con datos ficticios):
+
+```bash
+npm run dev
+```
+
+Terminal 2, la interfaz. La primera vez instalá sus dependencias:
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Abrí `http://localhost:5173`. Vite reenvía todo lo que empieza con `/api` a la API (por ejemplo, `/api/turnos` → `/turnos`), así que no hace falta configurar CORS.
+
+Tests y build de la interfaz (dentro de `web/`):
+
+```bash
+cd web
+npm test
+npm run build
+```
+
+> En Windows, si al cortar `npm run dev` con Ctrl+C queda un proceso ocupando el puerto 3000 o 5173, cerrá esa terminal o terminá el proceso `node` desde el Administrador de tareas.
+
 ## Estructura
 
 ```
 src/domain/          reglas puras: Intervalo [inicio, fin), grilla, duración, conflictos
 src/application/     caso de uso crearTurno (transacción BEGIN IMMEDIATE)
 src/infrastructure/  SQLite: esquema, repositorios, datos ficticios
-src/http/            API Fastify: POST /turnos, GET /health
+src/http/            API Fastify: POST /turnos, GET de catálogos, GET /health
 tests/               un test por escenario del spec, más tests unitarios y de concurrencia
+web/                 interfaz web (Vite + React): pantalla Nuevo turno
+design-system/       tokens, marca y componentes visuales de la interfaz
 knowledge-base/      base de conocimiento del proyecto
 openspec/            specs y changes (Spec-Driven Development)
 docs/                informe de Discovery y registros del ciclo OPSX
