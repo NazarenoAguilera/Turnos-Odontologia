@@ -20,8 +20,12 @@ afterEach(() => {
   db.close();
 });
 
-const contar = (tabla: string) =>
-  (db.prepare(`SELECT COUNT(*) AS n FROM ${tabla}`).get() as { n: number }).n;
+const SQL_CONTAR = {
+  turno: 'SELECT COUNT(*) AS n FROM turno',
+  evento_auditoria: 'SELECT COUNT(*) AS n FROM evento_auditoria',
+} as const;
+const contar = (tabla: keyof typeof SQL_CONTAR) =>
+  (db.prepare(SQL_CONTAR[tabla]).get() as { n: number }).n;
 
 describe('consultarAgenda (caso de uso)', () => {
   it('devuelve los turnos ordenados cronológicamente con nombres completos y horas locales', () => {

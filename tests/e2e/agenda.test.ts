@@ -56,8 +56,12 @@ function consultar(query: Record<string, string>) {
   return app.inject({ method: 'GET', url: '/turnos', query });
 }
 
-const contar = (tabla: string) =>
-  (db.prepare(`SELECT COUNT(*) AS n FROM ${tabla}`).get() as { n: number }).n;
+const SQL_CONTAR = {
+  turno: 'SELECT COUNT(*) AS n FROM turno',
+  evento_auditoria: 'SELECT COUNT(*) AS n FROM evento_auditoria',
+} as const;
+const contar = (tabla: keyof typeof SQL_CONTAR) =>
+  (db.prepare(SQL_CONTAR[tabla]).get() as { n: number }).n;
 
 describe('Requirement: Consultar agenda por rango diario y semanal', () => {
   it('Caso feliz de agenda diaria con orden cronológico y nombres de recursos', async () => {

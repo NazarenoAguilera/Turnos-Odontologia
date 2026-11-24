@@ -36,7 +36,7 @@
 
 ## 7. Verify y cierre
 
-- [ ] 7.1 Correr `npm test` y `npm run build` en la raíz y `npm run build` en `web/`; probar la pantalla Agenda manualmente contra el mockup aprobado con capturas a 390×844 y 1440×900 y registrar la verificación más la matriz escenario → test en `docs/opsx/verify-agenda-diaria-y-semanal.md`.
+- [x] 7.1 Correr `npm test` y `npm run build` en la raíz y `npm run build` en `web/`; probar la pantalla Agenda manualmente contra el mockup aprobado con capturas a 390×844 y 1440×900 y registrar la verificación más la matriz escenario → test en `docs/opsx/verify-agenda-diaria-y-semanal.md`.
 
 ## Workflow follow-up
 
