@@ -21,6 +21,7 @@
 - Router, manejo de estado global o librerías de UI. Con dos ítems de menú alcanza con estado local.
 - Tests automáticos de componentes o de punta a punta en el navegador. Las pantallas se verifican a mano contra el mockup.
 - Compartir código TypeScript entre la raíz y `web/`.
+- Vista móvil: la pantalla se diseña y verifica solo para escritorio (1440×900). Ver "Ajuste de alcance".
 
 ## Decisions
 
@@ -63,7 +64,7 @@ Cada ruta declara `response: { 200: { type: 'array', items: { type: 'object', ad
 - **Tests** (Vitest en `web/`, P3): una fecha de diciembre da `-03:00`; con otra zona (`Europe/Madrid`, invierno) da `+01:00`, lo que prueba que no está fijo; `GMT` sin horas da `+00:00`; y el resultado no depende de `process.env.TZ`.
 
 ### D8 — Comportamiento de la pantalla Nuevo turno
-- Al montar: carga los catálogos y muestra un skeleton. Si falla, muestra un aviso con "Reintentar".
+- Al montar: carga los catálogos y muestra el texto "Cargando…" (`role="status"`). Si falla, muestra un aviso con "Reintentar".
 - Fecha por defecto: hoy en la zona del consultorio. Hora vacía, con `step="900"`, que es solo una ayuda.
 - Reservar: deshabilita el botón (`aria-busy`, "Reservando…") y no permite doble envío.
 - Éxito: aviso verde con nombres y horario. Los nombres salen de los catálogos cargados: paciente "Nombre Apellido", profesional, sillón, y "martes 1/12, 10:00 a 10:30". Se limpia la hora y se conservan los demás campos para reservar otro turno rápido.
@@ -78,6 +79,18 @@ Cada ruta declara `response: { 200: { type: 'array', items: { type: 'object', ad
 ### D10 — Orden de implementación en dos tramos (P4)
 1. **Tramo API** (no espera el mockup): D1–D3 y D9 de la raíz.
 2. **Tramo pantallas** (espera `Approval: approved`): D4–D8, los tests de `web/` y el README.
+
+### Ajuste de alcance (2026-11-24, Lucas)
+
+Después del Propose se recortó el alcance de las pantallas:
+
+1. **Solo escritorio.** La vista móvil queda fuera de este change. Sin media queries para celular en `web/`, sin mockups ni capturas a 390×844, y la verificación manual es solo a 1440×900.
+2. **Carga con texto simple.** Mientras llegan los catálogos se muestra "Cargando…" en lugar del skeleton animado.
+3. **Orden de profesionales sin cambios.** Se mantiene el orden alfabético por `nombre` ("Dr. Bruno Ejemplo" antes que "Dra. Ana Prueba"), como dice el spec `catalogos`.
+
+**Motivo**: el plazo. La entrega es el 25/11 a las 23:00 y, después de C-11, Lucas sigue con C-05. La recepción usa la computadora de escritorio (DD-08), así que el móvil no bloquea la demo. El skeleton es solo cosmético.
+
+**Desvío del design-system**: `design-system/README.md` pide capturas a 390×844 para cada change visual. Este change no las tiene a propósito. Si se retoma la vista móvil, va en un change aparte con su propio mockup.
 
 ## Risks / Trade-offs
 
@@ -103,13 +116,13 @@ Mockups en `openspec/changes/interfaz-web-base/mockups/` (importan `../../../../
 |---|---|
 | `index.html` | Índice con un enlace por estado |
 | `nuevo-turno.html?estado=listo` | Formulario completo, listo para reservar |
-| `nuevo-turno.html?estado=cargando` | Carga de catálogos (skeleton) |
+| `nuevo-turno.html?estado=cargando` | Carga de catálogos (texto "Cargando…") |
 | `nuevo-turno.html?estado=reservando` | Botón "Reservando…" deshabilitado |
 | `nuevo-turno.html?estado=exito` | Aviso verde "Turno reservado" |
 | `nuevo-turno.html?estado=error-409` | Aviso rojo de sillón ocupado con el conflicto |
 | `nuevo-turno.html?estado=error-422` | Aviso ámbar de grilla de 15 minutos y campo Hora marcado |
 | `nuevo-turno.html?estado=sin-conexion` | Aviso rojo de sin conexión con "Reintentar" |
 
-Capturas a 1440×900 y 390×844 en `mockups/previews/`. Todos los datos son ficticios del seed.
+Capturas a 1440×900 en `mockups/previews/` (solo escritorio, ver "Ajuste de alcance"). Todos los datos son ficticios del seed.
 
 Para aprobar, el líder cambia la línea a `Approval: approved (<fecha>, by Nazareno)`.
