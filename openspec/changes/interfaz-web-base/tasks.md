@@ -34,12 +34,12 @@
 
 - [x] 6.1 Implementar `web/src/estilos.css` (mismas clases y variables que `design-system/components.html`, sin valores sueltos) y `components/Layout` con el menú lateral: Nuevo turno activo y Agenda con `aria-disabled` y la marca "Próximamente". Solo escritorio: sin media queries para móvil (design, "Ajuste de alcance"); verificar a mano a 1440×900 contra `mockups/previews/nuevo-turno-listo-desktop-1440x900.png`
 - [x] 6.2 Implementar `components/Aviso` (success, warning y danger, con el código técnico en monoespaciada) y `pages/NuevoTurno` según design D8: carga con el texto "Cargando…", error de carga con Reintentar, selects desde la API, fecha por defecto de hoy en la zona del consultorio, Reservar con `aria-busy`, aviso de éxito con nombres, 409 con lista de conflictos, 422 de grilla con el campo Hora marcado, y conservación de los campos tras un error; verificar que `cd web && npm run build` compila
-- [ ] 6.3 Verificar a mano con la API y la web levantadas, contra cada estado del mockup: reservar Paciente Ficticio Uno con la Dra. Ana Prueba en el Sillón 1 a las 10:00 (éxito), repetir con el Dr. Bruno Ejemplo en el Sillón 1 a las 10:15 (409 sillón), hora 10:10 (422) y API apagada (sin conexión). Guardar capturas a 1440×900 (solo escritorio) en `openspec/changes/interfaz-web-base/verify/`, solo con datos ficticios
+- [x] 6.3 Verificar a mano con la API y la web levantadas, contra cada estado del mockup: reservar Paciente Ficticio Uno con la Dra. Ana Prueba en el Sillón 1 a las 10:00 (éxito), repetir con el Dr. Bruno Ejemplo en el Sillón 1 a las 10:15 (409 sillón), hora 10:10 (422) y API apagada (sin conexión). Guardar capturas a 1440×900 (solo escritorio) en `openspec/changes/interfaz-web-base/verify/`, solo con datos ficticios
 
 ## 7. Documentación e integración
 
-- [ ] 7.1 Actualizar `README.md` con cómo levantar la API (`npm run dev`) y la interfaz (`cd web`, `npm install`, `npm run dev`, `http://localhost:5173`) y cómo correr los tests de `web/`; verificar siguiendo los pasos desde cero en una terminal nueva
-- [ ] 7.2 Verificación integral: `npm test` y `npm run build` en la raíz; `npm test` y `npm run build` en `web/`; todo en verde
+- [x] 7.1 Actualizar `README.md` con cómo levantar la API (`npm run dev`) y la interfaz (`cd web`, `npm install`, `npm run dev`, `http://localhost:5173`) y cómo correr los tests de `web/`; verificar siguiendo los pasos desde cero en una terminal nueva
+- [x] 7.2 Verificación integral: `npm test` y `npm run build` en la raíz; `npm test` y `npm run build` en `web/`; todo en verde
 
 ## Workflow follow-up
 
