@@ -6,6 +6,10 @@ import {
   buscarTurnosQuePodrianChocar,
   insertarEventoAuditoria,
   insertarTurno,
+  listarPacientes,
+  listarPrestacionesActivas,
+  listarProfesionalesActivos,
+  listarSillonesActivos,
   obtenerPrestacion,
   obtenerRecurso,
 } from '../../src/infrastructure/sqlite/repositorios.js';
@@ -57,6 +61,55 @@ describe('repositorios SQLite', () => {
     expect(buscarTurnosQuePodrianChocar(db, {
       profesionalId: ana, sillonId: sillon1, inicioMin: 630, finMin: 660,
     })).toEqual([]);
+  });
+
+  describe('listados de catálogos', () => {
+    const SQL_DESACTIVAR = {
+      profesional: 'UPDATE profesional SET activo = 0 WHERE id = ?',
+      sillon: 'UPDATE sillon SET activo = 0 WHERE id = ?',
+    } as const;
+    const desactivar = (tabla: keyof typeof SQL_DESACTIVAR, id: number) => db.prepare(SQL_DESACTIVAR[tabla]).run(id);
+
+    it('lista profesionales activos con id y nombre, ordenados por nombre', () => {
+      expect(listarProfesionalesActivos(db)).toEqual([
+        { id: bruno, nombre: 'Dr. Bruno Ejemplo' },
+        { id: ana, nombre: 'Dra. Ana Prueba' },
+        { id: SEED.profesionales.carla, nombre: 'Dra. Carla Demo' },
+      ]);
+    });
+
+    it('excluye profesionales inactivos', () => {
+      desactivar('profesional', SEED.profesionales.carla);
+      expect(listarProfesionalesActivos(db).map((p) => p.nombre)).toEqual(['Dr. Bruno Ejemplo', 'Dra. Ana Prueba']);
+    });
+
+    it('lista sillones activos ordenados por nombre y excluye los inactivos', () => {
+      expect(listarSillonesActivos(db).map((s) => s.nombre)).toEqual(['Box 3', 'Sillón 1', 'Sillón 2']);
+      desactivar('sillon', sillon2);
+      expect(listarSillonesActivos(db)).toEqual([
+        { id: SEED.sillones.box3, nombre: 'Box 3' },
+        { id: sillon1, nombre: 'Sillón 1' },
+      ]);
+    });
+
+    it('lista prestaciones activas con duracionMin y excluye las inactivas', () => {
+      expect(listarPrestacionesActivas(db)).toEqual([
+        { id: SEED.prestaciones.consulta, nombre: 'Consulta', duracionMin: 15 },
+        { id: SEED.prestaciones.endodoncia, nombre: 'Endodoncia', duracionMin: 90 },
+        { id: SEED.prestaciones.extraccion, nombre: 'Extracción simple', duracionMin: 45 },
+        { id: SEED.prestaciones.limpieza, nombre: 'Limpieza', duracionMin: 30 },
+      ]);
+      db.prepare('UPDATE prestacion SET activa = 0 WHERE id = ?').run(SEED.prestaciones.endodoncia);
+      expect(listarPrestacionesActivas(db).map((p) => p.nombre)).toEqual(['Consulta', 'Extracción simple', 'Limpieza']);
+    });
+
+    it('lista pacientes ordenados por apellido y nombre, sin datos de contacto', () => {
+      expect(listarPacientes(db)).toEqual([
+        { id: SEED.pacientes.dos, nombre: 'Paciente', apellido: 'Ficticio Dos' },
+        { id: SEED.pacientes.tres, nombre: 'Paciente', apellido: 'Ficticio Tres' },
+        { id: SEED.pacientes.uno, nombre: 'Paciente', apellido: 'Ficticio Uno' },
+      ]);
+    });
   });
 
   it('inserta eventos de auditoría que no se pueden modificar ni borrar', () => {

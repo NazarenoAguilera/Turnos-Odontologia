@@ -6,17 +6,17 @@
 
 ## 1. API: repositorio de catálogos
 
-- [ ] 1.1 Escribir primero tests de repositorio contra `:memory:` con seed para `listarProfesionalesActivos`, `listarSillonesActivos` y `listarPrestacionesActivas` (orden por nombre, inactivos excluidos, `duracionMin` mapeado) y para `listarPacientes` (orden por apellido y nombre, sin columnas de contacto en el resultado). Implementarlos en `src/infrastructure/sqlite/repositorios.ts` con sentencias preparadas que hacen `SELECT` solo de las columnas expuestas; verificar que `tests/infra/repositorios.test.ts` pasa
+- [x] 1.1 Escribir primero tests de repositorio contra `:memory:` con seed para `listarProfesionalesActivos`, `listarSillonesActivos` y `listarPrestacionesActivas` (orden por nombre, inactivos excluidos, `duracionMin` mapeado) y para `listarPacientes` (orden por apellido y nombre, sin columnas de contacto en el resultado). Implementarlos en `src/infrastructure/sqlite/repositorios.ts` con sentencias preparadas que hacen `SELECT` solo de las columnas expuestas; verificar que `tests/infra/repositorios.test.ts` pasa
 
 ## 2. API: rutas GET de catálogos
 
-- [ ] 2.1 Escribir primero `tests/e2e/catalogos.test.ts` con un `it` por escenario de `specs/catalogos/spec.md`: "Profesionales del seed", "Profesional inactivo excluido", "Sin profesionales activos", "Sillones del seed", "Sillón inactivo excluido", "Prestaciones del seed con duración", "Prestación inactiva excluida", "Pacientes del seed" y "Sin datos de contacto en la respuesta". Usar `app.inject`, una base `:memory:` nueva por test y `UPDATE` preparados para desactivar; verificar que fallan (RED)
-- [ ] 2.2 Crear el plugin `src/http/rutas-catalogos.ts` con los 4 GET y su `response` schema (`additionalProperties: false`, design D3), y registrarlo en `construirApp` con una sola línea (`app.register`, design D1); verificar que `tests/e2e/catalogos.test.ts` pasa y que `git diff src/http/app.ts` muestra solo el import y el registro
+- [x] 2.1 Escribir primero `tests/e2e/catalogos.test.ts` con un `it` por escenario de `specs/catalogos/spec.md`: "Profesionales del seed", "Profesional inactivo excluido", "Sin profesionales activos", "Sillones del seed", "Sillón inactivo excluido", "Prestaciones del seed con duración", "Prestación inactiva excluida", "Pacientes del seed" y "Sin datos de contacto en la respuesta". Usar `app.inject`, una base `:memory:` nueva por test y `UPDATE` preparados para desactivar; verificar que fallan (RED)
+- [x] 2.2 Crear el plugin `src/http/rutas-catalogos.ts` con los 4 GET y su `response` schema (`additionalProperties: false`, design D3), y registrarlo en `construirApp` con una sola línea (`app.register`, design D1); verificar que `tests/e2e/catalogos.test.ts` pasa y que `git diff src/http/app.ts` muestra solo el import y el registro
 
 ## 3. API: formato de error de `POST /turnos`
 
-- [ ] 3.1 Agregar en `tests/e2e/turnos.test.ts` los escenarios del delta de `agenda-turnos`: "Error de negocio por superposición con código y mensaje", "Regla de grilla con el mismo formato" y "Pedido mal formado con el mismo formato". Comprobar `error.codigo`, `error.mensaje` no vacío y `error.detalle` objeto (con `conflictos[].recurso`, `inicio` y `fin` en el 409); verificar que pasan sin tocar código de producción, o corregir lo que falle
-- [ ] 3.2 Verificar el tramo API completo: `npm test` en la raíz, todo en verde (los 75 de C-01 más los nuevos), y `npm run build` sin errores
+- [x] 3.1 Agregar en `tests/e2e/turnos.test.ts` los escenarios del delta de `agenda-turnos`: "Error de negocio por superposición con código y mensaje", "Regla de grilla con el mismo formato" y "Pedido mal formado con el mismo formato". Comprobar `error.codigo`, `error.mensaje` no vacío y `error.detalle` objeto (con `conflictos[].recurso`, `inicio` y `fin` en el 409); verificar que pasan sin tocar código de producción, o corregir lo que falle
+- [x] 3.2 Verificar el tramo API completo: `npm test` en la raíz, todo en verde (los 75 de C-01 más los nuevos), y `npm run build` sin errores
 
 ## 4. `web/`: base del proyecto (espera la aprobación del mockup)
 

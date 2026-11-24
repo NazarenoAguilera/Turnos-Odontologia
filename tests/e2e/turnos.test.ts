@@ -196,6 +196,41 @@ describe('Requirement: Recursos obligatorios, existentes y activos', () => {
   });
 });
 
+describe('Requirement: Formato de los errores de la creación de turnos', () => {
+  /** El cuerpo de todo rechazo es { error: { codigo, mensaje, detalle } } (change interfaz-web-base). */
+  function esperarFormatoDeError(cuerpo: unknown, codigo: string) {
+    expect(cuerpo).toEqual({
+      error: { codigo, mensaje: expect.any(String), detalle: expect.any(Object) },
+    });
+    const { mensaje, detalle } = (cuerpo as { error: { mensaje: string; detalle: unknown } }).error;
+    expect(mensaje.trim().length).toBeGreaterThan(0);
+    expect(Array.isArray(detalle)).toBe(false);
+  }
+
+  it('Error de negocio por superposición con código y mensaje', async () => {
+    const existente = (await turno(ana, sillon1, '10:00')).json();
+    const r = await turno(bruno, sillon1, '10:15');
+    expect(r.statusCode).toBe(409);
+    esperarFormatoDeError(r.json(), 'TURNO_SOLAPADO_SILLON');
+    expect(r.json().error.mensaje).toMatch(/sillón/);
+    expect(r.json().error.detalle.conflictos).toContainEqual({
+      recurso: 'sillon', turnoId: existente.id, inicio: hora('10:00'), fin: hora('10:30'),
+    });
+  });
+
+  it('Regla de grilla con el mismo formato', async () => {
+    const r = await turno(ana, sillon1, '10:10');
+    expect(r.statusCode).toBe(422);
+    esperarFormatoDeError(r.json(), 'INICIO_FUERA_DE_GRILLA');
+  });
+
+  it('Pedido mal formado con el mismo formato', async () => {
+    const r = await turno(ana, sillon1, '10:00', { campoInventado: 'x' });
+    expect(r.statusCode).toBe(400);
+    esperarFormatoDeError(r.json(), 'SOLICITUD_INVALIDA');
+  });
+});
+
 describe('Requirement: Auditoría de la creación', () => {
   it('Evento de auditoría al crear', async () => {
     const creado = (await turno(ana, sillon1, '10:00')).json();
