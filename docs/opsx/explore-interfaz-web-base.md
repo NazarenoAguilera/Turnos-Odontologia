@@ -162,9 +162,9 @@ Con P4 el Apply se parte en dos tramos:
                                              helper de fechas con Vitest)
 ```
 
-## Recomendaciones que siguen abiertas para el Propose
+## Recomendaciones aceptadas (2026-11-24, Lucas)
 
-No se preguntaron explícitamente; el Propose las toma como punto de partida y se pueden ajustar al revisarlo.
+Lucas aceptó R1 a R5 antes del Propose. Para R5 confirmó que profesionales y sillones devuelven `id` y `nombre`, y prestaciones `id`, `nombre` y `duracionMin`.
 
 | # | Tema | Recomendación |
 |---|---|---|
