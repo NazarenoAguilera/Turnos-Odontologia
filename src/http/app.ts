@@ -3,6 +3,7 @@ import type { DatabaseSync } from 'node:sqlite';
 import { consultarAgenda, type ConsultaAgenda } from '../application/consultar-agenda.js';
 import { crearTurno, relojDelSistema, type DatosCrearTurno, type Reloj } from '../application/crear-turno.js';
 import { ErrorDeNegocio, type CodigoError } from '../domain/errores.js';
+import { rutasCatalogos } from './rutas-catalogos.js';
 
 export interface OpcionesApp {
   db: DatabaseSync;
@@ -129,6 +130,7 @@ export function construirApp({ db, reloj = relojDelSistema, logger = false }: Op
   });
 
   app.get('/health', async () => ({ estado: 'ok' }));
+  app.register(rutasCatalogos, { db });
 
   app.get<{ Querystring: ConsultaAgenda }>('/turnos', { schema: esquemaConsultarAgenda }, async (request) =>
     consultarAgenda(db, request.query),
