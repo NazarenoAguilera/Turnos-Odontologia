@@ -81,7 +81,7 @@ C-02, C-03 y C-04 agregan solo endpoints CRUD sobre tablas que ya existen desde 
 ### Camino crítico
 
 ```
-Entrega (25/11):  C-01 ⭐ ✓ → C-11 ✓ → C-07 → C-05          (MVP defendible con pantallas)
+Entrega (25/11):  C-01 ⭐ ✓ → C-11 ✓ → C-07 ✓ → C-05          (MVP defendible con pantallas)
 MVP completo:     C-01 ⭐ → (C-02 a C-07 y C-11) → C-08 → C-09 → C-10
 ```
 
@@ -258,7 +258,7 @@ MVP completo:     C-01 ⭐ → (C-02 a C-07 y C-11) → C-08 → C-09 → C-10
   - `knowledge-base/10_preguntas_abiertas.md` PA-05
 
 ### [C-07] `agenda-diaria-y-semanal`
-- **Estado**: `[ ]` pendiente — Lautaro, rama `lautaro`
+- **Estado**: `[x]` completado — archivado el 2026-11-24 en `openspec/changes/archive/2026-11-24-agenda-diaria-y-semanal/`; spec vigente `openspec/specs/agenda-turnos/` (5 requirements nuevos de consulta de agenda); 123 tests en la raíz y 27 en `web/`, en verde. Verify en `docs/opsx/verify-agenda-diaria-y-semanal.md`. Lautaro, rama `lautaro`; GATE 0c se abre cuando el PR se mergee en `master`
 - **Scope**:
   - Cubre US-020
   - Endpoint `GET /turnos?desde&hasta[&profesionalId][&sillonId][&incluirCancelados]`
@@ -372,4 +372,4 @@ MVP completo:     C-01 ⭐ → (C-02 a C-07 y C-11) → C-08 → C-09 → C-10
 
 **Primer change recomendado**: `C-01` (`crear-turno-sin-solapamientos`), sin dependencias — ✅ **completado y archivado el 2026-11-17**. GATE 0 desbloqueado.
 
-**Próximos changes (entrega del 25/11)**: `C-11` (Lucas) y la API de `C-07` (Lautaro) en paralelo, después la pantalla de C-07 y `C-05`. Ver §Plan del equipo.
+**Próximos changes (entrega del 25/11)**: `C-11` y `C-07` archivados (pendiente merge de C-07 para abrir GATE 0c); sigue `C-05` (Lucas) y, si sobra tiempo, `C-06` / `C-03`. Ver §Plan del equipo.
