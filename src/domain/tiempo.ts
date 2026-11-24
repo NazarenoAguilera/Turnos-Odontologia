@@ -40,14 +40,14 @@ function formateador(zona: string): Intl.DateTimeFormat {
  * Convierte un ISO 8601 con offset obligatorio a un instante en milisegundos.
  * Sin offset la hora sería ambigua: se rechaza con SOLICITUD_INVALIDA (design D3).
  */
-export function instanteDesdeIso(iso: string): number {
+export function instanteDesdeIso(iso: string, campo: string = 'inicio'): number {
   const ms = ISO_CON_OFFSET.test(iso) ? Date.parse(iso) : Number.NaN;
   if (Number.isNaN(ms)) {
-    throw new ErrorDeNegocio(
-      'SOLICITUD_INVALIDA',
-      'El inicio debe ser una fecha y hora ISO 8601 con zona horaria, por ejemplo 2026-12-01T10:00:00-03:00.',
-      { campo: 'inicio', valor: iso },
-    );
+    const mensaje =
+      campo === 'inicio'
+        ? 'El inicio debe ser una fecha y hora ISO 8601 con zona horaria, por ejemplo 2026-12-01T10:00:00-03:00.'
+        : `El parámetro "${campo}" debe ser una fecha y hora ISO 8601 con zona horaria, por ejemplo 2026-12-01T10:00:00-03:00.`;
+    throw new ErrorDeNegocio('SOLICITUD_INVALIDA', mensaje, { campo, valor: iso });
   }
   return ms;
 }

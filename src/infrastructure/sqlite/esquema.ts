@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS turno (
 
 CREATE INDEX IF NOT EXISTS idx_turno_profesional ON turno (profesional_id, inicio_min, fin_min);
 CREATE INDEX IF NOT EXISTS idx_turno_sillon      ON turno (sillon_id, inicio_min, fin_min);
+CREATE INDEX IF NOT EXISTS idx_turno_rango       ON turno (inicio_min, fin_min);
 
 CREATE TABLE IF NOT EXISTS evento_auditoria (
   id           INTEGER PRIMARY KEY,

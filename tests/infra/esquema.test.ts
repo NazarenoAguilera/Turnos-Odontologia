@@ -38,6 +38,13 @@ describe('esquema SQLite', () => {
     expect(fk.foreign_keys).toBe(1);
   });
 
+  it('crea los índices de profesional, sillón y rango sobre la tabla turno', () => {
+    const indices = (db.prepare(
+      "SELECT name FROM sqlite_master WHERE type = 'index' AND tbl_name = 'turno' ORDER BY name",
+    ).all() as Array<{ name: string }>).map((i) => i.name);
+    expect(indices).toEqual(['idx_turno_profesional', 'idx_turno_rango', 'idx_turno_sillon']);
+  });
+
   it('configura busy_timeout para esperar locks en lugar de fallar', () => {
     const fila = db.prepare('PRAGMA busy_timeout').get() as Record<string, number>;
     expect(Object.values(fila)[0]).toBeGreaterThan(0);
