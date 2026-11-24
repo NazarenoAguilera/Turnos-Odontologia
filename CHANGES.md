@@ -81,7 +81,7 @@ C-02, C-03 y C-04 agregan solo endpoints CRUD sobre tablas que ya existen desde 
 ### Camino crítico
 
 ```
-Entrega (25/11):  C-01 ⭐ ✓ → C-11 → C-07 → C-05          (MVP defendible con pantallas)
+Entrega (25/11):  C-01 ⭐ ✓ → C-11 ✓ → C-07 → C-05          (MVP defendible con pantallas)
 MVP completo:     C-01 ⭐ → (C-02 a C-07 y C-11) → C-08 → C-09 → C-10
 ```
 
@@ -203,7 +203,7 @@ MVP completo:     C-01 ⭐ → (C-02 a C-07 y C-11) → C-08 → C-09 → C-10
 > La API de C-05, C-06 y C-07 sale de C-01 y es independiente entre sí (y de la FASE 2). La parte de pantalla depende de C-11 (ver el árbol). Una rama por integrante.
 
 ### [C-11] `interfaz-web-base`
-- **Estado**: `[ ]` pendiente — Lucas, rama `lucas`
+- **Estado**: `[x]` completado — archivado el 2026-11-24 en `openspec/changes/archive/2026-11-24-interfaz-web-base/`; specs vigentes `openspec/specs/catalogos/` (nueva) y `openspec/specs/agenda-turnos/` (formato de error); 92 tests en la raíz y 19 en `web/`, en verde. Verify en `docs/opsx/verify-interfaz-web-base.md`. Lucas, rama `lucas`; GATE 0b se abre cuando el PR se mergee en `master`
 - **Scope**:
   - Origen: DD-08 (interfaz web mínima en v1). Primer change visual: usa el design-system (revisión 1) y requiere mockup aprobado antes del Apply
   - Carpeta `web/` con Vite + React + TypeScript (`npm create vite@latest web -- --template react-ts`) y sus scripts (`cd web`, `npm run dev`)

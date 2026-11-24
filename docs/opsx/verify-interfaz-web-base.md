@@ -67,7 +67,7 @@ Los tests del delta de `agenda-turnos` pasaron sin tocar código de producción,
 
 **Capturas**: se sacaron con la API levantada sobre una base SQLite temporal nueva (seed ficticio) y la web en `http://localhost:5173`. Chrome headless manejó la pantalla como un usuario: eligió las opciones, cargó fecha y hora y tocó "Reservar turno". Solo escritorio, 1440×900. Todos los datos son ficticios.
 
-| Captura (`openspec/changes/interfaz-web-base/verify/`) | Pasos | Resultado en pantalla |
+| Captura (`openspec/changes/archive/2026-11-24-interfaz-web-base/verify/`) | Pasos | Resultado en pantalla |
 |---|---|---|
 | `exito-desktop-1440x900.png` | Paciente Ficticio Uno, Limpieza, Dra. Ana Prueba, Sillón 1, 1/12/2026 10:00 | "Turno reservado · Paciente Ficticio Uno · Dra. Ana Prueba · Sillón 1 · Limpieza · martes 1/12, 10:00 a 10:30" |
 | `borde-contiguo-desktop-1440x900.png` | Primero una Consulta de Paciente Ficticio Dos con el Dr. Bruno Ejemplo en el Sillón 2 a las 10:00 (10:00–10:15). Después Paciente Ficticio Tres, Consulta, Dra. Carla Demo, Sillón 2, 10:15 | "Turno reservado … Sillón 2 · Consulta · martes 1/12, 10:15 a 10:30": el turno contiguo se acepta |
