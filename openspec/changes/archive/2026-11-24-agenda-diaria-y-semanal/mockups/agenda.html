@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mockup · Agenda — Turnos Odontología</title>
+  <link rel="stylesheet" href="../../../../design-system/tokens.css">
+  <script type="module" src="../../../../design-system/brand.js"></script>
+  <style>
+    /* Mockup del change agenda-diaria-y-semanal (C-07). Mismas clases y variables que
+       design-system/components.html y web/src/estilos.css; sin valores sueltos. */
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: var(--text-md);
+      line-height: var(--leading-normal);
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+    h1, h2 { line-height: var(--leading-tight); margin: 0; }
+    p { margin: 0; }
+    [hidden] { display: none !important; }
+
+    .app { display: grid; grid-template-columns: var(--sidebar-width) 1fr; min-height: 100vh; }
+    .sidebar {
+      background: var(--color-surface);
+      border-right: 1px solid var(--color-border);
+      padding: var(--space-5) var(--space-3);
+      display: flex; flex-direction: column; gap: var(--space-6);
+    }
+    .brand { display: flex; align-items: center; gap: var(--space-3); padding: 0 var(--space-2); }
+    .brand img { width: 40px; height: 40px; }
+    .brand strong { font-size: var(--text-md); font-weight: var(--weight-bold); color: var(--color-primary-800); }
+    .nav { display: flex; flex-direction: column; gap: var(--space-1); }
+    .nav a {
+      display: flex; align-items: center; gap: var(--space-3);
+      min-height: var(--control-height);
+      padding: 0 var(--space-3);
+      border-radius: var(--radius-md);
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-weight: var(--weight-medium);
+      transition: background var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+    }
+    .nav a:hover { background: var(--color-primary-50); color: var(--color-primary-800); }
+    .nav a[aria-current="page"] { background: var(--color-primary-100); color: var(--color-primary-800); font-weight: var(--weight-semibold); }
+    .nav a:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+    .nav svg { width: 20px; height: 20px; flex: none; }
+
+    .main { padding: var(--space-8) var(--space-8) var(--space-12); min-width: 0; }
+    .page { max-width: var(--content-max); min-width: 0; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-6); }
+    .page-header h1 { font-size: var(--text-2xl); font-weight: var(--weight-bold); }
+    .page-header p { color: var(--color-text-muted); margin-top: var(--space-1); }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-5);
+    }
+    .stack { display: flex; flex-direction: column; gap: var(--space-4); }
+    .row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+      min-height: var(--control-height);
+      padding: 0 var(--space-4);
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      font: inherit; font-weight: var(--weight-semibold);
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+    .btn-secondary { background: var(--color-surface); color: var(--color-primary-700); border-color: var(--color-border-strong); }
+    .btn-secondary:hover { background: var(--color-primary-50); }
+    .btn-sm { min-height: var(--control-height); padding: 0 var(--space-3); font-size: var(--text-sm); }
+
+    /* ---------- Barra de controles y filtros ---------- */
+    .toolbar { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; justify-content: space-between; }
+    .segmented { display: inline-flex; border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); overflow: hidden; }
+    .segmented button {
+      min-height: var(--control-height);
+      padding: 0 var(--space-4);
+      border: 0;
+      background: var(--color-surface);
+      font: inherit; font-weight: var(--weight-medium);
+      color: var(--color-text-muted);
+      cursor: pointer;
+    }
+    .segmented button[aria-pressed="true"] { background: var(--color-primary-600); color: var(--color-text-inverse); font-weight: var(--weight-semibold); }
+    .segmented button:focus-visible { outline: none; box-shadow: inset 0 0 0 3px var(--color-primary-200); }
+
+    .date-nav { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+    .date-label { font-size: var(--text-lg); font-weight: var(--weight-semibold); min-width: 13rem; text-align: center; }
+
+    .filters-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); align-items: end; }
+    .field { display: flex; flex-direction: column; gap: var(--space-2); }
+    .field label { font-size: var(--text-sm); font-weight: var(--weight-semibold); }
+    .control {
+      min-height: var(--control-height);
+      padding: 0 var(--space-3);
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-sm);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font: inherit;
+      width: 100%;
+    }
+    .control:focus-visible { outline: none; border-color: var(--color-primary-600); box-shadow: var(--focus-ring); }
+
+    .check-field {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      min-height: var(--control-height);
+      font-size: var(--text-sm); font-weight: var(--weight-medium);
+      color: var(--color-text);
+      cursor: pointer;
+      user-select: none;
+    }
+    .check-field input {
+      width: 1.125rem; height: 1.125rem;
+      accent-color: var(--color-primary-600);
+      cursor: pointer;
+    }
+
+    /* ---------- Tabla de agenda ---------- */
+    .day-group { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+    .day-heading { font-size: var(--text-lg); font-weight: var(--weight-semibold); color: var(--color-primary-800); }
+    .table-wrap { width: 100%; max-width: 100%; min-width: 0; overflow-x: auto; border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: var(--shadow-sm); }
+    table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+    th, td { text-align: left; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--color-border); vertical-align: middle; }
+    th { background: var(--color-surface-muted); font-weight: var(--weight-semibold); color: var(--color-text-muted); white-space: nowrap; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: var(--color-primary-50); }
+    td.hora { font-variant-numeric: tabular-nums; font-weight: var(--weight-semibold); white-space: nowrap; }
+    tr.cancelado td:not(:last-child) { color: var(--color-text-muted); }
+    tr.cancelado .paciente { text-decoration: line-through; }
+
+    /* ---------- Insignias de estado ---------- */
+    .badge {
+      display: inline-flex; align-items: center; gap: var(--space-1);
+      padding: 2px var(--space-3);
+      border-radius: var(--radius-pill);
+      font-size: var(--text-sm); font-weight: var(--weight-semibold);
+      white-space: nowrap;
+    }
+    .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .badge-reservado { background: var(--estado-reservado-bg); color: var(--estado-reservado-fg); }
+    .badge-confirmado { background: var(--estado-confirmado-bg); color: var(--estado-confirmado-fg); }
+    .badge-atendido { background: var(--estado-atendido-bg); color: var(--estado-atendido-fg); }
+    .badge-ausente { background: var(--estado-ausente-bg); color: var(--estado-ausente-fg); }
+    .badge-cancelado { background: var(--estado-cancelado-bg); color: var(--estado-cancelado-fg); }
+
+    /* ---------- Avisos, vacío y carga ---------- */
+    .alert {
+      display: grid; grid-template-columns: auto 1fr; gap: var(--space-3);
+      padding: var(--space-4);
+      border-radius: var(--radius-md);
+      border: 1px solid;
+    }
+    .alert svg { width: 20px; height: 20px; margin-top: 2px; }
+    .alert strong { display: block; }
+    .alert p { font-size: var(--text-sm); }
+    .alert code { font-family: var(--font-mono); font-size: var(--text-xs); }
+    .alert .acciones { margin-top: var(--space-3); }
+    .alert-danger { background: var(--color-danger-50); border-color: var(--color-danger-200); color: var(--color-danger-700); }
+
+    .empty { text-align: center; padding: var(--space-10) var(--space-6); color: var(--color-text-muted); }
+    .empty strong { display: block; color: var(--color-text); margin-bottom: var(--space-1); }
+
+    .skeleton {
+      height: 14px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(90deg, var(--color-surface-muted), var(--color-primary-50), var(--color-surface-muted));
+      background-size: 200% 100%;
+      animation: shimmer 1.4s linear infinite;
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+
+    /* ---------- Móvil (< 768px) ---------- */
+    @media (max-width: 48rem) {
+      .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; }
+      .sidebar {
+        flex-direction: row; align-items: center; justify-content: space-between;
+        padding: var(--space-3) var(--space-3);
+        border-right: 0; border-bottom: 1px solid var(--color-border);
+        position: sticky; top: 0; z-index: 1; gap: var(--space-2);
+      }
+      .brand { padding: 0; }
+      .brand img { width: 32px; height: 32px; }
+      .brand strong { display: none; }
+      .nav { flex-direction: row; gap: var(--space-1); }
+      .nav a { padding: 0 var(--space-2); gap: var(--space-2); font-size: var(--text-sm); white-space: nowrap; }
+      .main { padding: var(--space-5) var(--space-4) var(--space-10); }
+      .page-header h1 { font-size: var(--text-xl); }
+      .card { padding: var(--space-4); }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .segmented { display: grid; grid-template-columns: 1fr 1fr; }
+      .date-nav { justify-content: space-between; }
+      .date-label { flex: 1 1 auto; min-width: 0; font-size: var(--text-md); }
+      .filters-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" aria-label="Navegación principal">
+    <div class="brand">
+      <img src="../../../../design-system/assets/logo.svg" alt="">
+      <strong data-brand-name>Turnos Odontología</strong>
+    </div>
+    <nav class="nav">
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+        <span>Nuevo turno</span>
+      </a>
+      <a href="#" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+        <span>Agenda</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="page">
+      <header class="page-header">
+        <h1>Agenda</h1>
+        <p>Consultá los turnos del día o de la semana, filtrados por profesional o por sillón.</p>
+      </header>
+
+      <!-- Barra de controles y filtros -->
+      <section class="card stack" aria-label="Controles de agenda">
+        <div class="toolbar">
+          <div class="segmented" role="group" aria-label="Vista de agenda">
+            <button type="button" id="btn-dia" aria-pressed="true">Día</button>
+            <button type="button" id="btn-semana" aria-pressed="false">Semana</button>
+          </div>
+          <div class="date-nav">
+            <button class="btn btn-secondary btn-sm" type="button" aria-label="Período anterior">‹</button>
+            <strong class="date-label" id="rango-titulo">Martes 1 de diciembre</strong>
+            <button class="btn btn-secondary btn-sm" type="button" aria-label="Período siguiente">›</button>
+            <button class="btn btn-secondary btn-sm" type="button">Hoy</button>
+          </div>
+        </div>
+
+        <div class="filters-grid">
+          <div class="field">
+            <label for="f-profesional">Profesional</label>
+            <select class="control" id="f-profesional">
+              <option value="">Todos los profesionales</option>
+              <option>Dra. Ana Prueba</option>
+              <option>Dr. Bruno Ejemplo</option>
+              <option>Dra. Carla Demo</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-sillon">Sillón</label>
+            <select class="control" id="f-sillon">
+              <option value="">Todos los sillones</option>
+              <option>Sillón 1</option>
+              <option>Sillón 2</option>
+              <option>Box 3</option>
+            </select>
+          </div>
+          <label class="check-field" for="f-cancelados">
+            <input type="checkbox" id="f-cancelados">
+            <span>Mostrar cancelados</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Estado: cargando -->
+      <div class="card stack" data-estado="cargando" aria-busy="true" aria-label="Cargando agenda">
+        <div class="skeleton" style="width: 72%"></div>
+        <div class="skeleton" style="width: 92%"></div>
+        <div class="skeleton" style="width: 60%"></div>
+        <div class="skeleton" style="width: 84%"></div>
+      </div>
+
+      <!-- Estado: error de API o sin conexión -->
+      <div class="alert alert-danger" role="alert" data-estado="error">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17h.01"/></svg>
+        <div>
+          <strong>No pudimos cargar la agenda</strong>
+          <p>Revisá que la API esté levantada y volvé a intentar. <code>SIN_CONEXION</code></p>
+          <div class="acciones"><button class="btn btn-secondary btn-sm" type="button">Reintentar</button></div>
+        </div>
+      </div>
+
+      <!-- Estado: vacío -->
+      <div class="card empty" data-estado="vacio">
+        <strong>No hay turnos para este período</strong>
+        <p>Probá otro día, limpiá los filtros o reservá un turno desde Nuevo turno.</p>
+      </div>
+
+      <!-- Estado: vista Día (con o sin cancelados) -->
+      <div class="table-wrap" data-estado="dia cancelados">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Hora</th>
+              <th scope="col">Paciente</th>
+              <th scope="col">Profesional</th>
+              <th scope="col">Sillón</th>
+              <th scope="col">Prestación</th>
+              <th scope="col">Estado</th>
+              <th scope="col"><span class="sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="hora">09:00–09:15</td>
+              <td class="paciente">Paciente Ficticio Dos</td>
+              <td>Dr. Bruno Ejemplo</td>
+              <td>Sillón 2</td>
+              <td>Consulta</td>
+              <td><span class="badge badge-atendido">Atendido</span></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="hora">10:00–10:30</td>
+              <td class="paciente">Paciente Ficticio Uno</td>
+              <td>Dra. Ana Prueba</td>
+              <td>Sillón 1</td>
+              <td>Limpieza</td>
+              <td><span class="badge badge-confirmado">Confirmado</span></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="hora">10:30–11:00</td>
+              <td class="paciente">Paciente Ficticio Tres</td>
+              <td>Dra. Ana Prueba</td>
+              <td>Sillón 1</td>
+              <td>Limpieza</td>
+              <td><span class="badge badge-reservado">Reservado</span></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="hora">11:00–11:45</td>
+              <td class="paciente">Paciente Ficticio Dos</td>
+              <td>Dr. Bruno Ejemplo</td>
+              <td>Box 3</td>
+              <td>Extracción simple</td>
+              <td><span class="badge badge-ausente">Ausente</span></td>
+              <td></td>
+            </tr>
+            <tr class="cancelado" data-solo-cancelados>
+              <td class="hora">12:00–12:30</td>
+              <td class="paciente">Paciente Ficticio Uno</td>
+              <td>Dra. Carla Demo</td>
+              <td>Sillón 2</td>
+              <td>Limpieza</td>
+              <td><span class="badge badge-cancelado">Cancelado</span></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Estado: vista Semana (tabla agrupada por día) -->
+      <div class="stack" data-estado="semana">
+        <section class="day-group" aria-labelledby="dia-mar">
+          <h2 class="day-heading" id="dia-mar">Martes 1 de diciembre</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Hora</th>
+                  <th scope="col">Paciente</th>
+                  <th scope="col">Profesional</th>
+                  <th scope="col">Sillón</th>
+                  <th scope="col">Prestación</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col"><span class="sr-only">Acciones</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="hora">09:00–09:30</td>
+                  <td class="paciente">Paciente Ficticio Uno</td>
+                  <td>Dra. Ana Prueba</td>
+                  <td>Sillón 1</td>
+                  <td>Limpieza</td>
+                  <td><span class="badge badge-confirmado">Confirmado</span></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td class="hora">11:00–11:15</td>
+                  <td class="paciente">Paciente Ficticio Dos</td>
+                  <td>Dr. Bruno Ejemplo</td>
+                  <td>Sillón 2</td>
+                  <td>Consulta</td>
+                  <td><span class="badge badge-reservado">Reservado</span></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="day-group" aria-labelledby="dia-jue">
+          <h2 class="day-heading" id="dia-jue">Jueves 3 de diciembre</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Hora</th>
+                  <th scope="col">Paciente</th>
+                  <th scope="col">Profesional</th>
+                  <th scope="col">Sillón</th>
+                  <th scope="col">Prestación</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col"><span class="sr-only">Acciones</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="hora">15:00–16:30</td>
+                  <td class="paciente">Paciente Ficticio Tres</td>
+                  <td>Dra. Carla Demo</td>
+                  <td>Box 3</td>
+                  <td>Endodoncia</td>
+                  <td><span class="badge badge-reservado">Reservado</span></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Selector de estado del mockup: agenda.html?estado=<dia|semana|cancelados|vacio|cargando|error>
+  (function () {
+    var estado = new URLSearchParams(location.search).get('estado') || 'dia';
+    document.querySelectorAll('[data-estado]').forEach(function (el) {
+      el.hidden = el.getAttribute('data-estado').split(' ').indexOf(estado) === -1;
+    });
+    var filaCancelada = document.querySelector('[data-solo-cancelados]');
+    if (filaCancelada) {
+      filaCancelada.hidden = estado !== 'cancelados';
+    }
+    var check = document.getElementById('f-cancelados');
+    if (check) {
+      check.checked = estado === 'cancelados';
+    }
+    var btnDia = document.getElementById('btn-dia');
+    var btnSemana = document.getElementById('btn-semana');
+    var rangoTitulo = document.getElementById('rango-titulo');
+    if (estado === 'semana') {
+      btnDia.setAttribute('aria-pressed', 'false');
+      btnSemana.setAttribute('aria-pressed', 'true');
+      rangoTitulo.textContent = '30 nov – 6 dic 2026';
+    } else if (estado === 'vacio') {
+      rangoTitulo.textContent = 'Miércoles 2 de diciembre';
+    }
+  })();
+</script>
+</body>
+</html>

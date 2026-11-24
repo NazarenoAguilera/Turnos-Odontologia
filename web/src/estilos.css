@@ -56,7 +56,8 @@ p { margin: 0; }
 }
 
 .main { padding: var(--space-8) var(--space-8) var(--space-12); min-width: 0; }
-.page { max-width: 48rem; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-6); }
+.page { max-width: 48rem; min-width: 0; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-6); }
+.page-wide { max-width: var(--content-max); }
 .page-header h1 { font-size: var(--text-2xl); font-weight: var(--weight-bold); }
 .page-header p { color: var(--color-text-muted); margin-top: var(--space-1); }
 
@@ -132,4 +133,111 @@ p { margin: 0; }
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- Controles y filtros de Agenda ---------- */
+.toolbar { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; justify-content: space-between; }
+.segmented { display: inline-flex; border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); overflow: hidden; }
+.segmented button {
+  min-height: var(--control-height);
+  padding: 0 var(--space-4);
+  border: 0;
+  background: var(--color-surface);
+  font: inherit; font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+.segmented button[aria-pressed="true"] { background: var(--color-primary-600); color: var(--color-text-inverse); font-weight: var(--weight-semibold); }
+.segmented button:focus-visible { outline: none; box-shadow: inset 0 0 0 3px var(--color-primary-200); }
+
+.date-nav { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+.date-nav .btn-sm { min-height: var(--control-height); }
+.date-label { font-size: var(--text-lg); font-weight: var(--weight-semibold); min-width: 13rem; text-align: center; }
+
+.filters-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); align-items: end; }
+.check-field {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  min-height: var(--control-height);
+  font-size: var(--text-sm); font-weight: var(--weight-medium);
+  color: var(--color-text);
+  cursor: pointer;
+  user-select: none;
+}
+.check-field input {
+  width: 1.125rem; height: 1.125rem;
+  accent-color: var(--color-primary-600);
+  cursor: pointer;
+}
+
+/* ---------- Tabla de agenda ---------- */
+.day-group { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+.day-heading { font-size: var(--text-lg); font-weight: var(--weight-semibold); color: var(--color-primary-800); }
+.table-wrap {
+  width: 100%; max-width: 100%; min-width: 0;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+th, td { text-align: left; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--color-border); vertical-align: middle; }
+th { background: var(--color-surface-muted); font-weight: var(--weight-semibold); color: var(--color-text-muted); white-space: nowrap; }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr:hover { background: var(--color-primary-50); }
+td.hora { font-variant-numeric: tabular-nums; font-weight: var(--weight-semibold); white-space: nowrap; }
+tr.cancelado td:not(:last-child) { color: var(--color-text-muted); }
+tr.cancelado .paciente { text-decoration: line-through; }
+
+/* ---------- Insignias de estado ---------- */
+.badge {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: 2px var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm); font-weight: var(--weight-semibold);
+  white-space: nowrap;
+}
+.badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.badge-reservado { background: var(--estado-reservado-bg); color: var(--estado-reservado-fg); }
+.badge-confirmado { background: var(--estado-confirmado-bg); color: var(--estado-confirmado-fg); }
+.badge-atendido { background: var(--estado-atendido-bg); color: var(--estado-atendido-fg); }
+.badge-ausente { background: var(--estado-ausente-bg); color: var(--estado-ausente-fg); }
+.badge-cancelado { background: var(--estado-cancelado-bg); color: var(--estado-cancelado-fg); }
+
+/* ---------- Vacío y carga ---------- */
+.empty { text-align: center; padding: var(--space-10) var(--space-6); color: var(--color-text-muted); }
+.empty strong { display: block; color: var(--color-text); margin-bottom: var(--space-1); }
+
+.skeleton {
+  height: 14px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--color-surface-muted), var(--color-primary-50), var(--color-surface-muted));
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+/* ---------- Móvil (< 768px) ---------- */
+@media (max-width: 48rem) {
+  .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; }
+  .sidebar {
+    flex-direction: row; align-items: center; justify-content: space-between;
+    padding: var(--space-3) var(--space-3);
+    border-right: 0; border-bottom: 1px solid var(--color-border);
+    position: sticky; top: 0; z-index: 1; gap: var(--space-2);
+  }
+  .brand { padding: 0; }
+  .brand img { width: 32px; height: 32px; }
+  .brand strong { display: none; }
+  .nav { flex-direction: row; gap: var(--space-1); }
+  .nav-item { width: auto; padding: 0 var(--space-2); gap: var(--space-2); font-size: var(--text-sm); white-space: nowrap; }
+  .main { padding: var(--space-5) var(--space-4) var(--space-10); }
+  .page-header h1 { font-size: var(--text-xl); }
+  .card { padding: var(--space-4); }
+  .form-grid { grid-template-columns: 1fr; }
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .segmented { display: grid; grid-template-columns: 1fr 1fr; }
+  .date-nav { justify-content: space-between; }
+  .date-label { flex: 1 1 auto; min-width: 0; font-size: var(--text-md); }
+  .filters-grid { grid-template-columns: 1fr; }
 }

@@ -1,5 +1,6 @@
 import Fastify, { type FastifyError, type FastifyInstance } from 'fastify';
 import type { DatabaseSync } from 'node:sqlite';
+import { consultarAgenda, type ConsultaAgenda } from '../application/consultar-agenda.js';
 import { crearTurno, relojDelSistema, type DatosCrearTurno, type Reloj } from '../application/crear-turno.js';
 import { ErrorDeNegocio, type CodigoError } from '../domain/errores.js';
 import { rutasCatalogos } from './rutas-catalogos.js';
@@ -39,6 +40,67 @@ const esquemaCrearTurno = {
   },
 } as const;
 
+const esquemaConsultarAgenda = {
+  querystring: {
+    type: 'object',
+    required: ['desde', 'hasta'],
+    additionalProperties: false,
+    properties: {
+      desde: { type: 'string', minLength: 1 },
+      hasta: { type: 'string', minLength: 1 },
+      profesionalId: idPositivo,
+      sillonId: idPositivo,
+      incluirCancelados: { type: 'boolean' },
+    },
+  },
+  response: {
+    200: {
+      type: 'object',
+      required: ['turnos'],
+      additionalProperties: false,
+      properties: {
+        turnos: {
+          type: 'array',
+          items: {
+            type: 'object',
+            required: [
+              'id',
+              'pacienteId',
+              'pacienteNombre',
+              'profesionalId',
+              'profesionalNombre',
+              'sillonId',
+              'sillonNombre',
+              'prestacionId',
+              'prestacionNombre',
+              'inicio',
+              'fin',
+              'duracionMin',
+              'estado',
+            ],
+            additionalProperties: false,
+            properties: {
+              id: { type: 'integer' },
+              pacienteId: { type: 'integer' },
+              pacienteNombre: { type: 'string' },
+              profesionalId: { type: 'integer' },
+              profesionalNombre: { type: 'string' },
+              sillonId: { type: 'integer' },
+              sillonNombre: { type: 'string' },
+              prestacionId: { type: 'integer' },
+              prestacionNombre: { type: 'string' },
+              inicio: { type: 'string' },
+              fin: { type: 'string' },
+              duracionMin: { type: 'integer' },
+              estado: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+  },
+} as const;
+
 /** Construye la app Fastify con sus rutas y el manejo de errores único. */
 export function construirApp({ db, reloj = relojDelSistema, logger = false }: OpcionesApp): FastifyInstance {
   // removeAdditional: false → un campo de más se RECHAZA con 400 en lugar de descartarse
@@ -69,6 +131,10 @@ export function construirApp({ db, reloj = relojDelSistema, logger = false }: Op
 
   app.get('/health', async () => ({ estado: 'ok' }));
   app.register(rutasCatalogos, { db });
+
+  app.get<{ Querystring: ConsultaAgenda }>('/turnos', { schema: esquemaConsultarAgenda }, async (request) =>
+    consultarAgenda(db, request.query),
+  );
 
   app.post<{ Body: DatosCrearTurno }>('/turnos', { schema: esquemaCrearTurno }, async (request, reply) => {
     const turno = crearTurno(db, request.body, reloj);

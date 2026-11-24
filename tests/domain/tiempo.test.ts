@@ -29,6 +29,28 @@ describe('instanteDesdeIso', () => {
   it('rechaza un texto que no es fecha con SOLICITUD_INVALIDA', () => {
     expect(codigoDe(() => instanteDesdeIso('mañana a las diez'))).toBe('SOLICITUD_INVALIDA');
   });
+
+  it('informa el campo indicado en detalle cuando falla desde o hasta', () => {
+    let errorDesde: ErrorDeNegocio | undefined;
+    try {
+      instanteDesdeIso('2026-12-01T00:00:00', 'desde');
+    } catch (e) {
+      errorDesde = e as ErrorDeNegocio;
+    }
+    expect(errorDesde).toBeInstanceOf(ErrorDeNegocio);
+    expect(errorDesde?.codigo).toBe('SOLICITUD_INVALIDA');
+    expect(errorDesde?.detalle).toEqual({ campo: 'desde', valor: '2026-12-01T00:00:00' });
+
+    let errorHasta: ErrorDeNegocio | undefined;
+    try {
+      instanteDesdeIso('invalido', 'hasta');
+    } catch (e) {
+      errorHasta = e as ErrorDeNegocio;
+    }
+    expect(errorHasta).toBeInstanceOf(ErrorDeNegocio);
+    expect(errorHasta?.codigo).toBe('SOLICITUD_INVALIDA');
+    expect(errorHasta?.detalle).toEqual({ campo: 'hasta', valor: 'invalido' });
+  });
 });
 
 describe('horaLocal (zona del consultorio)', () => {

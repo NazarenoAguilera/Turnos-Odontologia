@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mockups · agenda-diaria-y-semanal</title>
+  <link rel="stylesheet" href="../../../../design-system/tokens.css">
+  <style>
+    body { margin: 0; padding: var(--space-8) var(--space-4); font-family: var(--font-sans); color: var(--color-text); background: var(--color-bg); }
+    main { max-width: 44rem; margin: 0 auto; }
+    h1 { font-size: var(--text-2xl); margin: 0 0 var(--space-2); }
+    p { color: var(--color-text-muted); margin: 0 0 var(--space-6); }
+    ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+    a { display: block; padding: var(--space-3) var(--space-4); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); color: var(--color-primary-700); text-decoration: none; font-weight: var(--weight-semibold); }
+    a:hover { background: var(--color-primary-50); }
+    a:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+    small { display: block; color: var(--color-text-muted); font-weight: var(--weight-regular); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Mockups de C-07 · agenda-diaria-y-semanal</h1>
+  <p>Design system revisión 1. Datos 100 % ficticios. Capturas en <code>previews/</code> a 1440×900 y 390×844.</p>
+  <ul>
+    <li><a href="agenda.html?estado=dia">Agenda · Vista Día<small>Turnos del día ordenados por hora con insignias de estado y filtros</small></a></li>
+    <li><a href="agenda.html?estado=semana">Agenda · Vista Semana<small>Tabla agrupada por día (lunes a domingo) con fecha y horario</small></a></li>
+    <li><a href="agenda.html?estado=cancelados">Agenda · Mostrar cancelados<small>Incluye fila con clase .cancelado (nombre tachado e insignia gris)</small></a></li>
+    <li><a href="agenda.html?estado=vacio">Agenda · Vacío<small>Sin turnos para el rango o filtros seleccionados</small></a></li>
+    <li><a href="agenda.html?estado=cargando">Agenda · Cargando<small>Skeleton de carga mientras responde GET /turnos</small></a></li>
+    <li><a href="agenda.html?estado=error">Agenda · Error<small>Aviso de error de la API con código técnico y botón Reintentar</small></a></li>
+  </ul>
+</main>
+</body>
+</html>

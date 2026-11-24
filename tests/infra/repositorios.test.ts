@@ -10,6 +10,7 @@ import {
   listarPrestacionesActivas,
   listarProfesionalesActivos,
   listarSillonesActivos,
+  listarTurnosEnRango,
   obtenerPrestacion,
   obtenerRecurso,
 } from '../../src/infrastructure/sqlite/repositorios.js';
@@ -117,5 +118,37 @@ describe('repositorios SQLite', () => {
     insertarEventoAuditoria(db, { turnoId, accion: 'creado', ocurridoEn: '2026-11-17T00:00:00Z', despues: { turnoId } });
     expect(() => db.prepare("UPDATE evento_auditoria SET accion = 'cancelado'").run()).toThrow();
     expect(() => db.prepare('DELETE FROM evento_auditoria').run()).toThrow();
+  });
+
+  it('lista turnos en rango con nombres de recursos, ordenados por inicio e id, y con filtros opcionales', () => {
+    const tTarde = nuevoTurno(bruno, sillon2, 660, 690);
+    const tManana = nuevoTurno(ana, sillon1, 600, 630);
+    const tCancelado = nuevoTurno(ana, sillon1, 630, 660, 'cancelado');
+
+    const todosActivos = listarTurnosEnRango(db, { desdeMin: 600, hastaMin: 720, incluirCancelados: false });
+    expect(todosActivos.map((t) => t.id)).toEqual([tManana, tTarde]);
+    expect(todosActivos[0]).toMatchObject({
+      pacienteNombre: 'Paciente',
+      pacienteApellido: 'Ficticio Uno',
+      profesionalNombre: 'Dra. Ana Prueba',
+      sillonNombre: 'Sillón 1',
+      prestacionNombre: 'Limpieza',
+    });
+
+    const soloAnaConCancelados = listarTurnosEnRango(db, {
+      desdeMin: 600,
+      hastaMin: 720,
+      profesionalId: ana,
+      incluirCancelados: true,
+    });
+    expect(soloAnaConCancelados.map((t) => t.id)).toEqual([tManana, tCancelado]);
+
+    const soloSillon2 = listarTurnosEnRango(db, {
+      desdeMin: 600,
+      hastaMin: 720,
+      sillonId: sillon2,
+      incluirCancelados: false,
+    });
+    expect(soloSillon2.map((t) => t.id)).toEqual([tTarde]);
   });
 });
