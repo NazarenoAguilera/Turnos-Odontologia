@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import logo from '../../../design-system/assets/logo.svg'
 
-export type Pagina = 'nuevo-turno'
+export type Pagina = 'nuevo-turno' | 'agenda'
 
 const NOMBRE_MARCA = 'Turnos Odontología' // BRAND_NAME de design-system/brand.js
 
@@ -11,7 +11,7 @@ interface Props {
   children: ReactNode
 }
 
-/** Layout con menú lateral. Agenda queda deshabilitada hasta C-07 (design D4, R4). */
+/** Layout con menú lateral (Nuevo turno y Agenda). */
 export function Layout({ pagina, onNavegar, children }: Props) {
   return (
     <div className="app">
@@ -32,12 +32,16 @@ export function Layout({ pagina, onNavegar, children }: Props) {
             </svg>
             <span>Nuevo turno</span>
           </button>
-          <button type="button" className="nav-item" aria-disabled="true">
+          <button
+            type="button"
+            className="nav-item"
+            aria-current={pagina === 'agenda' ? 'page' : undefined}
+            onClick={() => onNavegar('agenda')}
+          >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" />
             </svg>
             <span>Agenda</span>
-            <span className="soon">Próximamente</span>
           </button>
         </nav>
       </aside>

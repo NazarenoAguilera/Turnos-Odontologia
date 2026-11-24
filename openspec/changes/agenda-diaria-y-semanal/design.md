@@ -70,14 +70,20 @@ La pantalla `web/src/pages/Agenda.tsx` actúa como cliente delgado de `/api/turn
 ## UI Mockups
 
 - **Design system revision**: 1
-- **Approval**: pending
-- **Location**: `openspec/changes/agenda-diaria-y-semanal/mockups/` (a generar en GATE 0b, antes del Apply del Tramo 2)
-- **Vistas requeridas y capturas** (`390×844` y `1440×900` en `mockups/previews/`):
-  1. Vista **Día** con turnos (`reservado`, `confirmado`, `atendido`, `ausente`) y barra de filtros.
-  2. Vista **Semana** en tabla agrupada por día.
-  3. Opción **Mostrar cancelados** activa (fila `.cancelado` con insignia gris y paciente tachado).
-  4. Estados **Vacío**, **Carga** (skeleton) y **Error** (aviso `.alert-danger`).
-- **Restricciones**: todos los HTML importan `../../../../design-system/tokens.css` y usan solo datos ficticios (`RN-PA-01`). El Apply del Tramo 2 no comienza hasta registrar `Approval: approved (<fecha>, by <nombre>)`.
+- **Approval**: approved (2026-11-24, by Nazareno)
+- **Location**: `openspec/changes/agenda-diaria-y-semanal/mockups/` (importan `../../../../design-system/tokens.css`, `brand.js` y `assets/logo.svg`, con datos 100 % ficticios del seed).
+
+| Archivo | Qué muestra |
+|---|---|
+| `index.html` | Índice con enlaces a cada estado |
+| `agenda.html?estado=dia` | Vista Día con turnos (`Atendido`, `Confirmado`, `Reservado`, `Ausente`), toolbar y filtros |
+| `agenda.html?estado=semana` | Vista Semana en tabla agrupada por día |
+| `agenda.html?estado=cancelados` | Opción "Mostrar cancelados" activa y fila `.cancelado` tachada |
+| `agenda.html?estado=vacio` | Estado vacío ("No hay turnos para este período") |
+| `agenda.html?estado=cargando` | Skeleton de carga mientras responde `GET /turnos` |
+| `agenda.html?estado=error` | Aviso `.alert-danger` con código técnico y botón "Reintentar" |
+
+Capturas renderizadas a `1440×900` y `390×844` en `openspec/changes/agenda-diaria-y-semanal/mockups/previews/` (`agenda-<estado>-desktop-1440x900.png` y `agenda-<estado>-mobile-390x844.png`). El Apply del Tramo 2 (`web/`) no comienza hasta registrar `Approval: approved (<fecha>, by <nombre>)`.
 
 ## Risks / Trade-offs
 

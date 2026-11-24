@@ -1,4 +1,16 @@
-import type { Catalogos, DatosReserva, ErrorApi, Resultado, TurnoCreado } from './tipos'
+import type {
+  Catalogos,
+  CatalogosAgenda,
+  DatosReserva,
+  ErrorApi,
+  FiltrosAgenda,
+  Profesional,
+  RespuestaAgenda,
+  Resultado,
+  Sillon,
+  TurnoCreado,
+  TurnoEnAgenda,
+} from './tipos'
 
 /** Prefijo que el proxy de Vite reenvía a la API sin el `/api` (design D5). */
 const BASE = '/api'
@@ -84,4 +96,42 @@ export function reservarTurno(datos: DatosReserva): Promise<Resultado<TurnoCread
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(datos),
   })
+}
+
+/** Carga en paralelo los catálogos usados en los filtros de la pantalla Agenda. */
+export async function obtenerCatalogosAgenda(): Promise<Resultado<CatalogosAgenda>> {
+  const [profesionales, sillones] = await Promise.all([
+    pedir<Profesional[]>('/profesionales'),
+    pedir<Sillon[]>('/sillones'),
+  ])
+  if (!profesionales.ok) return profesionales
+  if (!sillones.ok) return sillones
+  return {
+    ok: true,
+    valor: {
+      profesionales: profesionales.valor,
+      sillones: sillones.valor,
+    },
+  }
+}
+
+/** `GET /turnos` para un rango [desde, hasta) con filtros opcionales. */
+export async function consultarAgenda(filtros: FiltrosAgenda): Promise<Resultado<TurnoEnAgenda[]>> {
+  const params = new URLSearchParams({
+    desde: filtros.desde,
+    hasta: filtros.hasta,
+  })
+  if (filtros.profesionalId !== undefined) {
+    params.set('profesionalId', String(filtros.profesionalId))
+  }
+  if (filtros.sillonId !== undefined) {
+    params.set('sillonId', String(filtros.sillonId))
+  }
+  if (filtros.incluirCancelados === true) {
+    params.set('incluirCancelados', 'true')
+  }
+
+  const r = await pedir<RespuestaAgenda>(`/turnos?${params.toString()}`)
+  if (!r.ok) return r
+  return { ok: true, valor: r.valor.turnos }
 }

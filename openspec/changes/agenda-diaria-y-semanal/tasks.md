@@ -24,15 +24,15 @@
 
 ## 5. Diseño visual — Mockups de pantalla Agenda (Tramo 2 — GATE 0b, tras merge de `C-11`)
 
-- [ ] 5.1 Sincronizar la rama `lautaro` con `git pull origin master` una vez mergeado `C-11` (`interfaz-web-base`) y verificar el layout y endpoints de catálogos disponibles en `web/`.
-- [ ] 5.2 Crear los mockups HTML en `openspec/changes/agenda-diaria-y-semanal/mockups/` importando `../../../../design-system/tokens.css` (revisión 1) y usando solo datos ficticios, cubriendo vista Día, vista Semana (tabla agrupada por día), Mostrar cancelados activo, Vacío, Carga (skeleton) y Error.
-- [ ] 5.3 Renderizar capturas a 390×844 y 1440×900 en `openspec/changes/agenda-diaria-y-semanal/mockups/previews/` y obtener aprobación del líder (`Approval: approved` en `design.md`) antes de comenzar la Sección 6.
+- [x] 5.1 Sincronizar la rama `lautaro` con `git pull origin master` una vez mergeado `C-11` (`interfaz-web-base`) y verificar el layout y endpoints de catálogos disponibles en `web/`.
+- [x] 5.2 Crear los mockups HTML en `openspec/changes/agenda-diaria-y-semanal/mockups/` importando `../../../../design-system/tokens.css` (revisión 1) y usando solo datos ficticios, cubriendo vista Día, vista Semana (tabla agrupada por día), Mostrar cancelados activo, Vacío, Carga (skeleton) y Error.
+- [x] 5.3 Renderizar capturas a 390×844 y 1440×900 en `openspec/changes/agenda-diaria-y-semanal/mockups/previews/` y obtener aprobación del líder (`Approval: approved` en `design.md`) antes de comenzar la Sección 6.
 
 ## 6. Pantalla Agenda en `web/` (Tramo 2 — tras aprobación de mockups)
 
-- [ ] 6.1 Agregar la función cliente `consultarAgenda` en `web/src/api/` consumiendo `GET /api/turnos` y reutilizando el manejo de errores `{ codigo, mensaje }` de `C-11`.
-- [ ] 6.2 Implementar `web/src/pages/Agenda.tsx` e integrarla en la navegación lateral del layout de `C-11`: selector Día / Semana, flechas `‹` / `›`, cálculo de `[desde, hasta)` en `America/Argentina/Buenos_Aires`, filtros de profesional y sillón (alimentados por `/api/profesionales` y `/api/sillones`), checkbox "Mostrar cancelados", tabla (agrupada por día en Semana) con insignias de estado, estilo `.cancelado`, columna de acciones preparada para `C-05` y estados vacío/carga/error usando exclusivamente variables de `design-system/tokens.css`.
-- [ ] 6.3 Verificar que `npm run build` dentro de `web/` compila sin errores de TypeScript ni Vite.
+- [x] 6.1 Agregar la función cliente `consultarAgenda` en `web/src/api/` consumiendo `GET /api/turnos` y reutilizando el manejo de errores `{ codigo, mensaje }` de `C-11`.
+- [x] 6.2 Implementar `web/src/pages/Agenda.tsx` e integrarla en la navegación lateral del layout de `C-11`: selector Día / Semana, flechas `‹` / `›`, cálculo de `[desde, hasta)` en `America/Argentina/Buenos_Aires`, filtros de profesional y sillón (alimentados por `/api/profesionales` y `/api/sillones`), checkbox "Mostrar cancelados", tabla (agrupada por día en Semana) con insignias de estado, estilo `.cancelado`, columna de acciones preparada para `C-05` y estados vacío/carga/error usando exclusivamente variables de `design-system/tokens.css`.
+- [x] 6.3 Verificar que `npm run build` dentro de `web/` compila sin errores de TypeScript ni Vite.
 
 ## 7. Verify y cierre
 

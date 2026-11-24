@@ -64,10 +64,89 @@ export function hoyEnZona(ahora: Date = new Date(), zona: string = ZONA_CONSULTO
 }
 
 const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado']
+const DIAS_CAP = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+const MESES = [
+  'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+  'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre',
+]
+const MESES_CORTOS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
+
+export type VistaAgenda = 'dia' | 'semana'
 
 /** "2026-12-01T10:00:00-03:00" → "martes 1/12" (texto del aviso de turno reservado). */
 export function diaLegible(iso: string): string {
   const [anio, mes, dia] = iso.slice(0, 10).split('-').map(Number)
   const diaSemana = new Date(Date.UTC(anio ?? 0, (mes ?? 1) - 1, dia ?? 1)).getUTCDay()
   return `${DIAS[diaSemana] ?? ''} ${dia}/${mes}`
+}
+
+/** "2026-12-01T10:00:00-03:00" → "2026-12-01". */
+export function fechaDeIso(iso: string): string {
+  return iso.slice(0, 10)
+}
+
+function aFechaUtc(fechaYmd: string): Date {
+  const [anio, mes, dia] = fechaYmd.split('-').map(Number)
+  return new Date(Date.UTC(anio ?? 0, (mes ?? 1) - 1, dia ?? 1))
+}
+
+function formatearYmdUtc(fecha: Date): string {
+  return `${fecha.getUTCFullYear()}-${dosDigitos(fecha.getUTCMonth() + 1)}-${dosDigitos(fecha.getUTCDate())}`
+}
+
+/** Suma o resta días calendario sobre una fecha `YYYY-MM-DD`. */
+export function sumarDias(fechaYmd: string, dias: number): string {
+  const fecha = aFechaUtc(fechaYmd)
+  fecha.setUTCDate(fecha.getUTCDate() + dias)
+  return formatearYmdUtc(fecha)
+}
+
+/** Devuelve el lunes (`YYYY-MM-DD`) de la semana ISO que contiene a `fechaYmd`. */
+export function lunesDeSemana(fechaYmd: string): string {
+  const diaSemana = aFechaUtc(fechaYmd).getUTCDay()
+  const desplazamiento = diaSemana === 0 ? -6 : 1 - diaSemana
+  return sumarDias(fechaYmd, desplazamiento)
+}
+
+/** Calcula el rango semiabierto `[desde, hasta)` en la zona del consultorio. */
+export function rangoAgenda(
+  fechaBase: string,
+  vista: VistaAgenda,
+  zona: string = ZONA_CONSULTORIO,
+): { desde: string; hasta: string } {
+  const inicioDia = vista === 'dia' ? fechaBase : lunesDeSemana(fechaBase)
+  const finDia = sumarDias(inicioDia, vista === 'dia' ? 1 : 7)
+  return {
+    desde: inicioIso(inicioDia, '00:00', zona),
+    hasta: inicioIso(finDia, '00:00', zona),
+  }
+}
+
+/** "2026-12-01" → "Martes 1 de diciembre". */
+export function tituloDia(fechaYmd: string): string {
+  const fecha = aFechaUtc(fechaYmd)
+  const nombreDia = DIAS_CAP[fecha.getUTCDay()] ?? ''
+  const numero = fecha.getUTCDate()
+  const mes = MESES[fecha.getUTCMonth()] ?? ''
+  return `${nombreDia} ${numero} de ${mes}`
+}
+
+/** "2026-12-01" → "30 nov – 6 dic 2026". */
+export function tituloSemana(fechaBase: string): string {
+  const lunes = aFechaUtc(lunesDeSemana(fechaBase))
+  const domingo = aFechaUtc(sumarDias(formatearYmdUtc(lunes), 6))
+  const d1 = lunes.getUTCDate()
+  const m1 = MESES_CORTOS[lunes.getUTCMonth()] ?? ''
+  const a1 = lunes.getUTCFullYear()
+  const d2 = domingo.getUTCDate()
+  const m2 = MESES_CORTOS[domingo.getUTCMonth()] ?? ''
+  const a2 = domingo.getUTCFullYear()
+
+  if (a1 !== a2) {
+    return `${d1} ${m1} ${a1} – ${d2} ${m2} ${a2}`
+  }
+  if (m1 === m2) {
+    return `${d1} – ${d2} ${m2} ${a2}`
+  }
+  return `${d1} ${m1} – ${d2} ${m2} ${a2}`
 }

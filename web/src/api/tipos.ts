@@ -33,6 +33,41 @@ export interface TurnoCreado {
   estado: string
 }
 
+export type EstadoTurno = 'reservado' | 'confirmado' | 'cancelado' | 'ausente' | 'atendido'
+
+export interface TurnoEnAgenda {
+  id: number
+  pacienteId: number
+  pacienteNombre: string
+  profesionalId: number
+  profesionalNombre: string
+  sillonId: number
+  sillonNombre: string
+  prestacionId: number
+  prestacionNombre: string
+  inicio: string
+  fin: string
+  duracionMin: number
+  estado: EstadoTurno
+}
+
+export interface FiltrosAgenda {
+  desde: string
+  hasta: string
+  profesionalId?: number
+  sillonId?: number
+  incluirCancelados?: boolean
+}
+
+export interface RespuestaAgenda {
+  turnos: TurnoEnAgenda[]
+}
+
+export interface CatalogosAgenda {
+  profesionales: Profesional[]
+  sillones: Sillon[]
+}
+
 export interface Conflicto {
   recurso: 'profesional' | 'sillon'
   turnoId: number

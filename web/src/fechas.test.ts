@@ -1,5 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { diaLegible, horaDeIso, hoyEnZona, inicioIso } from './fechas'
+import {
+  diaLegible,
+  fechaDeIso,
+  horaDeIso,
+  hoyEnZona,
+  inicioIso,
+  lunesDeSemana,
+  rangoAgenda,
+  sumarDias,
+  tituloDia,
+  tituloSemana,
+} from './fechas'
 
 // design D7: el offset sale de la zona IANA con Intl, nunca de un "-03:00" fijo
 // ni del huso de la máquina que corre el navegador.
@@ -48,5 +59,42 @@ describe('textos de fecha para los avisos', () => {
   it('diaLegible arma "martes 1/12"', () => {
     expect(diaLegible('2026-12-01T10:00:00-03:00')).toBe('martes 1/12')
     expect(diaLegible('2026-12-06T10:00:00-03:00')).toBe('domingo 6/12')
+  })
+})
+
+describe('utilidades de fechas para Agenda', () => {
+  it('suma y resta días respetando cambios de mes y año', () => {
+    expect(sumarDias('2026-11-30', 1)).toBe('2026-12-01')
+    expect(sumarDias('2026-12-31', 1)).toBe('2027-01-01')
+    expect(sumarDias('2026-12-01', -1)).toBe('2026-11-30')
+  })
+
+  it('encuentra el lunes de la semana incluso para un domingo', () => {
+    expect(lunesDeSemana('2026-12-01')).toBe('2026-11-30')
+    expect(lunesDeSemana('2026-12-06')).toBe('2026-11-30')
+    expect(lunesDeSemana('2026-11-30')).toBe('2026-11-30')
+  })
+
+  it('arma rangos semiabiertos de día y semana en la zona indicada', () => {
+    expect(rangoAgenda('2026-12-01', 'dia')).toEqual({
+      desde: '2026-12-01T00:00:00-03:00',
+      hasta: '2026-12-02T00:00:00-03:00',
+    })
+    expect(rangoAgenda('2026-12-01', 'semana')).toEqual({
+      desde: '2026-11-30T00:00:00-03:00',
+      hasta: '2026-12-07T00:00:00-03:00',
+    })
+    expect(rangoAgenda('2026-12-01', 'dia', 'Europe/Madrid')).toEqual({
+      desde: '2026-12-01T00:00:00+01:00',
+      hasta: '2026-12-02T00:00:00+01:00',
+    })
+  })
+
+  it('extrae fechaDeIso y arma títulos legibles de día y semana', () => {
+    expect(fechaDeIso('2026-12-01T09:00:00-03:00')).toBe('2026-12-01')
+    expect(tituloDia('2026-12-01')).toBe('Martes 1 de diciembre')
+    expect(tituloSemana('2026-12-01')).toBe('30 nov – 6 dic 2026')
+    expect(tituloSemana('2026-12-15')).toBe('14 – 20 dic 2026')
+    expect(tituloSemana('2026-12-30')).toBe('28 dic 2026 – 3 ene 2027')
   })
 })
