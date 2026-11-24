@@ -20,20 +20,20 @@
 
 ## 4. `web/`: base del proyecto (espera la aprobación del mockup)
 
-- [ ] 4.1 Confirmar que `openspec/changes/interfaz-web-base/design.md` dice `Approval: approved`; si no, frenar acá
-- [ ] 4.2 Crear `web/` con `npm create vite@latest web -- --template react-ts` y quitar el contenido de ejemplo de la plantilla (logos, `App.css`, contador); verificar que `cd web && npm install && npm run build` termina sin errores
-- [ ] 4.3 Configurar `web/vite.config.ts` con el proxy `/api` → `http://127.0.0.1:3000` sin el prefijo y `server.fs.allow: ['..']` (design D5), e importar `../../design-system/tokens.css` en `web/src/main.tsx`; verificar con la API y la web levantadas que `http://localhost:5173/api/health` responde `{"estado":"ok"}`
-- [ ] 4.4 Agregar `vitest` como dependencia de desarrollo de `web/` con el script `"test": "vitest run"`; verificar que `cd web && npm test` corre
+- [x] 4.1 Confirmar que `openspec/changes/interfaz-web-base/design.md` dice `Approval: approved`; si no, frenar acá
+- [x] 4.2 Crear `web/` con `npm create vite@latest web -- --template react-ts` y quitar el contenido de ejemplo de la plantilla (logos, `App.css`, contador); verificar que `cd web && npm install && npm run build` termina sin errores
+- [x] 4.3 Configurar `web/vite.config.ts` con el proxy `/api` → `http://127.0.0.1:3000` sin el prefijo y `server.fs.allow: ['..']` (design D5), e importar `../../design-system/tokens.css` en `web/src/main.tsx`; verificar con la API y la web levantadas que `http://localhost:5173/api/health` responde `{"estado":"ok"}`
+- [x] 4.4 Agregar `vitest` como dependencia de desarrollo de `web/` con el script `"test": "vitest run"`; verificar que `cd web && npm test` corre
 
 ## 5. `web/`: fechas y cliente de API
 
-- [ ] 5.1 Escribir primero `web/src/fechas.test.ts` (design D7): `2026-12-01` `10:00` en `America/Argentina/Buenos_Aires` → `2026-12-01T10:00:00-03:00`; la misma fecha en `Europe/Madrid` → `+01:00`; una zona con offset cero → `+00:00`; el resultado no cambia con otro `process.env.TZ`. Implementar `web/src/fechas.ts` con `Intl` y sin `-03:00` fijo; verificar que `cd web && npm test` pasa
-- [ ] 5.2 Implementar `web/src/api/cliente.ts` (`obtenerCatalogos`, `reservarTurno` con resultado `{ ok, turno } | { ok: false, error }`, fallo de red → `SIN_CONEXION`) y `web/src/api/mensajes.ts` (`codigo` → título, ayuda y tono, con un caso por defecto que usa el `mensaje` del backend), según design D6; verificar que `cd web && npm run build` compila con tipos estrictos
+- [x] 5.1 Escribir primero `web/src/fechas.test.ts` (design D7): `2026-12-01` `10:00` en `America/Argentina/Buenos_Aires` → `2026-12-01T10:00:00-03:00`; la misma fecha en `Europe/Madrid` → `+01:00`; una zona con offset cero → `+00:00`; el resultado no cambia con otro `process.env.TZ`. Implementar `web/src/fechas.ts` con `Intl` y sin `-03:00` fijo; verificar que `cd web && npm test` pasa
+- [x] 5.2 Implementar `web/src/api/cliente.ts` (`obtenerCatalogos`, `reservarTurno` con resultado `{ ok, turno } | { ok: false, error }`, fallo de red → `SIN_CONEXION`) y `web/src/api/mensajes.ts` (`codigo` → título, ayuda y tono, con un caso por defecto que usa el `mensaje` del backend), según design D6; verificar que `cd web && npm run build` compila con tipos estrictos
 
 ## 6. `web/`: layout y pantalla Nuevo turno
 
-- [ ] 6.1 Implementar `web/src/estilos.css` (mismas clases y variables que `design-system/components.html`, sin valores sueltos) y `components/Layout` con el menú lateral: Nuevo turno activo y Agenda con `aria-disabled` y la marca "Próximamente". Solo escritorio: sin media queries para móvil (design, "Ajuste de alcance"); verificar a mano a 1440×900 contra `mockups/previews/nuevo-turno-listo-desktop-1440x900.png`
-- [ ] 6.2 Implementar `components/Aviso` (success, warning y danger, con el código técnico en monoespaciada) y `pages/NuevoTurno` según design D8: carga con el texto "Cargando…", error de carga con Reintentar, selects desde la API, fecha por defecto de hoy en la zona del consultorio, Reservar con `aria-busy`, aviso de éxito con nombres, 409 con lista de conflictos, 422 de grilla con el campo Hora marcado, y conservación de los campos tras un error; verificar que `cd web && npm run build` compila
+- [x] 6.1 Implementar `web/src/estilos.css` (mismas clases y variables que `design-system/components.html`, sin valores sueltos) y `components/Layout` con el menú lateral: Nuevo turno activo y Agenda con `aria-disabled` y la marca "Próximamente". Solo escritorio: sin media queries para móvil (design, "Ajuste de alcance"); verificar a mano a 1440×900 contra `mockups/previews/nuevo-turno-listo-desktop-1440x900.png`
+- [x] 6.2 Implementar `components/Aviso` (success, warning y danger, con el código técnico en monoespaciada) y `pages/NuevoTurno` según design D8: carga con el texto "Cargando…", error de carga con Reintentar, selects desde la API, fecha por defecto de hoy en la zona del consultorio, Reservar con `aria-busy`, aviso de éxito con nombres, 409 con lista de conflictos, 422 de grilla con el campo Hora marcado, y conservación de los campos tras un error; verificar que `cd web && npm run build` compila
 - [ ] 6.3 Verificar a mano con la API y la web levantadas, contra cada estado del mockup: reservar Paciente Ficticio Uno con la Dra. Ana Prueba en el Sillón 1 a las 10:00 (éxito), repetir con el Dr. Bruno Ejemplo en el Sillón 1 a las 10:15 (409 sillón), hora 10:10 (422) y API apagada (sin conexión). Guardar capturas a 1440×900 (solo escritorio) en `openspec/changes/interfaz-web-base/verify/`, solo con datos ficticios
 
 ## 7. Documentación e integración

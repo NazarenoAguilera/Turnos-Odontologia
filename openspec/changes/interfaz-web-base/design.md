@@ -65,7 +65,7 @@ Cada ruta declara `response: { 200: { type: 'array', items: { type: 'object', ad
 
 ### D8 — Comportamiento de la pantalla Nuevo turno
 - Al montar: carga los catálogos y muestra el texto "Cargando…" (`role="status"`). Si falla, muestra un aviso con "Reintentar".
-- Fecha por defecto: hoy en la zona del consultorio. Hora vacía, con `step="900"`, que es solo una ayuda.
+- Fecha por defecto: hoy en la zona del consultorio. Hora vacía y obligatoria (`required`). **Sin `step="900"`**, aunque el mockup lo tiene: en el Apply se vio que la validación nativa del navegador bloquea 10:10 antes de llegar a la API, y la grilla la tiene que decidir el backend (DD-08). La ayuda ":00, :15, :30 o :45" queda como texto.
 - Reservar: deshabilita el botón (`aria-busy`, "Reservando…") y no permite doble envío.
 - Éxito: aviso verde con nombres y horario. Los nombres salen de los catálogos cargados: paciente "Nombre Apellido", profesional, sillón, y "martes 1/12, 10:00 a 10:30". Se limpia la hora y se conservan los demás campos para reservar otro turno rápido.
 - Error: se conservan todos los campos y el aviso queda arriba del botón (`role="alert"`). En 422 `INICIO_FUERA_DE_GRILLA` el campo Hora se marca `invalid`.
