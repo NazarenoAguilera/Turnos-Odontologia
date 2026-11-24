@@ -108,7 +108,7 @@ Sin migración de datos ni cambios de esquema. Para levantar todo: terminal 1 en
 ## UI Mockups
 
 Design system revision: 1
-Approval: pending
+Approval: approved (2026-11-24, by Nazareno)
 
 Mockups en `openspec/changes/interfaz-web-base/mockups/` (importan `../../../../design-system/tokens.css`):
 
