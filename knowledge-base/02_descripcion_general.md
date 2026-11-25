@@ -65,7 +65,9 @@ Todas las respuestas son JSON. Las fechas y horas usan ISO 8601 con offset de Ar
 | | `GET /turnos/:id` | Detalle de un turno |
 | | `POST /turnos/:id/cancelar` | Cancelar: pasa a `cancelado` y libera los recursos |
 | | `POST /turnos/:id/reprogramar` | Mover a otro inicio, sillón o profesional con las mismas validaciones |
-| | `POST /turnos/:id/estado` | Cambiar a `confirmado`, `ausente` o `atendido` |
+| | `POST /turnos/:id/confirmar` | Confirmar: pasa a `confirmado` |
+| | `POST /turnos/:id/ausente` | Marcar ausente: pasa a `ausente` (sigue ocupando el horario) |
+| | `POST /turnos/:id/atendido` | Marcar atendido: pasa a `atendido` (sigue ocupando el horario) |
 | Profesionales | `GET/POST /profesionales`, `GET/PATCH /profesionales/:id` | Gestión de profesionales |
 | Horarios | `GET/PUT /profesionales/:id/horarios` | Franjas de atención semanales |
 | Bloqueos | `GET/POST/DELETE /profesionales/:id/bloqueos` | Feriados, vacaciones y ausencias |
