@@ -67,19 +67,22 @@ Las dos son sentencias preparadas fijas, sin SQL armado a mano.
 - `mensajes.ts` suma `TRANSICION_INVALIDA` → título "El turno ya no se puede cambiar a ese estado", ayuda "Alguien lo modificó antes. Actualizamos la agenda con su estado actual.", tono `warning`.
 
 ### D6 — Botones en la Agenda (P2, P3, R7)
-- **`TablaTurnos`** recibe props opcionales: `onCancelar?(turno)`, `onConfirmar?(turno)` y `turnoOcupadoId?: number`.
+- **`TablaTurnos`** recibe props opcionales: `onPedirCancelacion?(turno)`, `onCancelar?(turno)`, `onConfirmar?(turno)`, `onVolver?()`, `turnoConfirmandoId?: number` y `turnoOcupadoId?: number`.
   - En la columna Acciones muestra **Confirmar** (`btn-secondary btn-sm`) si el turno está `reservado`, y **Cancelar** (`btn-danger btn-sm`) si está `reservado` o `confirmado`.
   - Ocultar los botones en otros estados es presentación: si alguien igual dispara la acción, la API responde 422.
-  - Sigue siendo presentacional, así que los botones aparecen también en la vista Semana sin código extra.
+  - Si `turnoConfirmandoId` es el de la fila, los botones de esa fila se reemplazan por la **confirmación en la fila**: el texto "¿Cancelar este turno? No se puede deshacer." arriba, y debajo "Sí, cancelar turno" (`btn-danger btn-sm`) y "Volver" (`btn-secondary btn-sm`). La fila se marca con `tr.confirmando`, que usa el fondo de peligro suave.
+  - La confirmación tiene `role="group"` con un `aria-label` que nombra la hora del turno. Al abrirse, el foco va a **"Volver"**, la opción segura, y `Escape` equivale a "Volver".
+  - Mientras una fila está confirmando, las acciones de las demás filas quedan deshabilitadas: hay una sola confirmación abierta a la vez.
+  - Sigue siendo presentacional, así que los botones y la confirmación aparecen también en la vista Semana sin código extra.
 - **`Agenda`** se encarga de la acción:
-  1. **Cancelar**: `window.confirm('¿Cancelar el turno de las HH:MM de <paciente> con <profesional>? Esta acción no se puede deshacer.')`. Si la respuesta es no, no hace nada.
-  2. Marca el turno como ocupado. Su botón pasa a "Cancelando…"/"Confirmando…" con `aria-busy`, y todas las acciones de la tabla se deshabilitan para evitar doble envío.
+  1. **Cancelar**: el clic en "Cancelar" solo abre la confirmación en la fila (`turnoConfirmandoId`), sin llamar a la API. "Volver" la cierra sin cambios. Recién "Sí, cancelar turno" sigue con el paso 2. "Confirmar" no pide confirmación: no es irreversible, porque el turno sigue pudiendo cancelarse.
+  2. Marca el turno como ocupado. El botón que disparó la acción ("Sí, cancelar turno" o "Confirmar") pasa a "Cancelando…" o "Confirmando…" con `aria-busy`, y todas las acciones de la tabla, incluido "Volver", se deshabilitan para evitar doble envío.
   3. Llama a `cambiarEstado`.
   4. Muestra un aviso arriba de la tabla:
      - Éxito: "Turno cancelado · <paciente> · <profesional> · <sillón> · HH:MM a HH:MM. El horario quedó libre.", o "Turno confirmado · …".
      - Error: `describirError`.
   5. Recarga con `setIntento(n + 1)`, salvo con `SIN_CONEXION`, donde no tiene sentido recargar. La agenda queda siempre con el estado real de la API, sin parchear la lista a mano.
-  - El aviso desaparece al cambiar de fecha, vista o filtro.
+  - El aviso desaparece al cambiar de fecha, vista o filtro. Cambiar de fecha, vista o filtro también cierra una confirmación abierta.
 - **`estilos.css`** suma `.btn-danger` y `.btn-danger:hover`, iguales a `design-system/components.html`, y `.acciones-fila` (botones a la derecha).
 
 ### D7 — Tests
@@ -93,9 +96,19 @@ Las dos son sentencias preparadas fijas, sin SQL armado a mano.
 1. **API** (no espera el mockup): D1–D4 y sus tests, más README.
 2. **Pantalla** (espera `Approval: approved`): D5–D6 y sus tests de `web/`.
 
+### D9 — Ajuste del 2026-11-24: confirmación en la fila en lugar de `window.confirm`
+
+**Cambio**: la decisión P2 del Explore (`window.confirm` antes de cancelar) se reemplaza por una confirmación **dentro de la misma fila** de la Agenda. Tiene el texto "¿Cancelar este turno? No se puede deshacer." y dos botones: **"Sí, cancelar turno"** (peligro) y **"Volver"**. Los detalles de comportamiento y accesibilidad están en D6.
+
+**Motivo**: en un navegador en español, el diálogo nativo muestra "Aceptar" y "Cancelar". En esta pantalla, "Cancelar" significa *no* cancelar el turno, y eso es confuso justo en una acción irreversible (`cancelado` es un estado final). Con la confirmación en la fila, el botón dice lo que hace ("Sí, cancelar turno"), la salida segura dice "Volver", y la pregunta queda al lado del turno afectado. Además, sigue el design-system (colores y botones de `tokens.css`) en lugar de un diálogo cuyo aspecto depende del navegador.
+
+**Alternativas**:
+- Mantener `window.confirm` con una pregunta bien redactada: no elimina la ambigüedad del botón "Cancelar".
+- Un modal propio: más código y manejo de foco, y saca la pregunta del contexto de la fila.
+
 ## Risks / Trade-offs
 
-- [En `window.confirm` en español, el botón "Cancelar" significa *no cancelar el turno*] → La pregunta empieza con "¿Cancelar el turno…?" y aclara que no se puede deshacer, así que "Aceptar" = cancelar. Si en la prueba manual confunde, el diálogo se puede reemplazar por una confirmación en la fila en otro change.
+- [La confirmación en la fila ensancha la columna de acciones] → La pregunta va en su propia línea, arriba de los botones, con un ancho máximo. Así las demás columnas no se aprietan (se comprobó en el mockup a 1440×900). La fila confirmando queda más alta mientras dura la pregunta.
 - [Dos pedidos simultáneos sobre el mismo turno] → BEGIN IMMEDIATE serializa y el segundo ve el estado nuevo y recibe 422. Sin test de concurrencia nuevo (P5), es el mismo mecanismo probado en C-01.
 - [Marcar `atendido` un turno futuro] → Se permite (R6). La KB no lo prohíbe y no se inventa una regla.
 - [Recarga completa de la agenda después de cada acción] → Una consulta más por clic. Es aceptable para 2 a 5 profesionales y evita que la tabla muestre un estado distinto al de la base.
@@ -116,8 +129,8 @@ Mockups en `openspec/changes/cancelar-y-cambiar-estado-de-turno/mockups/`. Parte
 |---|---|
 | `index.html` | Índice con un enlace por estado |
 | `agenda.html?estado=acciones` | Confirmar y Cancelar en el turno `reservado`; solo Cancelar en el `confirmado`; nada en `atendido` y `ausente` |
-| `agenda.html?estado=confirmar-cancelacion` | La pregunta antes de cancelar. Es una **simulación** del `window.confirm` nativo, cuyo aspecto depende del navegador |
-| `agenda.html?estado=cancelando` | Botón "Cancelando…" y acciones deshabilitadas |
+| `agenda.html?estado=confirmar-cancelacion` | Confirmación en la fila: "¿Cancelar este turno? No se puede deshacer.", con "Sí, cancelar turno" (peligro) y "Volver"; las demás acciones deshabilitadas |
+| `agenda.html?estado=cancelando` | "Sí, cancelar turno" pasa a "Cancelando…" y "Volver" se deshabilita |
 | `agenda.html?estado=cancelado-ok` | Aviso "Turno cancelado"; la fila ya no aparece tras recargar (cancelados ocultos) |
 | `agenda.html?estado=confirmado-ok` | Aviso "Turno confirmado"; la insignia pasa a Confirmado y queda solo Cancelar |
 | `agenda.html?estado=error-422` | Aviso `422 TRANSICION_INVALIDA`; la agenda recargada muestra el turno como Atendido, sin acciones |

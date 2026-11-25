@@ -191,14 +191,12 @@
     .alert-success { background: var(--color-success-50); border-color: var(--color-success-200); color: var(--color-success-700); }
     .alert-warning { background: var(--color-warning-50); border-color: var(--color-warning-200); color: var(--color-warning-700); }
     .acciones-fila { display: flex; gap: var(--space-2); justify-content: flex-end; white-space: nowrap; }
-    tr.resaltada { background: var(--color-primary-50); }
 
-    /* Simulación del diálogo nativo de window.confirm (solo para el mockup). */
-    .dialogo-velo { position: fixed; inset: 0; background: rgb(23 48 44 / 0.25); display: flex; align-items: flex-start; justify-content: center; padding-top: 6rem; }
-    .dialogo { width: 28rem; background: var(--color-surface); border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); box-shadow: var(--shadow-md); padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-4); }
-    .dialogo .origen { font-size: var(--text-sm); color: var(--color-text-muted); }
-    .dialogo .botones { display: flex; justify-content: flex-end; gap: var(--space-2); }
-    .nota-mockup { font-size: var(--text-xs); color: var(--color-text-muted); text-align: center; }
+    /* Confirmación de la cancelación dentro de la misma fila (en lugar del diálogo nativo del navegador). */
+    .confirmacion-fila { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: var(--space-2); max-width: 17rem; margin-left: auto; }
+    .confirmacion-fila[hidden], .acciones-fila[hidden] { display: none; }
+    .confirmacion-fila .pregunta { flex: 1 0 100%; text-align: right; font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--color-danger-700); }
+    tr.confirmando { background: var(--color-danger-50); }
 
     /* Solo escritorio: la vista móvil queda fuera de este change (decisión P4 del Explore). */
   </style>
@@ -344,6 +342,11 @@
                   <button class="btn btn-secondary btn-sm" type="button" data-accion id="btn-confirmar">Confirmar</button>
                   <button class="btn btn-danger btn-sm" type="button" data-accion id="btn-cancelar">Cancelar</button>
                 </div>
+                <div class="confirmacion-fila" id="confirmacion-objetivo" role="group" aria-label="Confirmar la cancelación del turno de las 10:30" hidden>
+                  <span class="pregunta">¿Cancelar este turno? No se puede deshacer.</span>
+                  <button class="btn btn-danger btn-sm" type="button" id="btn-si-cancelar">Sí, cancelar turno</button>
+                  <button class="btn btn-secondary btn-sm" type="button" id="btn-volver">Volver</button>
+                </div>
               </td>
             </tr>
             <tr>
@@ -362,19 +365,6 @@
   </main>
 </div>
 
-<!-- Estado: confirmación antes de cancelar. En la app es el diálogo nativo window.confirm. -->
-<div class="dialogo-velo" data-estado="confirmar-cancelacion">
-  <div class="dialogo" role="dialog" aria-modal="true" aria-labelledby="dialogo-texto">
-    <p class="origen">localhost:5173 dice</p>
-    <p id="dialogo-texto">¿Cancelar el turno de las 10:30 de Paciente Ficticio Tres con la Dra. Ana Prueba? Esta acción no se puede deshacer.</p>
-    <div class="botones">
-      <button class="btn btn-secondary btn-sm" type="button">Cancelar</button>
-      <button class="btn btn-primary btn-sm" type="button">Aceptar</button>
-    </div>
-    <p class="nota-mockup">Simulación: en la app es el diálogo nativo del navegador (<code>window.confirm</code>); su aspecto depende del navegador.</p>
-  </div>
-</div>
-
 <script>
   // Selector de estado del mockup: agenda.html?estado=<acciones|confirmar-cancelacion|cancelando|cancelado-ok|confirmado-ok|error-422>
   (function () {
@@ -386,15 +376,20 @@
     var acciones = document.getElementById('acciones-objetivo');
     var badge = document.getElementById('badge-objetivo');
 
-    if (estado === 'confirmar-cancelacion') {
-      fila.classList.add('resaltada');
+    var confirmacion = document.getElementById('confirmacion-objetivo');
+    if (estado === 'confirmar-cancelacion' || estado === 'cancelando') {
+      // La confirmación reemplaza a los botones de esa fila; el foco va a "Volver" (opción segura).
+      fila.classList.add('confirmando');
+      acciones.hidden = true;
+      confirmacion.hidden = false;
+      document.querySelectorAll('[data-accion]').forEach(function (b) { b.disabled = true; });
     }
     if (estado === 'cancelando') {
-      fila.classList.add('resaltada');
-      document.querySelectorAll('[data-accion]').forEach(function (b) { b.disabled = true; });
-      var cancelar = document.getElementById('btn-cancelar');
-      cancelar.textContent = 'Cancelando…';
-      cancelar.setAttribute('aria-busy', 'true');
+      var si = document.getElementById('btn-si-cancelar');
+      si.textContent = 'Cancelando…';
+      si.disabled = true;
+      si.setAttribute('aria-busy', 'true');
+      document.getElementById('btn-volver').disabled = true;
     }
     if (estado === 'cancelado-ok') {
       // Con "Mostrar cancelados" apagado, la fila cancelada ya no aparece tras recargar.

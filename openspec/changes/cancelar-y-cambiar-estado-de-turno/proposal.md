@@ -18,7 +18,7 @@ Hoy un turno solo se puede crear: si el paciente avisa que no viene, recepción 
 - Cancelar libera al profesional y al sillón: se puede volver a reservar ese mismo horario. `ausente` y `atendido` siguen ocupando (RN-TU-10). No hay anticipación mínima ni restricción de fecha (RN-TU-11).
 - Cada transición deja un evento de auditoría en la misma transacción: `cancelado`, o `estado_cambiado` para las otras tres, con el estado anterior y el nuevo. Un rechazo no deja evento (RN-AU-01, RN-GL-01).
 - Pantalla Agenda (C-07), solo escritorio:
-  - Botón **Cancelar** en los turnos `reservado` y `confirmado`, con confirmación (`window.confirm`) antes de llamar a la API.
+  - Botón **Cancelar** en los turnos `reservado` y `confirmado`. Antes de llamar a la API, la misma fila pide confirmación: "¿Cancelar este turno? No se puede deshacer.", con los botones "Sí, cancelar turno" y "Volver".
   - Botón **Confirmar** en los turnos `reservado`.
   - Aviso de resultado (éxito o error) y recarga de la agenda después de cada acción.
 - Mockup de la Agenda con los botones en `mockups/` para que lo apruebe el líder.
