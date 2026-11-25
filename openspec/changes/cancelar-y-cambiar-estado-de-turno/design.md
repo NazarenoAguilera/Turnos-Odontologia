@@ -121,7 +121,7 @@ Sin migraciones: el esquema no cambia. Para revertir, alcanza con revertir los c
 ## UI Mockups
 
 Design system revision: 1
-Approval: pending
+Approval: approved (2026-11-24, by Nazareno)
 
 Mockups en `openspec/changes/cancelar-y-cambiar-estado-de-turno/mockups/`. Parten de la Agenda de C-07 aprobada por Nazareno (mismos estilos y datos) y suman la columna de acciones. Importan `../../../../design-system/tokens.css`. Solo escritorio (P4).
 
