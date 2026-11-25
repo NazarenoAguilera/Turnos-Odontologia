@@ -43,24 +43,24 @@
 
 ## 5. `web/`: cliente y estilos (espera la aprobación del mockup)
 
-- [ ] 5.1 Confirmar que `design.md` dice `Approval: approved`; si no, frenar acá
-- [ ] 5.2 Escribir primero en `web/src/api/cliente.test.ts` los casos de `cambiarEstado` (URL `/api/turnos/:id/cancelar` y `/confirmar`, método POST sin cuerpo, normalización del 422 y `SIN_CONEXION`) y en `web/src/api/mensajes.test.ts` el texto y el tono `warning` de `TRANSICION_INVALIDA`. Implementarlos en `cliente.ts` y `mensajes.ts` (design D5); verificar que `cd web && npm test` pasa
-- [ ] 5.3 Sumar `.btn-danger`, `.btn-danger:hover` y `.acciones-fila` a `web/src/estilos.css` con las mismas variables que `design-system/components.html`; verificar que `cd web && npm run build` compila
+- [x] 5.1 Confirmar que `design.md` dice `Approval: approved`; si no, frenar acá
+- [x] 5.2 Escribir primero en `web/src/api/cliente.test.ts` los casos de `cambiarEstado` (URL `/api/turnos/:id/cancelar` y `/confirmar`, método POST sin cuerpo, normalización del 422 y `SIN_CONEXION`) y en `web/src/api/mensajes.test.ts` el texto y el tono `warning` de `TRANSICION_INVALIDA`. Implementarlos en `cliente.ts` y `mensajes.ts` (design D5); verificar que `cd web && npm test` pasa
+- [x] 5.3 Sumar `.btn-danger`, `.btn-danger:hover` y `.acciones-fila` a `web/src/estilos.css` con las mismas variables que `design-system/components.html`; verificar que `cd web && npm run build` compila
 
 ## 6. `web/`: botones en la Agenda
 
-- [ ] 6.1 Agregar a `TablaTurnos` las props opcionales `onPedirCancelacion`, `onCancelar`, `onConfirmar`, `onVolver`, `turnoConfirmandoId` y `turnoOcupadoId` (design D6 y D9):
+- [x] 6.1 Agregar a `TablaTurnos` las props opcionales `onPedirCancelacion`, `onCancelar`, `onConfirmar`, `onVolver`, `turnoConfirmandoId` y `turnoOcupadoId` (design D6 y D9):
   - Botones en la columna Acciones: Confirmar solo en `reservado`; Cancelar en `reservado` y `confirmado`.
   - Confirmación en la fila: "¿Cancelar este turno? No se puede deshacer.", con "Sí, cancelar turno" (`btn-danger`) y "Volver". Tiene `role="group"`, foco inicial en "Volver" y `Escape` = Volver.
   - `tr.confirmando` en la fila que pregunta; el resto de las acciones deshabilitadas mientras hay una confirmación abierta o una acción en curso.
 
   Sumar `.confirmacion-fila` y `tr.confirmando` a `estilos.css`, iguales al mockup; verificar que `cd web && npm run build` y `npm run lint` pasan sin advertencias
-- [ ] 6.2 En `Agenda.tsx`: estado `turnoConfirmandoId` ("Cancelar" lo abre, "Volver" o cambiar de fecha, vista o filtro lo cierran, sin llamar a la API); "Sí, cancelar turno" y "Confirmar" llaman a `cambiarEstado`; aviso de éxito o error arriba de la tabla (que se limpia al cambiar fecha, vista o filtro); recarga con `intento` salvo `SIN_CONEXION`. Verificar que `cd web && npm run build`, `npm run lint` y `npm test` pasan
-- [ ] 6.3 Verificación manual con la API y la web levantadas, a 1440×900, contra cada estado del mockup: confirmar un turno reservado; cancelar uno confirmado (con "Sí, cancelar turno") y comprobar que el horario se puede volver a reservar desde Nuevo turno; abrir la confirmación y tocar "Volver" (y `Escape`) y comprobar que no cambia nada; provocar un 422 (cambiar el turno por la API antes de tocar el botón). Guardar capturas en `openspec/changes/cancelar-y-cambiar-estado-de-turno/verify/`, solo con datos ficticios
+- [x] 6.2 En `Agenda.tsx`: estado `turnoConfirmandoId` ("Cancelar" lo abre, "Volver" o cambiar de fecha, vista o filtro lo cierran, sin llamar a la API); "Sí, cancelar turno" y "Confirmar" llaman a `cambiarEstado`; aviso de éxito o error arriba de la tabla (que se limpia al cambiar fecha, vista o filtro); recarga con `intento` salvo `SIN_CONEXION`. Verificar que `cd web && npm run build`, `npm run lint` y `npm test` pasan
+- [x] 6.3 Verificación manual con la API y la web levantadas, a 1440×900, contra cada estado del mockup: confirmar un turno reservado; cancelar uno confirmado (con "Sí, cancelar turno") y comprobar que el horario se puede volver a reservar desde Nuevo turno; abrir la confirmación y tocar "Volver" (y `Escape`) y comprobar que no cambia nada; provocar un 422 (cambiar el turno por la API antes de tocar el botón). Guardar capturas en `openspec/changes/cancelar-y-cambiar-estado-de-turno/verify/`, solo con datos ficticios
 
 ## 7. Integración
 
-- [ ] 7.1 Verificación integral: `npm test` y `npm run build` en la raíz; `npm test`, `npm run build` y `npm run lint` en `web/`; todo en verde
+- [x] 7.1 Verificación integral: `npm test` y `npm run build` en la raíz; `npm test`, `npm run build` y `npm run lint` en `web/`; todo en verde
 
 ## Workflow follow-up
 

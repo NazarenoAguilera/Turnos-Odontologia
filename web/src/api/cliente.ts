@@ -135,3 +135,11 @@ export async function consultarAgenda(filtros: FiltrosAgenda): Promise<Resultado
   if (!r.ok) return r
   return { ok: true, valor: r.valor.turnos }
 }
+
+/** Acciones de la Agenda sobre un turno (C-05). Ausente y Atendido quedan solo en la API. */
+export type AccionTurno = 'cancelar' | 'confirmar'
+
+/** `POST /turnos/:id/<accion>` sin cuerpo. Devuelve el turno actualizado o el error normalizado. */
+export function cambiarEstado(id: number, accion: AccionTurno): Promise<Resultado<TurnoCreado>> {
+  return pedir<TurnoCreado>(`/turnos/${id}/${accion}`, { method: 'POST' })
+}

@@ -50,6 +50,11 @@ const TEXTOS: Record<string, { titulo: string; ayuda: string; tono: Tono }> = {
     ayuda: 'Revisá que estén completos todos los campos.',
     tono: 'danger',
   },
+  TRANSICION_INVALIDA: {
+    titulo: 'El turno ya no se puede cambiar a ese estado',
+    ayuda: 'Alguien lo modificó antes. Actualizamos la agenda con su estado actual.',
+    tono: 'warning',
+  },
   SIN_CONEXION: {
     titulo: 'No pudimos conectar con el servidor',
     ayuda: 'Revisá que la API esté levantada y volvé a intentar.',

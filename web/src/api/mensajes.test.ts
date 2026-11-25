@@ -27,6 +27,15 @@ describe('describirError', () => {
     expect(d.codigoTecnico).toBe('422 INICIO_FUERA_DE_GRILLA')
   })
 
+  it('422 TRANSICION_INVALIDA es una advertencia que explica que el turno cambió antes', () => {
+    expect(describirError(error(422, 'TRANSICION_INVALIDA'))).toEqual({
+      titulo: 'El turno ya no se puede cambiar a ese estado',
+      ayuda: 'Alguien lo modificó antes. Actualizamos la agenda con su estado actual.',
+      tono: 'warning',
+      codigoTecnico: '422 TRANSICION_INVALIDA',
+    })
+  })
+
   it('sin conexión no muestra estado HTTP', () => {
     const d = describirError(error(0, 'SIN_CONEXION'))
     expect(d.titulo).toBe('No pudimos conectar con el servidor')

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { consultarAgenda, obtenerCatalogos, obtenerCatalogosAgenda, reservarTurno } from './cliente'
+import { cambiarEstado, consultarAgenda, obtenerCatalogos, obtenerCatalogosAgenda, reservarTurno } from './cliente'
 
 const datos = {
   pacienteId: 1, profesionalId: 1, sillonId: 1, prestacionId: 2, inicio: '2026-12-01T10:00:00-03:00',
@@ -165,6 +165,47 @@ describe('consultarAgenda', () => {
 
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')))
     const sinRed = await consultarAgenda({ desde, hasta })
+    if (sinRed.ok) throw new Error('debía fallar')
+    expect(sinRed.error.codigo).toBe('SIN_CONEXION')
+  })
+})
+
+describe('cambiarEstado', () => {
+  const turno = {
+    id: 7, pacienteId: 1, profesionalId: 1, sillonId: 1, prestacionId: 2,
+    inicio: '2026-12-01T10:00:00-03:00', fin: '2026-12-01T10:30:00-03:00', duracionMin: 30, estado: 'cancelado',
+  }
+
+  it('cancelar hace POST /api/turnos/:id/cancelar sin cuerpo y devuelve el turno', async () => {
+    const fetchFalso = vi.fn().mockResolvedValue(respuestaJson(200, turno))
+    vi.stubGlobal('fetch', fetchFalso)
+
+    expect(await cambiarEstado(7, 'cancelar')).toEqual({ ok: true, valor: turno })
+    const [url, init] = fetchFalso.mock.calls[0] as [string, RequestInit]
+    expect(url).toBe('/api/turnos/7/cancelar')
+    expect(init.method).toBe('POST')
+    expect(init.body).toBeUndefined()
+  })
+
+  it('confirmar usa /api/turnos/:id/confirmar', async () => {
+    const fetchFalso = vi.fn().mockResolvedValue(respuestaJson(200, { ...turno, estado: 'confirmado' }))
+    vi.stubGlobal('fetch', fetchFalso)
+    await cambiarEstado(12, 'confirmar')
+    expect((fetchFalso.mock.calls[0] as [string])[0]).toBe('/api/turnos/12/confirmar')
+  })
+
+  it('normaliza el 422 TRANSICION_INVALIDA y el fallo de conexión', async () => {
+    const detalle = { estadoActual: 'atendido', estadoPedido: 'cancelado' }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(respuestaJson(422, {
+      error: { codigo: 'TRANSICION_INVALIDA', mensaje: 'No se puede pasar un turno atendido a cancelado.', detalle },
+    })))
+    expect(await cambiarEstado(7, 'cancelar')).toEqual({
+      ok: false,
+      error: { estado: 422, codigo: 'TRANSICION_INVALIDA', mensaje: 'No se puede pasar un turno atendido a cancelado.', detalle },
+    })
+
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')))
+    const sinRed = await cambiarEstado(7, 'confirmar')
     if (sinRed.ok) throw new Error('debía fallar')
     expect(sinRed.error.codigo).toBe('SIN_CONEXION')
   })
