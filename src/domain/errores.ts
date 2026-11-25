@@ -6,7 +6,8 @@ export type CodigoError =
   | 'INICIO_FUERA_DE_GRILLA'
   | 'DURACION_INVALIDA'
   | 'TURNO_SOLAPADO_PROFESIONAL'
-  | 'TURNO_SOLAPADO_SILLON';
+  | 'TURNO_SOLAPADO_SILLON'
+  | 'TRANSICION_INVALIDA';
 
 /** Error de una regla de negocio, con un código estable y un mensaje en español. */
 export class ErrorDeNegocio extends Error {

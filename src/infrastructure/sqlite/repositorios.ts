@@ -131,6 +131,49 @@ export function insertarTurno(db: DatabaseSync, t: NuevoTurno): number {
   return Number(r.lastInsertRowid);
 }
 
+export interface TurnoGuardado {
+  id: number;
+  pacienteId: number;
+  profesionalId: number;
+  sillonId: number;
+  prestacionId: number;
+  inicioMin: number;
+  finMin: number;
+  duracionMin: number;
+  estado: EstadoTurno;
+}
+
+/** Turno por id, o undefined si no existe (C-05, design D3). */
+export function obtenerTurno(db: DatabaseSync, id: number): TurnoGuardado | undefined {
+  const fila = db
+    .prepare(
+      `SELECT id, paciente_id, profesional_id, sillon_id, prestacion_id, inicio_min, fin_min, duracion_min, estado
+         FROM turno
+        WHERE id = ?`,
+    )
+    .get(id) as {
+    id: number; paciente_id: number; profesional_id: number; sillon_id: number; prestacion_id: number;
+    inicio_min: number; fin_min: number; duracion_min: number; estado: EstadoTurno;
+  } | undefined;
+  if (!fila) return undefined;
+  return {
+    id: fila.id,
+    pacienteId: fila.paciente_id,
+    profesionalId: fila.profesional_id,
+    sillonId: fila.sillon_id,
+    prestacionId: fila.prestacion_id,
+    inicioMin: fila.inicio_min,
+    finMin: fila.fin_min,
+    duracionMin: fila.duracion_min,
+    estado: fila.estado,
+  };
+}
+
+/** Cambia solo el estado y la fecha de actualización del turno. */
+export function actualizarEstadoTurno(db: DatabaseSync, id: number, estado: EstadoTurno, actualizadoEn: string): void {
+  db.prepare('UPDATE turno SET estado = ?, actualizado_en = ? WHERE id = ?').run(estado, actualizadoEn, id);
+}
+
 export interface NuevoEventoAuditoria {
   turnoId: number;
   accion: 'creado' | 'cancelado' | 'reprogramado' | 'estado_cambiado';
