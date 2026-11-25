@@ -161,17 +161,19 @@ Recomendación: **A**, que es la del roadmap más reciente. Por dentro, las cuat
   recarga (intento+1)     recarga (intento+1)  (sin recargar)
 ```
 
-## Preguntas abiertas
+## Decisiones confirmadas (2026-11-24, Lucas)
 
-- **P1**: ¿Endpoints con cuatro rutas, una por acción (CHANGES, opción A), o `/cancelar` + `/estado` con cuerpo (KB, opción B)? Recomiendo A y corregir la tabla de la KB. Es el contrato que usan la pantalla y C-06.
-- **P2**: ¿Cancelar pide confirmación antes de llamar a la API? Recomiendo **sí**, porque `cancelado` es final. ¿Con `window.confirm` (cero diseño) o con una confirmación en línea en la fila ("¿Cancelar? Sí / No", que hay que mockear)?
-- **P3**: ¿Qué botones lleva la Agenda en este change? Recomiendo **Cancelar y Confirmar**; Ausente y Atendido quedan solo en la API. Si se suman a la pantalla, son más botones por fila y más estados para el mockup.
-- **P4**: ¿Mockup solo escritorio, como C-11, y el mismo esquema de dos tramos (API antes de la aprobación, pantalla después)?
-- **P5**: ¿Se suma un test de concurrencia de transiciones (dos conexiones, cancelar contra atendido → exactamente una gana)? Recomiendo **no** para este plazo: la transacción `BEGIN IMMEDIATE` es el mismo mecanismo ya probado en C-01. Queda anotado como riesgo aceptado.
+| # | Pregunta | Decisión |
+|---|---|---|
+| P1 | Forma de los endpoints | **Cuatro rutas sin cuerpo**, como CHANGES.md: `POST /turnos/:id/cancelar`, `/confirmar`, `/ausente` y `/atendido`. Se corrige la tabla API de `knowledge-base/02_descripcion_general.md` para que coincida (H1) |
+| P2 | Confirmación antes de cancelar | **Sí, con `window.confirm`** antes de llamar a la API: `cancelado` es un estado final |
+| P3 | Botones en la Agenda | **Cancelar y Confirmar**. Ausente y Atendido quedan solo en la API |
+| P4 | Mockup y orden | **Solo escritorio (1440×900)**, como C-11. **Primero la API**, que no espera el mockup; la pantalla espera la aprobación de Nazareno |
+| P5 | Test de concurrencia de transiciones | **No** se suma uno nuevo. La transacción `BEGIN IMMEDIATE` es el mismo mecanismo ya probado en C-01; queda como riesgo aceptado |
 
-## Recomendaciones (pendientes de confirmar)
+Recomendaciones aceptadas (R1 a R7):
 
-| # | Tema | Recomendación |
+| # | Tema | Decisión |
 |---|---|---|
 | R1 | Respuesta de la transición | `200` con el turno en la forma de `POST /turnos` y `response` schema (H2) |
 | R2 | Atomicidad | Leer, validar, actualizar y auditar en `enTransaccionInmediata` (H3) |
@@ -183,4 +185,4 @@ Recomendación: **A**, que es la del roadmap más reciente. Por dentro, las cuat
 
 ## Próximo paso
 
-Confirmar P1–P5 y R1–R7 → `/opsx:propose cancelar-y-cambiar-estado-de-turno` → mockup del botón (aprobación de Nazareno) → Apply en dos tramos.
+`/opsx:propose cancelar-y-cambiar-estado-de-turno` → mockup del botón (aprobación de Nazareno) → Apply en dos tramos.
