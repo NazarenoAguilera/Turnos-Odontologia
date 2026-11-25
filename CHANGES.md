@@ -81,7 +81,7 @@ C-02, C-03 y C-04 agregan solo endpoints CRUD sobre tablas que ya existen desde 
 ### Camino crítico
 
 ```
-Entrega (25/11):  C-01 ⭐ ✓ → C-11 ✓ → C-07 ✓ → C-05          (MVP defendible con pantallas)
+Entrega (25/11):  C-01 ⭐ ✓ → C-11 ✓ → C-07 ✓ → C-05 ✓        (MVP defendible con pantallas)
 MVP completo:     C-01 ⭐ → (C-02 a C-07 y C-11) → C-08 → C-09 → C-10
 ```
 
@@ -223,7 +223,7 @@ MVP completo:     C-01 ⭐ → (C-02 a C-07 y C-11) → C-08 → C-09 → C-10
   - `openspec/specs/agenda-turnos/spec.md`
 
 ### [C-05] `cancelar-y-cambiar-estado-de-turno`
-- **Estado**: `[ ]` pendiente — Lucas, rama `lucas`
+- **Estado**: `[x]` completado — archivado el 2026-11-24 en `openspec/changes/archive/2026-11-24-cancelar-y-cambiar-estado-de-turno/`; spec vigente `openspec/specs/agenda-turnos/` (24 requisitos: suma cancelar, confirmar, ausente/atendido, transiciones inválidas y su auditoría); 175 tests en la raíz y 31 en `web/`, en verde. Verify en `docs/opsx/verify-cancelar-y-cambiar-estado-de-turno.md`. Lucas, rama `lucas`; queda cerrado cuando el PR se mergee en `master`
 - **Scope**:
   - Cubre US-011 y US-013
   - Máquina de estados en dominio (`EstadoTurno`, `transicionValida`) con las transiciones de RN-TU-09; `TRANSICION_INVALIDA` (422) para cualquier otra

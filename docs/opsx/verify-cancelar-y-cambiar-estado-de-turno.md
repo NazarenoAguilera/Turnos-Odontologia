@@ -73,7 +73,7 @@ La API y la web se levantaron sobre otra base temporal nueva. Los turnos de prue
 
 Chrome headless manejó la pantalla como un usuario, con clics en el menú y en los botones de la fila.
 
-| Captura (`openspec/changes/cancelar-y-cambiar-estado-de-turno/verify/`) | Pasos | Resultado |
+| Captura (`openspec/changes/archive/2026-11-24-cancelar-y-cambiar-estado-de-turno/verify/`) | Pasos | Resultado |
 |---|---|---|
 | `botones-en-fila-desktop-1440x900.png` | Abrir la Agenda | "Confirmar" y "Cancelar" solo en el turno `reservado`; solo "Cancelar" en el `confirmado`; nada en `atendido` ni en `ausente` |
 | `confirmacion-en-fila-desktop-1440x900.png` | "Cancelar" en el turno de las 10:30 | La fila pasa al fondo rojo suave con "¿Cancelar este turno? No se puede deshacer.", "Sí, cancelar turno" y "Volver". **El foco queda en "Volver"** y el "Cancelar" de la otra fila se deshabilita |
@@ -87,8 +87,6 @@ Chrome headless manejó la pantalla como un usuario, con clics en el menú y en 
 - Mientras la confirmación está abierta, las acciones de las otras filas quedan deshabilitadas.
 - Después se consultó la API: el turno seguía `reservado`.
 - La consola del navegador no mostró errores de la aplicación.
-
-Lucas hace además la prueba manual propia (tarea 6.3 del plan).
 
 ## Diferencias con el mockup aprobado
 
@@ -116,5 +114,5 @@ Colores, botones (`btn-danger`, `btn-secondary`), la confirmación en la fila (p
 ## Observaciones
 
 - **Sin test de concurrencia nuevo para las transiciones** (decisión P5): usan el mismo `BEGIN IMMEDIATE` que ya está probado en C-01. Queda como riesgo aceptado.
-- **El orden de los tests de `web/` no se puso a prueba con la pantalla**: los componentes se verifican a mano, como en C-11 y C-07.
+- **Los componentes de `web/` no tienen tests automáticos**: los botones y la confirmación se verifican a mano con las capturas, como en C-11 y C-07. Lo que sí tiene tests es la lógica (cliente y mensajes).
 - **En Windows, cortar `npm run dev` deja procesos escuchando** en los puertos 3000 y 5173. Los cerré después de cada prueba, verificando el PID y la línea de comando.
