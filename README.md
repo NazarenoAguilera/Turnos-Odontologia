@@ -73,6 +73,7 @@ Si se pide el mismo sillón en un horario superpuesto, la respuesta es `409`:
 | `INICIO_FUERA_DE_GRILLA` | 422 | El inicio no cae en :00, :15, :30 o :45 |
 | `DURACION_INVALIDA` | 422 | La duración no es mayor que 0 ni múltiplo de 15 |
 | `RECURSO_INACTIVO` | 422 | El paciente, profesional, sillón o prestación existe pero está inactivo |
+| `TRANSICION_INVALIDA` | 422 | El cambio de estado no está permitido (por ejemplo, cancelar un turno atendido o ya cancelado) |
 | `RECURSO_INEXISTENTE` | 404 | No existe el recurso indicado |
 | `SOLICITUD_INVALIDA` | 400 | Faltan datos, hay datos de más o el formato es inválido (por ejemplo, un inicio sin zona horaria) |
 
@@ -86,6 +87,47 @@ Para elegir los datos de un turno sin conocer los ids, la API lista los recursos
 | `GET /profesionales` | Profesionales activos con `id` y `nombre` |
 | `GET /sillones` | Sillones/boxes activos con `id` y `nombre` |
 | `GET /prestaciones` | Prestaciones activas con `id`, `nombre` y `duracionMin` |
+
+### Cambiar el estado de un turno
+
+Cada acción es un `POST` sin cuerpo sobre el turno:
+
+| Ruta | Pasa a | Desde |
+|---|---|---|
+| `POST /turnos/:id/cancelar` | `cancelado` (libera al profesional y al sillón) | `reservado` o `confirmado` |
+| `POST /turnos/:id/confirmar` | `confirmado` | `reservado` |
+| `POST /turnos/:id/ausente` | `ausente` (sigue ocupando el horario) | `reservado` o `confirmado` |
+| `POST /turnos/:id/atendido` | `atendido` (sigue ocupando el horario) | `reservado` o `confirmado` |
+
+`cancelado`, `ausente` y `atendido` son estados finales. Respuestas:
+- `200`: el turno actualizado, con la misma forma que `POST /turnos`.
+- `422 TRANSICION_INVALIDA`: cualquier otro cambio.
+- `404 RECURSO_INEXISTENTE`: el turno no existe.
+- `400 SOLICITUD_INVALIDA`: el id no es un entero positivo.
+
+Cada cambio queda en la auditoría (`cancelado` o `estado_cambiado`, con el estado anterior y el nuevo).
+
+Ejemplo: cancelar el turno 1 creado en el ejemplo anterior.
+
+```bash
+curl -X POST http://127.0.0.1:3000/turnos/1/cancelar
+```
+
+Respuesta `200`:
+
+```json
+{ "id": 1, "pacienteId": 1, "profesionalId": 1, "sillonId": 1, "prestacionId": 2,
+  "inicio": "2026-12-01T10:00:00-03:00", "fin": "2026-12-01T10:30:00-03:00",
+  "duracionMin": 30, "estado": "cancelado" }
+```
+
+Después de cancelarlo, el mismo horario se puede volver a reservar con el mismo profesional y el mismo sillón. Si se vuelve a cancelar, la respuesta es `422`:
+
+```json
+{ "error": { "codigo": "TRANSICION_INVALIDA",
+  "mensaje": "No se puede pasar un turno cancelado a cancelado.",
+  "detalle": { "estadoActual": "cancelado", "estadoPedido": "cancelado" } } }
+```
 
 ## Interfaz web
 
@@ -125,7 +167,7 @@ npm run build
 src/domain/          reglas puras: Intervalo [inicio, fin), grilla, duración, conflictos
 src/application/     caso de uso crearTurno (transacción BEGIN IMMEDIATE)
 src/infrastructure/  SQLite: esquema, repositorios, datos ficticios
-src/http/            API Fastify: POST /turnos, GET de catálogos, GET /health
+src/http/            API Fastify: POST /turnos, GET /turnos (agenda), transiciones de estado, GET de catálogos, GET /health
 tests/               un test por escenario del spec, más tests unitarios y de concurrencia
 web/                 interfaz web (Vite + React): pantalla Nuevo turno
 design-system/       tokens, marca y componentes visuales de la interfaz

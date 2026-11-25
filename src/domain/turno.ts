@@ -5,6 +5,33 @@ import { horaLocal, MS_POR_MINUTO } from './tiempo.js';
 /** Estados posibles de un turno (RN-TU-09). En C-01 solo se crean turnos `reservado`. */
 export type EstadoTurno = 'reservado' | 'confirmado' | 'cancelado' | 'ausente' | 'atendido';
 
+/**
+ * Transiciones válidas (RN-TU-09). Única fuente de la regla: `cancelado`, `ausente` y
+ * `atendido` son finales, y repetir el estado actual no es una transición (design D1).
+ */
+export const TRANSICIONES: Readonly<Record<EstadoTurno, readonly EstadoTurno[]>> = {
+  reservado: ['confirmado', 'cancelado', 'ausente', 'atendido'],
+  confirmado: ['cancelado', 'ausente', 'atendido'],
+  cancelado: [],
+  ausente: [],
+  atendido: [],
+};
+
+export function transicionValida(desde: EstadoTurno, hacia: EstadoTurno): boolean {
+  return TRANSICIONES[desde].includes(hacia);
+}
+
+/** Lanza TRANSICION_INVALIDA (422) si la transición no está en RN-TU-09. */
+export function exigirTransicion(desde: EstadoTurno, hacia: EstadoTurno): void {
+  if (!transicionValida(desde, hacia)) {
+    throw new ErrorDeNegocio(
+      'TRANSICION_INVALIDA',
+      `No se puede pasar un turno ${desde} a ${hacia}.`,
+      { estadoActual: desde, estadoPedido: hacia },
+    );
+  }
+}
+
 /** Paso de la grilla de inicio y de la duración, en minutos (RN-TU-05, RN-TU-06). */
 export const PASO_GRILLA_MIN = 15;
 

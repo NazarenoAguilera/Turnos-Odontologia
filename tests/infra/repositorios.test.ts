@@ -11,8 +11,10 @@ import {
   listarProfesionalesActivos,
   listarSillonesActivos,
   listarTurnosEnRango,
+  actualizarEstadoTurno,
   obtenerPrestacion,
   obtenerRecurso,
+  obtenerTurno,
 } from '../../src/infrastructure/sqlite/repositorios.js';
 
 let db: DatabaseSync;
@@ -150,5 +152,34 @@ describe('repositorios SQLite', () => {
       incluirCancelados: false,
     });
     expect(soloSillon2.map((t) => t.id)).toEqual([tTarde]);
+  });
+});
+
+describe('turno por id y cambio de estado (C-05)', () => {
+  const insertar = () => insertarTurno(db, {
+    pacienteId: SEED.pacientes.uno, profesionalId: SEED.profesionales.ana, sillonId: SEED.sillones.sillon1,
+    prestacionId: SEED.prestaciones.limpieza, inicioMin: 600, finMin: 630, duracionMin: 30,
+    estado: 'reservado', creadoEn: '2026-11-17T00:00:00Z',
+  });
+
+  it('obtenerTurno devuelve el turno con sus datos', () => {
+    const id = insertar();
+    expect(obtenerTurno(db, id)).toEqual({
+      id, pacienteId: SEED.pacientes.uno, profesionalId: SEED.profesionales.ana, sillonId: SEED.sillones.sillon1,
+      prestacionId: SEED.prestaciones.limpieza, inicioMin: 600, finMin: 630, duracionMin: 30, estado: 'reservado',
+    });
+  });
+
+  it('obtenerTurno devuelve undefined si el turno no existe', () => {
+    expect(obtenerTurno(db, 9999)).toBeUndefined();
+  });
+
+  it('actualizarEstadoTurno cambia estado y actualizado_en sin tocar el resto', () => {
+    const id = insertar();
+    const consulta = 'SELECT * FROM turno WHERE id = ?';
+    const antes = db.prepare(consulta).get(id) as Record<string, unknown>;
+    actualizarEstadoTurno(db, id, 'cancelado', '2026-11-24T15:00:00Z');
+    const despues = db.prepare(consulta).get(id) as Record<string, unknown>;
+    expect(despues).toEqual({ ...antes, estado: 'cancelado', actualizado_en: '2026-11-24T15:00:00Z' });
   });
 });

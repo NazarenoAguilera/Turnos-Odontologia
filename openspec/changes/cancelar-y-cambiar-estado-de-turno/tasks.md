@@ -6,16 +6,16 @@
 
 ## 1. Dominio: máquina de estados
 
-- [ ] 1.1 Escribir primero en `tests/domain/turno.test.ts` la tabla de las 25 combinaciones `desde × hacia` contra RN-TU-09 (incluye X → X inválido y los tres estados finales) y los casos de `exigirTransicion` (lanza `TRANSICION_INVALIDA` con `detalle` `{ estadoActual, estadoPedido }` y mensaje en español). Sumar `TRANSICION_INVALIDA` a `CodigoError` (`src/domain/errores.ts`) e implementar `TRANSICIONES`, `transicionValida` y `exigirTransicion` en `src/domain/turno.ts` (design D1); verificar que `npx vitest run tests/domain/turno.test.ts` pasa
+- [x] 1.1 Escribir primero en `tests/domain/turno.test.ts` la tabla de las 25 combinaciones `desde × hacia` contra RN-TU-09 (incluye X → X inválido y los tres estados finales) y los casos de `exigirTransicion` (lanza `TRANSICION_INVALIDA` con `detalle` `{ estadoActual, estadoPedido }` y mensaje en español). Sumar `TRANSICION_INVALIDA` a `CodigoError` (`src/domain/errores.ts`) e implementar `TRANSICIONES`, `transicionValida` y `exigirTransicion` en `src/domain/turno.ts` (design D1); verificar que `npx vitest run tests/domain/turno.test.ts` pasa
 
 ## 2. Persistencia y caso de uso
 
-- [ ] 2.1 Escribir primero tests en `tests/infra/repositorios.test.ts` para `obtenerTurno` (existente y `undefined` si no existe) y `actualizarEstadoTurno` (cambia `estado` y `actualizado_en`, no toca el resto). Implementarlos en `src/infrastructure/sqlite/repositorios.ts` con sentencias preparadas fijas (design D3); verificar que los tests pasan
-- [ ] 2.2 Escribir primero `tests/application/cambiar-estado-turno.test.ts`: turno inexistente → `RECURSO_INEXISTENTE` sin auditoría; cancelar `reservado` → `cancelado` con evento `cancelado` y `antes`/`despues`; confirmar → evento `estado_cambiado`; transición inválida → `TRANSICION_INVALIDA` sin cambiar el turno ni auditar. Implementar `src/application/cambiar-estado-turno.ts` dentro de `enTransaccionInmediata` con reloj inyectable (design D2); verificar que los tests pasan
+- [x] 2.1 Escribir primero tests en `tests/infra/repositorios.test.ts` para `obtenerTurno` (existente y `undefined` si no existe) y `actualizarEstadoTurno` (cambia `estado` y `actualizado_en`, no toca el resto). Implementarlos en `src/infrastructure/sqlite/repositorios.ts` con sentencias preparadas fijas (design D3); verificar que los tests pasan
+- [x] 2.2 Escribir primero `tests/application/cambiar-estado-turno.test.ts`: turno inexistente → `RECURSO_INEXISTENTE` sin auditoría; cancelar `reservado` → `cancelado` con evento `cancelado` y `antes`/`despues`; confirmar → evento `estado_cambiado`; transición inválida → `TRANSICION_INVALIDA` sin cambiar el turno ni auditar. Implementar `src/application/cambiar-estado-turno.ts` dentro de `enTransaccionInmediata` con reloj inyectable (design D2); verificar que los tests pasan
 
 ## 3. API: rutas de transición
 
-- [ ] 3.1 Escribir primero `tests/e2e/estado-turno.test.ts` con un `it` por escenario del delta de `agenda-turnos`:
+- [x] 3.1 Escribir primero `tests/e2e/estado-turno.test.ts` con un `it` por escenario del delta de `agenda-turnos`:
   - Cancelar un turno reservado
   - Cancelar un turno confirmado
   - Cancelar y volver a reservar el mismo horario con los mismos recursos
@@ -34,12 +34,12 @@
   - Evento al confirmar
 
   Usar `app.inject` y una base `:memory:` nueva por test; verificar que fallan (RED)
-- [ ] 3.2 Crear el plugin `src/http/rutas-estado-turno.ts` (mapa fijo acción → estado, `params` schema con `id` integer ≥ 1, `response` 200 schema, sin body schema) y registrarlo en `construirApp` con una línea; sumar `TRANSICION_INVALIDA: 422` en `ESTADO_HTTP` (design D4); verificar que `tests/e2e/estado-turno.test.ts` pasa y que `git diff src/http/app.ts` solo muestra el import, el registro y el 422
-- [ ] 3.3 Verificar el tramo API completo: `npm test` en la raíz todo en verde (los 123 previos más los nuevos) y `npm run build` sin errores
+- [x] 3.2 Crear el plugin `src/http/rutas-estado-turno.ts` (mapa fijo acción → estado, `params` schema con `id` integer ≥ 1, `response` 200 schema, sin body schema) y registrarlo en `construirApp` con una línea; sumar `TRANSICION_INVALIDA: 422` en `ESTADO_HTTP` (design D4); verificar que `tests/e2e/estado-turno.test.ts` pasa y que `git diff src/http/app.ts` solo muestra el import, el registro y el 422
+- [x] 3.3 Verificar el tramo API completo: `npm test` en la raíz todo en verde (los 123 previos más los nuevos) y `npm run build` sin errores
 
 ## 4. Documentación de la API
 
-- [ ] 4.1 Actualizar `README.md`: tabla con los cuatro endpoints de transición, sus respuestas (`200`, `404`, `422 TRANSICION_INVALIDA`, `400`), un ejemplo `curl` de cancelación con datos ficticios, y `TRANSICION_INVALIDA` en la tabla de códigos; verificar ejecutando el `curl` documentado contra la API levantada con una base temporal
+- [x] 4.1 Actualizar `README.md`: tabla con los cuatro endpoints de transición, sus respuestas (`200`, `404`, `422 TRANSICION_INVALIDA`, `400`), un ejemplo `curl` de cancelación con datos ficticios, y `TRANSICION_INVALIDA` en la tabla de códigos; verificar ejecutando el `curl` documentado contra la API levantada con una base temporal
 
 ## 5. `web/`: cliente y estilos (espera la aprobación del mockup)
 

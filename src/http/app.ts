@@ -4,6 +4,7 @@ import { consultarAgenda, type ConsultaAgenda } from '../application/consultar-a
 import { crearTurno, relojDelSistema, type DatosCrearTurno, type Reloj } from '../application/crear-turno.js';
 import { ErrorDeNegocio, type CodigoError } from '../domain/errores.js';
 import { rutasCatalogos } from './rutas-catalogos.js';
+import { rutasEstadoTurno } from './rutas-estado-turno.js';
 
 export interface OpcionesApp {
   db: DatabaseSync;
@@ -20,6 +21,7 @@ const ESTADO_HTTP: Record<CodigoError, number> = {
   INICIO_FUERA_DE_GRILLA: 422,
   DURACION_INVALIDA: 422,
   RECURSO_INACTIVO: 422,
+  TRANSICION_INVALIDA: 422,
 };
 
 const idPositivo = { type: 'integer', minimum: 1 } as const;
@@ -131,6 +133,7 @@ export function construirApp({ db, reloj = relojDelSistema, logger = false }: Op
 
   app.get('/health', async () => ({ estado: 'ok' }));
   app.register(rutasCatalogos, { db });
+  app.register(rutasEstadoTurno, { db, reloj });
 
   app.get<{ Querystring: ConsultaAgenda }>('/turnos', { schema: esquemaConsultarAgenda }, async (request) =>
     consultarAgenda(db, request.query),
