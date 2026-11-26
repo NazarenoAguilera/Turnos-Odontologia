@@ -75,7 +75,7 @@ El plan completo está en [CHANGES.md](CHANGES.md). Resumen:
 
 - **Total**: 11 changes en 4 fases, más un backlog fuera del MVP (FASE 5).
 - **C-01** `crear-turno-sin-solapamientos` (change central): ✅ **archivado el 2026-11-17**. Spec vigente: `openspec/specs/agenda-turnos/`.
-- **Para la entrega del 25/11** (equipo de 3, ver CHANGES.md §Plan del equipo): `C-11` `interfaz-web-base` y `C-05` `cancelar-y-cambiar-estado-de-turno` (Lucas, rama `lucas`); `C-07` `agenda-diaria-y-semanal` con su pantalla (Lautaro, rama `lautaro`). Si sobra tiempo: `C-06` y `C-03`. **No se hacen** C-02, C-04, C-08, C-09 ni C-10 antes de la entrega.
+- **Entrega del 25/11** (equipo de 3, ver CHANGES.md §Plan del equipo): ✅ `C-11` `interfaz-web-base` y `C-05` `cancelar-y-cambiar-estado-de-turno` (Lucas, rama `lucas`) y ✅ `C-07` `agenda-diaria-y-semanal` con su pantalla (Lautaro, rama `lautaro`), archivados el 2026-11-24 y mergeados en `master` (PR #1, #2 y #3). `C-06` y `C-03` no se hicieron. Quedan como roadmap C-02, C-03, C-04, C-06, C-08, C-09 y C-10.
 - **Orden de merges a `master`**: C-11 → C-07 → C-05 (→ C-06 / C-03).
 - **Camino crítico del MVP completo**: `C-01 → (C-02 a C-07 y C-11) → C-08 → C-09 → C-10`.
 
