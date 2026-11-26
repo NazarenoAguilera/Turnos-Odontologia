@@ -19,6 +19,8 @@
 > **Para la consigna (Etapa 6)**: el change central `C-01` `crear-turno-sin-solapamientos` ya pasó por el ciclo OPSX completo (archivado el 2026-11-17).
 >
 > **Ajuste del 2026-11-23 (DD-08)**: después de ver el ejemplo de la cátedra, el equipo decidió sumar una interfaz web mínima y cerrar el "MVP defendible" (C-01 + C-05 + C-07) con pantallas. Se agregó `C-11` `interfaz-web-base`. Para la entrega solo se hacen **C-11, C-07 y C-05** (obligatorios) y, si sobra tiempo, **C-06 y C-03**. C-02, C-04, C-08, C-09 y C-10 quedan como roadmap. Ver §Plan del equipo.
+>
+> **Cierre del 2026-11-25**: C-11, C-07 y C-05 quedaron completos y mergeados. C-06 y C-03 no se hicieron por el plazo.
 
 Reglas transversales (valen para todos los changes):
 - Solo datos ficticios en código, seeds, tests y ejemplos (RN-PA-01). Sin secretos en el repo (RN-GL-03).
@@ -372,4 +374,4 @@ MVP completo:     C-01 ⭐ → (C-02 a C-07 y C-11) → C-08 → C-09 → C-10
 
 **Primer change recomendado**: `C-01` (`crear-turno-sin-solapamientos`), sin dependencias — ✅ **completado y archivado el 2026-11-17**. GATE 0 desbloqueado.
 
-**Próximos changes (entrega del 25/11)**: `C-11` y `C-07` archivados (pendiente merge de C-07 para abrir GATE 0c); sigue `C-05` (Lucas) y, si sobra tiempo, `C-06` / `C-03`. Ver §Plan del equipo.
+**Estado de la entrega (25/11)**: ✅ completo el "MVP defendible". `C-11` (PR #1), `C-07` (PR #2) y `C-05` (PR #3) están archivados y mergeados en `master` con merge commit. `C-06` y `C-03` no se hicieron: quedan como roadmap, igual que C-02, C-04, C-08, C-09 y C-10.

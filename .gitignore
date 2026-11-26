@@ -1,8 +1,35 @@
+# Dependencias
 node_modules/
+
+# Compilados y reportes
 dist/
+dist-ssr/
+coverage/
+*.tsbuildinfo
+
+# Base de datos local (se crea al levantar la API)
 data/
-.env
 *.db
 *.db-journal
 *.db-wal
 *.db-shm
+
+# Variables de entorno (.env.example sí se versiona)
+.env
+.env.*
+!.env.example
+
+# Configuración del IDE y del editor
+.idea/
+.vscode/
+*.suo
+*.sw?
+
+# Configuración local de Claude Code (las skills de OpenSpec en .claude/skills sí se versionan)
+.claude/settings.local.json
+
+# Logs y archivos del sistema operativo
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db

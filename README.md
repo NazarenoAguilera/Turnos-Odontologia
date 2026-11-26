@@ -6,6 +6,19 @@ Es el Trabajo Global de Desarrollo de Software (UTN-FRM), hecho con Spec-Driven 
 
 > Todos los datos de ejemplo son **ficticios**. Nunca se usan datos reales de pacientes.
 
+## Qué incluye esta entrega
+
+Cuatro changes, cada uno con su ciclo OPSX completo (explore, propose, apply, verify y archive) y archivado en `openspec/changes/archive/`:
+
+| Change | Qué agrega | Integrante |
+|---|---|---|
+| C-01 `crear-turno-sin-solapamientos` (central) | `POST /turnos`: crea turnos sin solapamientos por profesional y por sillón, con grilla de 15 minutos y auditoría | Nazareno |
+| C-11 `interfaz-web-base` | Interfaz web en `web/`, pantalla **Nuevo turno** y catálogos (`GET /pacientes`, `/profesionales`, `/sillones`, `/prestaciones`) | Lucas |
+| C-07 `agenda-diaria-y-semanal` | `GET /turnos` y pantalla **Agenda** por día o semana, con filtros por profesional y por sillón | Lautaro |
+| C-05 `cancelar-y-cambiar-estado-de-turno` | Cancelar, confirmar y marcar ausente o atendido, con los botones **Confirmar** y **Cancelar** en la Agenda | Lucas |
+
+El plan completo y lo que queda para después de la entrega está en [CHANGES.md](CHANGES.md).
+
 ## Requisitos
 
 - **Node.js 24 o superior** (incluye SQLite integrado, `node:sqlite`). Verificalo con `node --version`.
@@ -16,7 +29,7 @@ No hace falta Docker, una base de datos externa ni cuentas en servicios.
 ## Instalar y correr los tests
 
 ```bash
-git clone <url-del-repositorio> turnos-odontologia
+git clone https://github.com/NazarenoAguilera/Turnos-Odontologia.git turnos-odontologia
 cd turnos-odontologia
 npm install
 npm test
@@ -88,6 +101,35 @@ Para elegir los datos de un turno sin conocer los ids, la API lista los recursos
 | `GET /sillones` | Sillones/boxes activos con `id` y `nombre` |
 | `GET /prestaciones` | Prestaciones activas con `id`, `nombre` y `duracionMin` |
 
+### Consultar la agenda
+
+`GET /turnos` devuelve los turnos que se cruzan con el rango `[desde, hasta)`, ordenados por hora de inicio, con los nombres del paciente, el profesional, el sillón y la prestación.
+
+| Parámetro | Obligatorio | Descripción |
+|---|---|---|
+| `desde`, `hasta` | Sí | Fecha y hora ISO 8601 con zona horaria; `desde` tiene que ser anterior a `hasta`. Un día o una semana |
+| `profesionalId` | No | Solo los turnos de ese profesional |
+| `sillonId` | No | Solo los turnos de ese sillón |
+| `incluirCancelados` | No | `true` para mostrar también los cancelados (por defecto se ocultan) |
+
+Ejemplo: la agenda del martes 1/12 (con el turno del ejemplo anterior).
+
+```bash
+curl "http://127.0.0.1:3000/turnos?desde=2026-12-01T00:00:00-03:00&hasta=2026-12-02T00:00:00-03:00"
+```
+
+Respuesta `200`:
+
+```json
+{ "turnos": [ { "id": 1, "pacienteId": 1, "pacienteNombre": "Paciente Ficticio Uno",
+  "profesionalId": 1, "profesionalNombre": "Dra. Ana Prueba", "sillonId": 1, "sillonNombre": "Sillón 1",
+  "prestacionId": 2, "prestacionNombre": "Limpieza",
+  "inicio": "2026-12-01T10:00:00-03:00", "fin": "2026-12-01T10:30:00-03:00",
+  "duracionMin": 30, "estado": "reservado" } ] }
+```
+
+Si falta `desde` o `hasta`, la fecha no tiene zona horaria, el rango está invertido o se manda un parámetro desconocido, la respuesta es `400 SOLICITUD_INVALIDA`.
+
 ### Cambiar el estado de un turno
 
 Cada acción es un `POST` sin cuerpo sobre el turno:
@@ -131,7 +173,12 @@ Después de cancelarlo, el mismo horario se puede volver a reservar con el mismo
 
 ## Interfaz web
 
-La carpeta `web/` tiene la interfaz de recepción (Vite + React + TypeScript), con la pantalla **Nuevo turno**. Es un cliente de la API: no repite reglas de negocio y muestra los errores que devuelve el backend. Por ahora es solo para escritorio y no tiene login.
+La carpeta `web/` tiene la interfaz de recepción (Vite + React + TypeScript), con dos pantallas en el menú lateral:
+
+- **Nuevo turno**: elegir paciente, prestación, profesional, sillón, fecha y hora, y reservar. Si el horario choca o no cae en la grilla de 15 minutos, muestra el aviso con el motivo.
+- **Agenda**: los turnos del día o de la semana, con filtros por profesional y por sillón, y la opción de mostrar los cancelados. Cada turno tiene los botones **Confirmar** (si está reservado) y **Cancelar** (si está reservado o confirmado). Antes de cancelar, la misma fila pide confirmación.
+
+Es un cliente de la API: no repite reglas de negocio y muestra los errores que devuelve el backend. Por ahora es solo para escritorio y no tiene login.
 
 Se usan **dos terminales**, las dos parados en la raíz del repositorio.
 
@@ -165,11 +212,11 @@ npm run build
 
 ```
 src/domain/          reglas puras: Intervalo [inicio, fin), grilla, duración, conflictos
-src/application/     caso de uso crearTurno (transacción BEGIN IMMEDIATE)
+src/application/     casos de uso crearTurno, consultarAgenda y cambiarEstadoTurno (escrituras con BEGIN IMMEDIATE)
 src/infrastructure/  SQLite: esquema, repositorios, datos ficticios
 src/http/            API Fastify: POST /turnos, GET /turnos (agenda), transiciones de estado, GET de catálogos, GET /health
 tests/               un test por escenario del spec, más tests unitarios y de concurrencia
-web/                 interfaz web (Vite + React): pantalla Nuevo turno
+web/                 interfaz web (Vite + React): pantallas Nuevo turno y Agenda
 design-system/       tokens, marca y componentes visuales de la interfaz
 knowledge-base/      base de conocimiento del proyecto
 openspec/            specs y changes (Spec-Driven Development)
